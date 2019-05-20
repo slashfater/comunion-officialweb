@@ -1,25 +1,39 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from './views/Home.vue'
+import { States } from "./constants";
 
-Vue.use(Router)
+import Home from "./components/views/Home.vue";
 
-export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
+import Projects from "./components/views/Projects.vue";
+
+import Partners from "./components/views/Partners.vue";
+
+import Contacts from "./components/views/Contacts.vue";
+
+import Slide from "./components/views/Slide.vue";
+
+import Leaf from "./components/views/Leaf.vue";
+
+export default {
+  mode: "history",
+
+  base: "/",
+
   routes: [
+    { path: "/contacts", name: States.CONTACTS, component: Contacts },
+
+    { path: "/partners", name: States.PARTNERS, component: Partners },
+
     {
-      path: '/',
-      name: 'home',
-      component: Home
+      path: "/",
+      name: States.HOME,
+      component: Home,
+      children: [{ path: ":slide", name: States.SLIDER, component: Slide }]
     },
+
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: "/projects",
+      name: States.PROJECTS,
+      component: Projects,
+      children: [{ path: ":leaf", name: States.LEAF, component: Leaf }]
     }
   ]
-})
+};
