@@ -1,4 +1,4 @@
-# website
+# Comunion website
 
 ## Project setup
 ```
