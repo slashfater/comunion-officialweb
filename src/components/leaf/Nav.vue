@@ -2,7 +2,7 @@
 <template>
 
 	<section id="leaf-nav">
-		
+
 		<div class="next btn" :name="'next'" :class="{ 'active': nextActive }" @click="next" @mouseenter="mouseenter" @mouseleave="mouseleave">
 			<div class="btn-side sx">
 				<div class="btn-wrap" ref="nextSx">
@@ -58,187 +58,182 @@
 </template>
 
 <script>
-	
-	export default {
 
-		name: 'Nav',
+export default {
 
-		props: [ 'prev', 'next', 'prevCount', 'nextCount', 'prevActive', 'nextActive' ],
+  name: 'Nav',
 
-		data () {
-			
-			return {
+  props: [ 'prev', 'next', 'prevCount', 'nextCount', 'prevActive', 'nextActive' ],
 
-			}
-		},
+  data () {
+    return {
 
-		computed: {
+    }
+  },
 
-			mobile () { return isMobile.any }
-		},
+  computed: {
 
-		watch: {
+    mobile () { return isMobile.any }
+  },
 
-			prevActive ( value ) {
+  watch: {
 
-				let $target = this.$el.querySelector( '.prev.btn' )
-				
-				if ( !value ) this.clear( $target )
-			},
+    prevActive (value) {
+      let $target = this.$el.querySelector('.prev.btn')
 
-			nextActive ( value ) {
+      if (!value) this.clear($target)
+    },
 
-				let $target = this.$el.querySelector( '.next.btn' )
-				
-				if ( !value ) this.clear( $target )
-			}
-		},
+    nextActive (value) {
+      let $target = this.$el.querySelector('.next.btn')
 
-		methods: {
+      if (!value) this.clear($target)
+    }
+  },
 
-			mouseleave ( event ) {
+  methods: {
 
-				if ( this.mobile ) return
-					
+    mouseleave (event) {
+      if (this.mobile) return
 
-				this.clear( event.target )
-			},
+      this.clear(event.target)
+    },
 
-			mouseenter ( event ) {
+    mouseenter (event) {
+      if (this.mobile) return
 
-				if ( this.mobile ) return
+      let $target = event.target
 
+      let $sxRedbg = $target.querySelector('.sx .red-bg')
 
-				let $target = event.target,
+      let $dxRedbg = $target.querySelector('.dx .red-bg')
 
-					$sxRedbg = $target.querySelector( '.sx .red-bg' ),
-					
-					$dxRedbg = $target.querySelector( '.dx .red-bg' ),
+      let $arrows = $target.querySelector('.arrows')
 
-					$arrows = $target.querySelector( '.arrows' ),
+      let $counts = $target.querySelector('.counts')
 
-					$counts = $target.querySelector( '.counts' ),
+      let dir = $target.classList.contains('next') ? 1 : -1
 
-					dir = $target.classList.contains( 'next' ) ? 1 : -1
+      if (dir < 0 && !this.prevActive || dir > 0 && !this.nextActive) return
 
+      this.$mixer.play('tic')
 
-				if ( dir < 0 && !this.prevActive || dir > 0 && !this.nextActive ) return
+      TweenMax.killChildTweensOf($target)
 
+      return new TimelineMax({ tweens: [
 
-				this.$mixer.play( 'tic' )
+        new TimelineMax({ tweens: [
 
+          TweenMax.to($sxRedbg, 0.6, { x: '0%', force3D: true, ease: Cubic.easeOut }),
 
-				TweenMax.killChildTweensOf( $target )
+          TweenMax.to($dxRedbg, 0.6, { x: '0%', force3D: true, ease: Cubic.easeOut })
 
-				return new TimelineMax( { tweens: [
+        ],
+        stagger: 0.03 }),
 
-					new TimelineMax( { tweens: [
+        new TimelineMax({ tweens: [
 
-						TweenMax.to( $sxRedbg, .6, { x: '0%', force3D: true, ease: Cubic.easeOut } ),
-					
-						TweenMax.to( $dxRedbg, .6, { x: '0%', force3D: true, ease: Cubic.easeOut } )
+          TweenMax.to($arrows, 0.6, { x: dir > 0 ? '50%' : '-50%', force3D: true, ease: Cubic.easeOut }),
 
-						], stagger: .03 } ),
+          TweenMax.to($counts, 0.6, { x: dir > 0 ? '-50%' : '50%', force3D: true, ease: Cubic.easeOut })
 
-					new TimelineMax( { tweens: [
+        ],
+        stagger: 0.06 })
 
-						TweenMax.to( $arrows, .6, { x: dir > 0 ? '50%' : '-50%', force3D: true, ease: Cubic.easeOut } ),
+      ],
+      stagger: 0.09 })
+    },
 
-						TweenMax.to( $counts, .6, { x: dir > 0 ? '-50%' : '50%', force3D: true, ease: Cubic.easeOut } )
+    clear ($target) {
+      let $sxRedbg = $target.querySelector('.sx .red-bg')
 
-						], stagger: .06 } )
+      let $dxRedbg = $target.querySelector('.dx .red-bg')
 
-					], stagger: .09 } )
-			
-			},
+      let $arrows = $target.querySelector('.arrows')
 
-			clear ( $target ) {
+      let $counts = $target.querySelector('.counts')
 
-				let $sxRedbg = $target.querySelector( '.sx .red-bg' ),
-					
-					$dxRedbg = $target.querySelector( '.dx .red-bg' ),
+      TweenMax.killChildTweensOf($target)
 
-					$arrows = $target.querySelector( '.arrows' ),
+      return new TimelineMax({ tweens: [
 
-					$counts = $target.querySelector( '.counts' )
+        new TimelineMax({ tweens: [
 
+          TweenMax.to($counts, 0.6, { x: '0%', force3D: true, ease: Cubic.easeInOut }),
 
-				TweenMax.killChildTweensOf( $target )
+          TweenMax.to($arrows, 0.6, { x: '0%', force3D: true, ease: Cubic.easeInOut })
 
-				return new TimelineMax( { tweens: [
+        ],
+        stagger: 0.03 }),
 
-					new TimelineMax( { tweens: [
+        new TimelineMax({ tweens: [
 
-						TweenMax.to( $counts, .6, { x: '0%', force3D: true, ease: Cubic.easeInOut } ),
-						
-						TweenMax.to( $arrows, .6, { x: '0%', force3D: true, ease: Cubic.easeInOut } )
+          TweenMax.to($dxRedbg, 0.6, { x: '-100%', force3D: true, ease: Cubic.easeInOut }),
 
-						], stagger: .03 } ),
+          TweenMax.to($sxRedbg, 0.6, { x: '100%', force3D: true, ease: Cubic.easeInOut })
 
-					new TimelineMax( { tweens: [
+        ],
+        stagger: 0.0 })
 
-						TweenMax.to( $dxRedbg, .6, { x: '-100%', force3D: true, ease: Cubic.easeInOut } ),
-						
-						TweenMax.to( $sxRedbg, .6, { x: '100%', force3D: true, ease: Cubic.easeInOut } )
+      ],
+      stagger: 0.06 })
+    },
 
-						], stagger: .0 } )
+    leave (el, done) {
+      let $refs = this.$refs
 
-					], stagger: .06 } )
-			},
+      return new TimelineMax({ tweens: [
 
-			leave ( el, done ) {
+        new TimelineMax({ tweens: [
 
-				let $refs = this.$refs
+          TweenMax.to($refs.prevDx, 1, { x: '-100%', force3D: true, ease: Cubic.easeInOut }),
 
+          TweenMax.to($refs.prevSx, 1, { x: '100%', force3D: true, ease: Cubic.easeInOut })
 
-				return new TimelineMax( { tweens: [
+        ],
+        stagger: 0.15 }),
 
-					new TimelineMax( { tweens: [
-					
-						TweenMax.to( $refs.prevDx, 1, { x: '-100%', force3D: true, ease: Cubic.easeInOut } ),
-					
-						TweenMax.to( $refs.prevSx, 1, { x: '100%', force3D: true, ease: Cubic.easeInOut } )
-					
-						], stagger: .15 } ),
+        new TimelineMax({ tweens: [
 
-					new TimelineMax( { tweens: [
-					
-						TweenMax.to( $refs.nextDx, 1, { x: '-100%', force3D: true, ease: Cubic.easeInOut } ),
-					
-						TweenMax.to( $refs.nextSx, 1, { x: '100%', force3D: true, ease: Cubic.easeInOut } )
-					
-						], stagger: .15 } )
+          TweenMax.to($refs.nextDx, 1, { x: '-100%', force3D: true, ease: Cubic.easeInOut }),
 
-					], stagger: .25 } )
-			},
+          TweenMax.to($refs.nextSx, 1, { x: '100%', force3D: true, ease: Cubic.easeInOut })
 
-			enter ( el, done ) {
+        ],
+        stagger: 0.15 })
 
-				let $refs = this.$refs
+      ],
+      stagger: 0.25 })
+    },
 
-				
-				return new TimelineMax( { tweens: [
+    enter (el, done) {
+      let $refs = this.$refs
 
-					new TimelineMax( { tweens: [
-					
-						TweenMax.from( $refs.nextSx, 1, { x: '100%', force3D: true, ease: Cubic.easeInOut } ),
-					
-						TweenMax.from( $refs.nextDx, 1, { x: '-100%', force3D: true, ease: Cubic.easeInOut } )
-					
-						], stagger: .15 } ),
-					
-					new TimelineMax( { tweens: [
-					
-						TweenMax.from( $refs.prevSx, 1, { x: '100%', force3D: true, ease: Cubic.easeInOut } ),
-					
-						TweenMax.from( $refs.prevDx, 1, { x: '-100%', force3D: true, ease: Cubic.easeInOut } )
-					
-						], stagger: .15 } )
+      return new TimelineMax({ tweens: [
 
-					], stagger: .25 } )
-			}
-		}
-	}
+        new TimelineMax({ tweens: [
+
+          TweenMax.from($refs.nextSx, 1, { x: '100%', force3D: true, ease: Cubic.easeInOut }),
+
+          TweenMax.from($refs.nextDx, 1, { x: '-100%', force3D: true, ease: Cubic.easeInOut })
+
+        ],
+        stagger: 0.15 }),
+
+        new TimelineMax({ tweens: [
+
+          TweenMax.from($refs.prevSx, 1, { x: '100%', force3D: true, ease: Cubic.easeInOut }),
+
+          TweenMax.from($refs.prevDx, 1, { x: '-100%', force3D: true, ease: Cubic.easeInOut })
+
+        ],
+        stagger: 0.15 })
+
+      ],
+      stagger: 0.25 })
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -246,11 +241,11 @@
 	$width: 44px;
 
 	$height: 44px;
-		
+
 	#leaf-nav {
 
 		position: static;
-	
+
 		.btn {
 
 			position: absolute;
@@ -264,13 +259,13 @@
 		    cursor: default;
 
 		    z-index: 2;
-			
+
 			opacity: .2;
 
 			@include transition( opacity 1s map-get( $ease, cubic_out ) );
 
 			&.active {
-					
+
 				opacity: 1;
 
 				cursor: pointer;
@@ -325,7 +320,7 @@
 						}
 					}
 				}
-	
+
 				.counts {
 
 					position: absolute;
@@ -339,9 +334,9 @@
 						position: relative;
 
 						color: map-get( $colors, white );
-			
+
 						float: left; width: 50%;
-						
+
 						display: block;
 
 						font: {
@@ -350,9 +345,9 @@
 						}
 					}
 				}
-					
+
 				.arrows {
-					
+
 					position: absolute;
 
 					top: 0; left: 0;
@@ -364,9 +359,9 @@
 						position: absolute;
 
 						top: 50%;
-						
+
 						&:before, &:after {
-							
+
 							position: absolute;
 
 							top: 0; left: 0;
@@ -378,7 +373,7 @@
 
 							width: 20px; height: 2px;
 
-							margin: 0px 0 0 -10px;	
+							margin: 0px 0 0 -10px;
 						}
 
 						&:after {
@@ -388,14 +383,14 @@
 							width: 2px; height: 10px;
 
 							margin: -8px 0 0 9px;
-							
+
 							@include transform-origin( 0% 100% );
 
 							@include rotate( -50deg );
 						}
-						
+
 						&.red:before, &.red:after {
-							
+
 							background: {
 
 								color: map-get( $colors, red );
@@ -403,12 +398,12 @@
 						}
 
 						&.white:before, &.white:after {
-							
+
 							background: {
 
 								color: map-get( $colors, white );
 							}
-						}		
+						}
 					}
 				}
 
@@ -455,9 +450,9 @@
 					right: 0;
 
 					.btn-wrap {
-						
+
 						.red-bg {
-							
+
 							@include translate( -100%, 0 );
 						}
 					}
@@ -472,7 +467,7 @@
 						left: -100%;
 
 						.arrow {
-							
+
 							@include rotate( 0deg );
 
 							&.red {

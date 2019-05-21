@@ -1,45 +1,45 @@
-import Vue from "vue";
+import Vue from 'vue'
 
-import { Events } from "../../constants";
+import { Events } from '../../constants'
 
 class Resizer {
-  constructor(options) {
-    this._name = "Resizer";
+  constructor (options) {
+    this._name = 'Resizer'
 
-    this._bus = new Vue().$bus;
+    this._bus = new Vue().$bus
 
-    this.addListeners();
+    this.addListeners()
   }
 
-  addListeners() {
-    window.addEventListener(Events.RESIZE, this.onResize.bind(this), false);
+  addListeners () {
+    window.addEventListener(Events.RESIZE, this.onResize.bind(this), false)
   }
 
-  removeListeners() {
-    window.removeEventListener(Events.RESIZE, this.onResize.bind(this));
+  removeListeners () {
+    window.removeEventListener(Events.RESIZE, this.onResize.bind(this))
   }
 
-  onResize() {
-    this._bus.emit(Events.RESIZE);
+  onResize () {
+    this._bus.emit(Events.RESIZE)
   }
 
-  get name() {
-    return this._name;
+  get name () {
+    return this._name
   }
 
-  get bus() {
-    return this._bus;
+  get bus () {
+    return this._bus
   }
 }
 
 export default {
-  install(Vue) {
-    let resizer = new Resizer();
+  install (Vue) {
+    let resizer = new Resizer()
 
-    Object.defineProperty(Vue.prototype, "$resizer", {
-      get() {
-        return resizer;
+    Object.defineProperty(Vue.prototype, '$resizer', {
+      get () {
+        return resizer
       }
-    });
+    })
   }
-};
+}

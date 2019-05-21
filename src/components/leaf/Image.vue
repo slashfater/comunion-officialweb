@@ -2,7 +2,7 @@
 <template>
 
 	<div class="image" :class="config">
-		
+
 		<img :src="model.source" :width="model.width" :height="model.height" alt="" ref="image">
 
 	</div>
@@ -11,48 +11,45 @@
 
 <script>
 
-	import Compo from './Compo'
-	
-	export default {
+import Compo from './Compo'
 
-		name: 'ImageLeaf',
+export default {
 
-		mixins: [ Compo ],
+  name: 'ImageLeaf',
 
-		props: [ 'model' ],
+  mixins: [ Compo ],
 
-		data () {
-			
-			return {
+  props: [ 'model' ],
 
-			}
-		},
+  data () {
+    return {
 
-		mounted () {
+    }
+  },
 
-			this.timeline = new TimelineMax( { tweens: [
+  mounted () {
+    this.timeline = new TimelineMax({ tweens: [
 
-				TweenMax.from( this.$refs.image, 1.5, { opacity: 0, scale: 1.2, force3D: true, ease: Cubic.easeInOut } )
+      TweenMax.from(this.$refs.image, 1.5, { opacity: 0, scale: 1.2, force3D: true, ease: Cubic.easeInOut })
 
-				], paused: true } )
-		},
+    ],
+    paused: true })
+  },
 
-		destroyed () {
+  destroyed () {
+    if (this.timeline) {
+      this.timeline.kill()
 
-			if ( this.timeline ) {
-
-				this.timeline.kill()
-
-				this.timeline = null
-			}
-		}
-	}
+      this.timeline = null
+    }
+  }
+}
 </script>
 
 <style lang="scss">
 
 	section.leaf .image {
-			
+
 		position: relative;
 
 		overflow: hidden;
@@ -61,16 +58,16 @@
 
 		width: 50%;
 
-		@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-				
+		@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 			width: 100%;
 		}
 
 		img {
-			
+
 			position: relative;
-			
-			display: block;	
+
+			display: block;
 
 			width: 100%;
 
@@ -78,13 +75,13 @@
 		}
 
 		&.left {
-			
+
 			float: left;
 		}
 
 		&.right {
 
-			float: right;	
+			float: right;
 		}
 	}
 

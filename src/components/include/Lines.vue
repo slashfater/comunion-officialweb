@@ -2,9 +2,9 @@
 <template>
 
 	<div id="lines">
-		
+
 		<div class="left-line line">
-			
+
 			<div class="s-line top"></div>
 
 			<div class="g-line"></div>
@@ -14,13 +14,13 @@
 		</div>
 
 		<div class="middle-line line">
-			
+
 			<div class="g-line"></div>
 
 		</div>
 
 		<div class="right-line line">
-			
+
 			<div class="s-line top"></div>
 
 			<div class="g-line"></div>
@@ -34,32 +34,30 @@
 </template>
 
 <script>
-	
-	export default {
 
-		name: 'Lines',
+export default {
 
-		data () {
-	
-			return {
+  name: 'Lines',
 
-			}
-		},
+  data () {
+    return {
 
-		methods: {
+    }
+  },
 
-			enter () {
+  methods: {
 
-				let $lines = this.$el.querySelectorAll( '.line' ).reverse()
+    enter () {
+      let $lines = this.$el.querySelectorAll('.line').reverse()
 
-				return new TimelineMax( { tweens: [
+      return new TimelineMax({ tweens: [
 
-					TweenMax.allFrom( $lines, 2, { scaleY: 0, ease: Expo.easeInOut }, .15 )
+        TweenMax.allFrom($lines, 2, { scaleY: 0, ease: Expo.easeInOut }, 0.15)
 
-					] } )
-			}
-		}
-	}
+      ] })
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -69,7 +67,7 @@
 		position: static;
 
 		.line {
-			
+
 			position: absolute;
 
 			top: 0; bottom: 0;

@@ -2,7 +2,7 @@
 <template>
 
 	<div class="link">
-		
+
 		<main-btn class="red" :click="discover">
 			<span class="font-bold" v-html="model.content">{{ }}</span>
 		</main-btn>
@@ -13,57 +13,53 @@
 
 <script>
 
-	import Compo from './Compo'
+import Compo from './Compo'
 
-	import MainBtn from '../btns/MainBtn.vue'
-	
-	export default {
+import MainBtn from '../btns/MainBtn.vue'
 
-		name: 'LinkLeaf',
+export default {
 
-		mixins: [ Compo ],
+  name: 'LinkLeaf',
 
-		props: [ 'model' ],
+  mixins: [ Compo ],
 
-		data () {
-			
-			return {
+  props: [ 'model' ],
 
-			}
-		},
+  data () {
+    return {
 
-		components: {
+    }
+  },
 
-			'main-btn': MainBtn
-		},
+  components: {
 
-		methods: {
+    'main-btn': MainBtn
+  },
 
-			discover () {
+  methods: {
 
-				console.log( 'discover' )
-			}
-		},
+    discover () {
+      console.log('discover')
+    }
+  },
 
-		mounted () {
+  mounted () {
+    this.timeline = new TimelineMax({ tweens: [
 
-			this.timeline = new TimelineMax( { tweens: [
+      TweenMax.from(this.$el, 1, { opacity: 0, y: 60, force3D: true, ease: Cubic.easeOut })
 
-				TweenMax.from( this.$el, 1, { opacity: 0, y: 60, force3D: true, ease: Cubic.easeOut } )
+    ],
+    paused: true })
+  },
 
-				], paused: true } )
-		},
+  destroyed () {
+    if (this.timeline) {
+      this.timeline.kill()
 
-		destroyed () {
-
-			if ( this.timeline ) {
-
-				this.timeline.kill()
-
-				this.timeline = null
-			}
-		}
-	}
+      this.timeline = null
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -78,8 +74,8 @@
 
 			margin: 100px auto;
 
-			@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-				
+			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 				margin: 50px auto;
 			}
 
@@ -88,7 +84,7 @@
 				color: rgba( 212,212,212,1 );
 
 				span {
-					
+
 					color: rgba( 79,79,79,1 );
 				}
 			}

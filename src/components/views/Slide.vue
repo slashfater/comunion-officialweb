@@ -1,27 +1,27 @@
 
 <template>
-	
+
 	<!--transition name="slide"-->
-		
+
 	<transition
-			
-		@enter="enter" 
-    	
+
+		@enter="enter"
+
     	@leave="leave"
 
     	:css="false">
 
 		<section :id="name" class="slide">
-				
+
 			<div class="table">
 				<div class="table-cell">
-					
+
 					<h3 v-if="head && !news">
 						<span class="font-reg">
 							<span class="letter" v-for="letter in head" :class="{ 'space': letter == ' ' }" ref="h3Letters">{{ letter }}</span>
 						</span>
 					</h3>
-					
+
 					<h1 v-if="title || news" :class="{ 'main': index == 0, 'news': news }">
 						<span class="font-reg" v-if="!news">
 							<span class="left line" ref="h1LeftLine"></span>
@@ -72,217 +72,204 @@
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
 
-	import { States, Sizes, Events } from '../../constants'
+import { mapState } from 'vuex'
 
-	import Section from '../mixins/Section'
-	
-	import Commons from '../mixins/Commons'
+import { States, Sizes, Events } from '../../constants'
 
-	import MainBtn from '../btns/MainBtn.vue'
+import Section from '../mixins/Section'
 
-	import SimpleBtn from '../btns/SimpleBtn.vue'
+import Commons from '../mixins/Commons'
 
-	import meta from '../../meta'
+import MainBtn from '../btns/MainBtn.vue'
 
-	export default {
+import SimpleBtn from '../btns/SimpleBtn.vue'
 
-		name: 'Slide',
+import meta from '../../meta'
 
-		mixins: [ Section, Commons ],
+export default {
 
-		data () {
-	
-			return {
+  name: 'Slide',
 
-				deskscreen: true
-			}
-		},
+  mixins: [ Section, Commons ],
 
-		components: {
+  data () {
+    return {
 
-			'main-btn': MainBtn,
+      deskscreen: true
+    }
+  },
 
-			'simple-btn': SimpleBtn
-		},
+  components: {
 
-		computed: {
+    'main-btn': MainBtn,
 
-			...mapState( {
+    'simple-btn': SimpleBtn
+  },
 
-				slider: state => state.site.collections.slider,
+  computed: {
 
-				locale: state => state.site.locale
-			} ),
+    ...mapState({
 
-			counter () { return this.locale.counter },
+      slider: state => state.site.collections.slider,
 
-			name () { return this.$route.params.slide },
+      locale: state => state.site.locale
+    }),
 
-			index () { return this.slider.indexOfName( this.name ) },
+    counter () { return this.locale.counter },
 
-			title () { return this.locale.home[ this.index ].title || null },
+    name () { return this.$route.params.slide },
 
-			head () { return this.locale.home[ this.index ].head || null },
+    index () { return this.slider.indexOfName(this.name) },
 
-			cta () { return this.locale.home[ this.index ].cta || null },
+    title () { return this.locale.home[ this.index ].title || null },
 
-			copy () { return this.locale.home[ this.index ].copy || null },
-			
-			mcopy () { return this.locale.home[ this.index ].mcopy || null },
+    head () { return this.locale.home[ this.index ].head || null },
 
-			newsTitle () { return this.news ? this.locale.news.title : null },
+    cta () { return this.locale.home[ this.index ].cta || null },
 
-			newsCopy () { return this.news ? this.locale.news.copy : null },
-			
-			newsMCopy () { return this.news ? this.locale.news.mcopy : null },
+    copy () { return this.locale.home[ this.index ].copy || null },
 
-			newsCta () { return this.news ? this.locale.news.cta : null },
+    mcopy () { return this.locale.home[ this.index ].mcopy || null },
 
-			news () { return this.locale.news.length === undefined && this.index == 0 }
-		},
+    newsTitle () { return this.news ? this.locale.news.title : null },
 
-		methods: {
+    newsCopy () { return this.news ? this.locale.news.copy : null },
 
-			discover () {
+    newsMCopy () { return this.news ? this.locale.news.mcopy : null },
 
-				let leaf = 'the-gate' // => dynamic value ??
+    newsCta () { return this.news ? this.locale.news.cta : null },
 
-				this.navigateTo( States.LEAF, { leaf } )
-			},
+    news () { return this.locale.news.length === undefined && this.index == 0 }
+  },
 
-			newslink () {
+  methods: {
 
-				window.open( this.locale.news.link, '_blank' )
-			},
+    discover () {
+      let leaf = 'the-gate' // => dynamic value ??
 
-			leave ( el, done ) {
+      this.navigateTo(States.LEAF, { leaf })
+    },
 
-				let $refs = this.$refs,
+    newslink () {
+      window.open(this.locale.news.link, '_blank')
+    },
 
-					$mainBtn = $refs.mainBtn ? $refs.mainBtn.$refs.wrap : { y: 0 },
+    leave (el, done) {
+      let $refs = this.$refs
 
-					$newsBtn = $refs.newsBtn ? $refs.newsBtn.$refs.wrap : { y: 0 },
-					
-					delay = meta.scrollontop ? 0 : 2
+      let $mainBtn = $refs.mainBtn ? $refs.mainBtn.$refs.wrap : { y: 0 }
 
+      let $newsBtn = $refs.newsBtn ? $refs.newsBtn.$refs.wrap : { y: 0 }
 
-				return new TimelineMax( { tweens: [
+      let delay = meta.scrollontop ? 0 : 2
 
-					TweenMax.to( $newsBtn, 1, { y: 55, force3D: true, ease: Cubic.easeInOut } ),
-					
-					TweenMax.to( $mainBtn, 1, { y: 75, force3D: true, ease: Cubic.easeInOut } ),
+      return new TimelineMax({ tweens: [
 
-					TweenMax.allTo( $refs.h3Letters, .8, { y: 25, force3D: true, ease: Cubic.easeInOut }, .02 ),
+        TweenMax.to($newsBtn, 1, { y: 55, force3D: true, ease: Cubic.easeInOut }),
 
-					new TimelineMax( { tweens: [
+        TweenMax.to($mainBtn, 1, { y: 75, force3D: true, ease: Cubic.easeInOut }),
 
-						TweenMax.to( $refs.h1LeftLine, .8, { x: -40, scaleX: 0, force3D: true, ease: Cubic.easeInOut } ),
+        TweenMax.allTo($refs.h3Letters, 0.8, { y: 25, force3D: true, ease: Cubic.easeInOut }, 0.02),
 
-						TweenMax.to( $refs.h1RightLine, .8, { x: 40, scaleX: 0, force3D: true, ease: Cubic.easeInOut } )
-					
-						] } ),
+        new TimelineMax({ tweens: [
 
-					new TimelineMax( { tweens: [
+          TweenMax.to($refs.h1LeftLine, 0.8, { x: -40, scaleX: 0, force3D: true, ease: Cubic.easeInOut }),
 
-						TweenMax.allTo( $refs.mh4Rows, 1, { width: 0, force3D: true, ease: Cubic.easeInOut }, .05 ),
+          TweenMax.to($refs.h1RightLine, 0.8, { x: 40, scaleX: 0, force3D: true, ease: Cubic.easeInOut })
 
-						TweenMax.allTo( $refs.h4Rows, 1, { width: 0, force3D: true, ease: Cubic.easeInOut }, .05 ),
+        ] }),
 
-						TweenMax.allTo( $refs.h1Letters, 1, { y: 75, force3D: true, ease: Cubic.easeInOut }, .05 )
+        new TimelineMax({ tweens: [
 
-						] } )
+          TweenMax.allTo($refs.mh4Rows, 1, { width: 0, force3D: true, ease: Cubic.easeInOut }, 0.05),
 
-					], delay, onComplete: () => {
+          TweenMax.allTo($refs.h4Rows, 1, { width: 0, force3D: true, ease: Cubic.easeInOut }, 0.05),
 
-						if ( done instanceof Function )
+          TweenMax.allTo($refs.h1Letters, 1, { y: 75, force3D: true, ease: Cubic.easeInOut }, 0.05)
 
-							done()
-					} } )
-			},
+        ] })
 
-			enter ( el, done ) {
+      ],
+      delay,
+      onComplete: () => {
+        if (done instanceof Function) { done() }
+      } })
+    },
 
-				let $refs = this.$refs,
+    enter (el, done) {
+      let $refs = this.$refs
 
-					$mainBtn = $refs.mainBtn ? $refs.mainBtn.$refs.wrap : { y: 0 },
+      let $mainBtn = $refs.mainBtn ? $refs.mainBtn.$refs.wrap : { y: 0 }
 
-					$newsBtn = $refs.newsBtn ? $refs.newsBtn.$refs.wrap : { y: 0 },
+      let $newsBtn = $refs.newsBtn ? $refs.newsBtn.$refs.wrap : { y: 0 }
 
-					delay = meta.scrollontop ? .75 : 2.75
+      let delay = meta.scrollontop ? 0.75 : 2.75
 
+      return new TimelineMax({ tweens: [
 
-				return new TimelineMax( { tweens: [
+        new TimelineMax({ tweens: [
 
-					new TimelineMax( { tweens: [
-						
-						TweenMax.allFrom( $refs.h1Letters, 1, { y: 75, force3D: true, ease: Cubic.easeOut }, .05 ),
+          TweenMax.allFrom($refs.h1Letters, 1, { y: 75, force3D: true, ease: Cubic.easeOut }, 0.05),
 
-						TweenMax.allFrom( $refs.h4Rows, 1, { width: 0, force3D: true, ease: Cubic.easeInOut, onComplete: function () {
+          TweenMax.allFrom($refs.h4Rows, 1, { width: 0,
+            force3D: true,
+            ease: Cubic.easeInOut,
+            onComplete: function () {
+              TweenMax.set(this.target, { width: 'auto' })
+            } }, 0.05),
 
-							TweenMax.set( this.target, { width: 'auto' } )
+          TweenMax.allFrom($refs.mh4Rows, 1, { width: 0,
+            force3D: true,
+            ease: Cubic.easeInOut,
+            onComplete: function () {
+              TweenMax.set(this.target, { width: 'auto' })
+            } }, 0.05)
 
-							} }, .05 ),
+        ] }),
 
-						TweenMax.allFrom( $refs.mh4Rows, 1, { width: 0, force3D: true, ease: Cubic.easeInOut, onComplete: function () {
+        new TimelineMax({ tweens: [
 
-							TweenMax.set( this.target, { width: 'auto' } )
+          TweenMax.from($refs.h1LeftLine, 0.8, { scaleX: 0, ease: Cubic.easeOut }),
 
-							} }, .05 )
-						
-						] } ),
+          TweenMax.from($refs.h1RightLine, 0.8, { scaleX: 0, ease: Cubic.easeOut })
 
-					new TimelineMax( { tweens: [
+        ] }),
 
-						TweenMax.from( $refs.h1LeftLine, .8, { scaleX: 0, ease: Cubic.easeOut } ),
+        TweenMax.allFrom($refs.h3Letters, 0.8, { y: 25, force3D: true, ease: Cubic.easeInOut }, 0.04),
 
-						TweenMax.from( $refs.h1RightLine, .8, { scaleX: 0, ease: Cubic.easeOut } )
+        TweenMax.from($mainBtn, 1, { y: 75, force3D: true, ease: Cubic.easeInOut }),
 
-						] } ),
+        TweenMax.from($newsBtn, 1, { y: 55, force3D: true, ease: Cubic.easeInOut })
 
-					TweenMax.allFrom( $refs.h3Letters, .8, { y: 25, force3D: true, ease: Cubic.easeInOut }, .04 ),
+      ],
+      delay,
+      onComplete: () => {
+        if (done instanceof Function) { done() }
+      } })
+    },
 
-					TweenMax.from( $mainBtn, 1, { y: 75, force3D: true, ease: Cubic.easeInOut } ),
-					
-					TweenMax.from( $newsBtn, 1, { y: 55, force3D: true, ease: Cubic.easeInOut } )
+    resize () {
+      let deskscreen = window.innerWidth > Sizes.CUSTOM - 1
 
-					], delay, onComplete: () => {
+      if (!deskscreen && this.deskscreen) {
+        this.deskscreen = false
+      } else if (deskscreen && !this.deskscreen) {
+        this.deskscreen = true
+      }
+    }
+  },
 
-						if ( done instanceof Function )
+  mounted () {
+    this.$resizer.bus.on(Events.RESIZE, this.resize)
 
-							done()
-					} } )
-			},
+    this.resize()
+  },
 
-			resize () {
-
-				let deskscreen = window.innerWidth > Sizes.CUSTOM - 1
-
-				if ( !deskscreen && this.deskscreen ) {
-
-					this.deskscreen = false
-
-				} else if ( deskscreen && !this.deskscreen ) {
-
-					this.deskscreen = true
-				}
-			}
-		},
-
-		mounted () {
-
-			this.$resizer.bus.on( Events.RESIZE, this.resize )
-
-			this.resize()
-		},
-
-		destroyed () {
-
-			this.$resizer.bus.off( Events.RESIZE, this.resize )
-		}
-	}
+  destroyed () {
+    this.$resizer.bus.off(Events.RESIZE, this.resize)
+  }
+}
 </script>
 
 <style lang="scss">
@@ -297,11 +284,11 @@
 
 		z-index: 1;
 
-		@include grabbable();
+		// @include grabbable();
 
 		&:active {
-			
-			@include grabbable-active();
+
+			// @include grabbable-active();
 		}
 
 		.table {
@@ -332,7 +319,7 @@
 			}
 
 			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-				
+
 				&.main {
 
 					font: {
@@ -342,7 +329,7 @@
 				}
 
 				&.news {
-						
+
 					font: {
 
 						size: 24px * 0.7;
@@ -360,16 +347,16 @@
 
 					color: map-get( $colors, rgb_xlight_white );
 				}
-				
+
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-	
+
 					display: none;
 				}
 
 				&.left {
 
 					@include transform-origin( 100% 0% );
-	
+
 					margin: -1px 0 0 -40px;
 
 					left: -40px;
@@ -378,15 +365,15 @@
 				&.right {
 
 					@include transform-origin( 0% 0% );
-					
+
 					margin: -1px -40px 0 0;
 
 					right: -40px;
 				}
 			}
 
-			>span { 
-				
+			>span {
+
 				&:before, &:after {
 
 					//content: '';
@@ -434,7 +421,7 @@
 		h4 {
 
 		    max-width: 580px;
-		
+
 			margin: 0 auto 10px;
 
 			line-height: 1.75em;
@@ -477,7 +464,7 @@
 					width: 100%;
 
 					clear: both;
-					
+
 					span {
 
 						position: relative;
@@ -493,60 +480,56 @@
 					}
 
 					&:nth-child(even) {
-						
+
 						float: right;
 
 						span {
-							
+
 							float: right;
 						}
 					}
-					
+
 					&:nth-child(odd) {
-					
+
 						float: left;
 
 						span {
-							
+
 							float: left;
 						}
-					}	
+					}
 				}
 			}
 		}
 
 		$h1duration: 1s;
-		
+
 		$h3duration: 0.9s;
-		
+
 		$h4duration: 1.4s;
 
 		$ctaduration: 1.2s;
 
 		$totduration: 2.75s;
 
-		
 		$h1stagger: 0.08s;
-		
+
 		$h3stagger: 0.045s;
-		
+
 		$h4stagger: 0.16s;
 
 		$ctastagger: 0.35s;
-
 
 		$delay1: 0.9s;
 
 		$delay2: 0.9s;
 
-		
 		$easingOut: map-get( $ease, cubic_out );
-		
+
 		$easingInOut: map-get( $ease, cubic_in_out );
-		
 
 		&.slide-enter-active, &.slide-leave-active {
-			
+
 			@include transition( $totduration );
 
 			h1 span.letter { @include transition( transform $h1duration $easingOut ); }
@@ -569,7 +552,7 @@
 			h4 span.row { @for $i from 1 to 10 { &:nth-child(#{$i}) { @include transition-delay( $i * $h4stagger ); } } }
 
 			h1>span:before { @include transform-origin( 0% 0% ); @include transition-delay( $ctastagger ); }
-			
+
 			h1>span:after { @include transform-origin( 100% 0% ); @include transition-delay( $ctastagger ); }
 
 			button.main-btn .wrap { @include transition-delay( $ctastagger ); }
@@ -596,7 +579,7 @@
 
 				@include translate3d( 0, 75px, 0 );
 			}
-			
+
 			h3 span.letter {
 
 				@include translate3d( 0, 20px, 0 );
@@ -604,12 +587,12 @@
 
 			button.main-btn .wrap {
 
-				@include translate3d( 0, 75px, 0 );	
+				@include translate3d( 0, 75px, 0 );
 			}
 
 			h1>span:before, h1>span:after {
 
-				@include scale( 0, 1 );	
+				@include scale( 0, 1 );
 			}
 
 			h4 span.row {

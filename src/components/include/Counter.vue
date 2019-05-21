@@ -1,8 +1,8 @@
 
 <template>
-	
+
 	<div id="counter">
-			
+
 		<count v-for="( model, i ) in collection" :model="model" :active="i == index" ref="counts"></count>
 
 	</div>
@@ -10,104 +10,92 @@
 </template>
 
 <script>
-		
-	import { mapState } from 'vuex'
 
-	import Count from './Count.vue'
+import { mapState } from 'vuex'
 
-	export default {
+import Count from './Count.vue'
 
-		name: 'Counter',
+export default {
 
-		data () {
-			
-			return {
+  name: 'Counter',
 
-				delay: 5000,
+  data () {
+    return {
 
-				index: 0,
+      delay: 5000,
 
-				timer: 0
-			}
-		},
+      index: 0,
 
-		computed: {
+      timer: 0
+    }
+  },
 
-			...mapState( {
+  computed: {
 
-				locale: state => state.site.locale
-			} ),
+    ...mapState({
 
-			collection () { return this.locale.counter },
+      locale: state => state.site.locale
+    }),
 
-			length () { return this.collection.length }
-		},
+    collection () { return this.locale.counter },
 
-		components: {
+    length () { return this.collection.length }
+  },
 
-			'count': Count
-		},
+  components: {
 
-		methods: {
+    'count': Count
+  },
 
-			play () {
+  methods: {
 
-				this.timer = setTimeout( this.update.bind( this ), this.delay )
-			},
+    play () {
+      this.timer = setTimeout(this.update.bind(this), this.delay)
+    },
 
-			update () {
+    update () {
+      ++this.index
 
-				++this.index
+      if (this.index >= this.length) { this.index = 0 }
 
-				if ( this.index >= this.length )
+      this.play()
+    },
 
-					this.index = 0
+    stop () {
+      clearTimeout(this.timer)
+    },
 
+    current () {
+      let current
 
-				this.play()
-			},
+      for (let count of this.$children) {
+        if (count.active) { current = count }
+      }
 
-			stop () {
+      return current
+    }
+  },
 
-				clearTimeout( this.timer )
-			},
+  mounted () {
 
-			current () {
+    // this.play()
+  },
 
-				let current
-
-				for ( let count of this.$children ) {
-
-					if ( count.active ) 
-
-						current = count
-				}	
-
-				return current
-			}	
-		},
-		
-		mounted () {
-
-			//this.play()
-		},
-
-		destroyed () {
-
-			this.stop()
-		}
-	}
+  destroyed () {
+    this.stop()
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	#counter {
-		
+
 		position: absolute;
 
 		left: 90px + 40px; bottom: 34px;
 
 		z-index: 2;
-	} 
+	}
 
 </style>

@@ -1,8 +1,8 @@
 
 <template>
-	
+
 	<div id="app-main">
-		
+
 		<router-view ref="root"></router-view>
 
 	</div>
@@ -10,53 +10,48 @@
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
 
-	import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
-	import { Actions, States } from '../../constants'
+import { Actions, States } from '../../constants'
 
-	export default {
+export default {
 
-		name: 'AppMain',
+  name: 'AppMain',
 
-		data () {
-	
-			return {
+  data () {
+    return {
 
-			}
-		},
+    }
+  },
 
-		methods: {
+  methods: {
 
-			leave ( el, done ) {
+    leave (el, done) {
+      let section = this.$refs.root
 
-				let section = this.$refs.root
+      return new TimelineMax({ tweens: [
 
-				return new TimelineMax( { tweens: [
+        section.leave(el, done)
 
-					section.leave( el, done )
+      ] })
+    },
 
-					] } )
-			},
+    enter (el, done) {
+      let section = this.$refs.root
 
-			enter ( el, done ) {
+      return new TimelineMax({ tweens: [
 
-				let section = this.$refs.root
+        section.enter(el, done)
 
-				return new TimelineMax( { tweens: [
-
-					section.enter( el, done )
-
-					] } )
-			}
-		}
-	}
+      ] })
+    }
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	@import 'src/components/sass/vars.scss';
 
 	#app-main {
@@ -82,7 +77,7 @@
 		}
 
 		h1 {
-			
+
 			position: relative;
 
 			overflow: hidden;
@@ -113,12 +108,12 @@
 				}
 			}
 
-			>span { 
+			>span {
 
 				position: relative;
 
 				padding-left: 18px;
-				
+
 				span.letter {
 
 					position: relative;
@@ -129,12 +124,12 @@
 
 						display: inline;
 					}
-				}	
+				}
 			}
 		}
 
 		h2 {
-			
+
 			position: relative;
 
 			overflow: hidden;
@@ -168,9 +163,9 @@
 			>span {
 
 				position: relative;
-				
+
 				overflow: hidden;
-				
+
 				display: inline-block;
 
 				span.letter {
@@ -188,7 +183,7 @@
 		}
 
 		h3 {
-			
+
 			position: relative;
 
 			overflow: hidden;
@@ -196,7 +191,7 @@
 			width: 100%;
 
 			letter-spacing: map-get( $ls, s );
-	
+
 			font: {
 
 				size: map-get( $typo, h3_ );
@@ -221,7 +216,7 @@
 		}
 
 		h4 {
-			
+
 			position: relative;
 
 			overflow: hidden;
@@ -279,7 +274,7 @@
 			position: absolute;
 
 			overflow: hidden;
-				
+
 			top: 0; bottom: 0; width: 50%;
 
 			.holder {
@@ -287,7 +282,7 @@
 				position: absolute;
 
 				overflow: hidden;
-					
+
 				top: 0; bottom: 0;
 
 				left: 0; right: 0;
@@ -300,7 +295,7 @@
 				width: 100%;
 
 				display: none;
-				
+
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
 					display: block;
@@ -347,7 +342,7 @@
 					}
 
 					>span {
-						
+
 						margin-left: -2px;
 					}
 				}
@@ -379,7 +374,7 @@
 				}
 
 				.line {
-					
+
 					position: absolute;
 
 				 	top: 89px; left: ( 60px + 90px );
@@ -411,7 +406,7 @@
 			}
 
 			&.right {
-			
+
 				right: 0;
 			}
 		}

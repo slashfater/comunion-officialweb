@@ -1,7 +1,7 @@
 <template>
-	
+
 	<section id="application" class="unselectable">
-		
+
 		<root></root>
 
 		<load></load>
@@ -12,33 +12,32 @@
 
 <script>
 
-	import Root from './Root.vue'
+import Root from './Root.vue'
 
-	import Load from './Load.vue'
+import Load from './Load.vue'
 
-	export default {
+export default {
 
-		name: 'App',
+  name: 'App',
 
-		data () {
+  data () {
+    return {
 
-			return {
+    }
+  },
 
-			}
-		},
+  components: {
 
-		components: {
+    'root': Root,
 
-			'root': Root,
-
-			'load': Load
-		}
-	}
+    'load': Load
+  }
+}
 </script>
 
 <style lang="scss">
-	
-	@import 'src/components/sass/utils.scss';
+
+	// @import 'src/components/sass/utils.scss';
 
 	@import 'src/components/sass/vars.scss';
 
@@ -49,7 +48,7 @@
 		top: 0; left: 0; bottom: 0; right: 0;
 
 		@media only screen and (max-width: 812px) and (min-aspect-ratio: 13/9) {
-		    
+
 		    & { visibility: hidden; opacity: 0; }
 		}
 	}

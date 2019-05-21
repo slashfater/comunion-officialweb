@@ -1,49 +1,49 @@
-import { States } from "../../../constants";
+import { States } from '../../../constants'
 
-import Visual from "../../core/Visual";
+import Visual from '../../core/Visual'
 
-import Points from "./points/";
+import Points from './points/'
 
-import models from "../../../models";
+import models from '../../../models'
 
-import meta from "../../../meta";
+import meta from '../../../meta'
 
 export default class Projects extends Visual {
-  constructor(options) {
-    super(options);
+  constructor (options) {
+    super(options)
 
-    let collection = models.prjs;
+    let collection = models.prjs
 
-    this._points = new Points({ collection });
+    this._points = new Points({ collection })
 
-    this._scene.add(this._points.mesh);
+    this._scene.add(this._points.mesh)
 
-    this._adjusting = false;
+    this._adjusting = false
 
-    this._displacement = 0;
+    this._displacement = 0
 
-    this._offset = 0;
+    this._offset = 0
 
-    this._index = 0;
+    this._index = 0
   }
 
-  render() {
-    super.render();
+  render () {
+    super.render()
 
-    this._points.render();
+    this._points.render()
 
     if (!this._adjusting) {
-      this.displacement += (meta.scrollTop / 2 - this.displacement) * 0.065;
+      this.displacement += (meta.scrollTop / 2 - this.displacement) * 0.065
     }
   }
 
-  slide() {
-    let from = meta.route.from,
-      route = from ? from.name : "";
+  slide () {
+    let from = meta.route.from
+    let route = from ? from.name : ''
 
-    this._points.index = this._index;
+    this._points.index = this._index
 
-    this._points.first = route != States.LEAF ? 1 : 0;
+    this._points.first = route != States.LEAF ? 1 : 0
 
     this._timeline = new TimelineMax({
       tweens: [
@@ -54,71 +54,71 @@ export default class Projects extends Visual {
           { offset: 0, ease: Expo.easeInOut }
         )
       ]
-    });
+    })
   }
 
-  offsetUpdate() {
-    this._points.offset = this._offset;
+  offsetUpdate () {
+    this._points.offset = this._offset
   }
 
-  adjust(step) {
-    this._adjusting = true;
+  adjust (step) {
+    this._adjusting = true
 
-    let duration = meta.scrollontop ? 0 : 2;
+    let duration = meta.scrollontop ? 0 : 2
 
     TweenMax.to(this, duration, {
       displacement: 0,
       ease: Expo.easeInOut,
       onUpdate: () => {
-        step.call(null);
+        step.call(null)
       },
       onComplete: () => {
-        this._adjusting = false;
+        this._adjusting = false
       }
-    });
+    })
   }
 
-  displacementUpdate() {
-    this._points.displ = this._displacement;
+  displacementUpdate () {
+    this._points.displ = this._displacement
   }
 
-  transform() {
-    super.transform();
+  transform () {
+    super.transform()
 
-    let transforms = this._transforms,
-      shapes = this._shapes,
-      points = this._points;
+    let transforms = this._transforms
+    let shapes = this._shapes
+    let points = this._points
 
     if (transforms) {
-      points.period = 5; // transforms.scene.period // 5
+      points.period = 5 // transforms.scene.period // 5
 
-      points.amplitude = 2; // transforms.scene.amplitude // 12
+      points.amplitude = 2 // transforms.scene.amplitude // 12
     }
   }
 
-  set index(value) {
-    this._index = value;
+  set index (value) {
+    this._index = value
 
-    this.slide();
+    this.slide()
   }
 
-  set displacement(value) {
-    this._displacement = value;
+  set displacement (value) {
+    this._displacement = value
 
-    this.displacementUpdate();
+    this.displacementUpdate()
   }
 
-  get displacement() {
-    return this._displacement;
+  get displacement () {
+    return this._displacement
   }
 
-  set offset(value) {
-    this._offset = value;
+  set offset (value) {
+    this._offset = value
 
-    this.offsetUpdate();
+    this.offsetUpdate()
   }
 
-  get offset() {
-    return this._offset;
+  get offset () {
+    return this._offset
   }
 }

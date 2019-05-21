@@ -1,10 +1,9 @@
-
 <template>
 
 	<footer :class="{ 'off': !active }">
-		
+
 		<span class="mouse-icon" :class="{ 'off': !scroll, 'mobile': mobile }"><!--!scroll && deskscreen-->
-		
+
 			<span class="gsap">
 				<span class="border"></span>
 				<span class="point" ref="point"><span></span></span>
@@ -12,15 +11,15 @@
 					<span class="font-reg">{{ mobile ? locale.ui.swipe : locale.ui.scroll }}</span>
 				</span>
 			</span>
-		
+
 		</span>
-			
+
 		<span class="scroll-line" :class="{ 'off': !scroll }"><!--!scroll && deskscreen-->
 			<span ref="scrollLineBar"><span></span></span>
 		</span>
 
 		<span class="audio-icon" :class="{ 'muted': muted }" @click="toggle">
-			
+
 			<span class="gsap">
 				<div class="icon">
 					<img :src="assets['audio'].src" :class="{ 'show': !inversed }" alt="">
@@ -33,21 +32,21 @@
 		<p class="lang" @click="toggleLang">
 			<span class="gsap">
 				<div class="icon">
-					
-					<span class="font-reg">{{ lang }}</span> 
 
-				</span>
+					<span class="font-reg">{{ lang }}</span>
+
+				</div>
 			</span>
 		</p>
 
 		<p class="foo">
 			<span class="gsap">
 				<span>
-					
-					<span class="font-reg">{{ locale.footer.rights }}</span> 
-			
+
+					<span class="font-reg">{{ locale.footer.rights }}</span>
+
 					<a :href="'mailto:'+locale.footer.email" target="_self"><span class="font-reg">{{ locale.footer.email }}</span></a>
-				
+
 				</span>
 			</span>
 		</p>
@@ -57,151 +56,135 @@
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
 
-	import { Events, Sizes } from '../../constants'
+import { mapState } from 'vuex'
 
-	import Commons from '../mixins/Commons'
+import { Events, Sizes } from '../../constants'
 
-	export default {
+import Commons from '../mixins/Commons'
 
-		name: 'Footer',
+export default {
 
-		mixins: [ Commons ],
+  name: 'Footer',
 
-		data () {
-	
-			return {
+  mixins: [ Commons ],
 
-				active: true,
+  data () {
+    return {
 
-				scroll: true,
+      active: true,
 
-				muted: false,
+      scroll: true,
 
-				inversed: false
-			}
-		},
+      muted: false,
 
-		computed: {
+      inversed: false
+    }
+  },
 
-			...mapState( {
+  computed: {
 
-				locale: state => state.site.locale,
+    ...mapState({
 
-				assets: state => state.site.assets
-			} ),
+      locale: state => state.site.locale,
 
+      assets: state => state.site.assets
+    }),
 
-			deskscreen () { return window.innerWidth > Sizes.CUSTOM - 1 },
-			
-			lang () { return window.appconf.lang == 'en' || window.appconf.lang == '' ? 'it' : 'en' },
+    deskscreen () { return window.innerWidth > Sizes.CUSTOM - 1 },
 
-			mobile () { return isMobile.any }
-		},
+    lang () { return window.appconf.lang == 'en' || window.appconf.lang == '' ? 'cn' : 'en' },
 
-		methods: {
+    mobile () { return isMobile.any }
+  },
 
-			initialize () {
+  methods: {
 
-				this.iconTimeline = new TimelineMax( { tweens: [
+    initialize () {
+      this.iconTimeline = new TimelineMax({ tweens: [
 
-					TweenMax.fromTo( this.$refs.point, .75, { opacity: 0 }, { opacity: 1, ease: Cubic.easeOut } ),
+        TweenMax.fromTo(this.$refs.point, 0.75, { opacity: 0 }, { opacity: 1, ease: Cubic.easeOut }),
 
-					new TimelineMax( { tweens: [
+        new TimelineMax({ tweens: [
 
-						TweenMax.to( this.$refs.point, .75, { y: 7, force3D: true, ease: Cubic.easeOut } ),
+          TweenMax.to(this.$refs.point, 0.75, { y: 7, force3D: true, ease: Cubic.easeOut }),
 
-						TweenMax.to( this.$refs.point, .75, { opacity: 0, ease: Cubic.easeOut } )
-						
-						], stagger: .25 } )
+          TweenMax.to(this.$refs.point, 0.75, { opacity: 0, ease: Cubic.easeOut })
 
-					], stagger: 1, repeat: -1 } )
+        ],
+        stagger: 0.25 })
 
+      ],
+      stagger: 1,
+      repeat: -1 })
 
-				this.lineTimeline = new TimelineMax( { tweens: [
+      this.lineTimeline = new TimelineMax({ tweens: [
 
-					TweenMax.fromTo( this.$refs.scrollLineBar, 1.2, { y: -40 }, { bezier: { values:[ { y: 0 }, { y: 40 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut } )
+        TweenMax.fromTo(this.$refs.scrollLineBar, 1.2, { y: -40 }, { bezier: { values: [ { y: 0 }, { y: 40 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut })
 
-					], repeatDelay: 1, repeat: -1 } )
-			},
+      ],
+      repeatDelay: 1,
+      repeat: -1 })
+    },
 
-			update ( state ) {
+    update (state) {
+      if (state.theme !== undefined) { this.inversed = state.theme == 'light' }
 
-				if ( state.theme !== undefined )
+      if (state.visible !== undefined) { this.active = state.visible }
 
-					this.inversed = state.theme == 'light'
+      if (state.scroll !== undefined) { this.scroll = state.scroll }
+    },
 
-				if ( state.visible !== undefined )
+    toggle () {
+      this.muted = !this.muted
 
-					this.active = state.visible
+      this.$mixer.toggle()
+    },
 
-				if ( state.scroll !== undefined )
+    enter () {
+      let $icon = this.$el.querySelector('.mouse-icon .gsap')
 
-					this.scroll = state.scroll
-			},
+      let $mute = this.$el.querySelector('.audio-icon .gsap')
 
-			toggle () {
+      let $lang = this.$el.querySelector('p.lang .gsap')
 
-				this.muted = !this.muted
+      let $foo = this.$el.querySelector('p.foo .gsap')
 
-				this.$mixer.toggle()
-			},
+      return new TimelineMax({ tweens: [
 
-			enter () {
+        TweenMax.from($lang, 1, { y: 40, force3D: true, ease: Cubic.easeInOut }),
 
-				let $icon = this.$el.querySelector( '.mouse-icon .gsap' ),
+        TweenMax.from($icon, 1, { opacity: 0, y: 15, force3D: true, ease: Cubic.easeOut }),
 
-					$mute = this.$el.querySelector( '.audio-icon .gsap' ),
+        TweenMax.from($foo, 1, { y: 20, force3D: true, ease: Cubic.easeInOut }),
 
-					$lang = this.$el.querySelector( 'p.lang .gsap' ),
+        TweenMax.from($mute, 1, { y: 40, force3D: true, ease: Cubic.easeInOut })
 
-					$foo = this.$el.querySelector( 'p.foo .gsap' )
+      ],
+      stagger: 0.1 })
+    }
+  },
 
-				return new TimelineMax( { tweens: [
+  created () {
+    this.$bus.on(Events.UISTATE, this.update)
+  },
 
-					TweenMax.from( $lang, 1, { y: 40, force3D: true, ease: Cubic.easeInOut } ),
+  mounted () {
+    this.initialize()
+  },
 
-					TweenMax.from( $icon, 1, { opacity: 0, y: 15, force3D: true, ease: Cubic.easeOut } ),
+  destroyed () {
+    this.$bus.off(Events.UISTATE, this.update)
 
-					TweenMax.from( $foo, 1, { y: 20, force3D: true, ease: Cubic.easeInOut } ),
+    if (this.iconTimeline) { this.iconTimeline.kill() }
 
-					TweenMax.from( $mute, 1, { y: 40, force3D: true, ease: Cubic.easeInOut } )
-
-					], stagger: .1 } )
-			}
-		},
-
-		created () {
-
-			this.$bus.on( Events.UISTATE, this.update )
-		},
-
-		mounted () {
-
-			this.initialize()
-		},
-
-		destroyed () {
-			
-			this.$bus.off( Events.UISTATE, this.update )
-
-			
-			if ( this.iconTimeline )
-
-				this.iconTimeline.kill()
-
-
-			if ( this.lineTimeline )
-
-				this.lineTimeline.kill()
-		}
-	}
+    if (this.lineTimeline) { this.lineTimeline.kill() }
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	footer {
 
 		position: absolute;
@@ -217,23 +200,23 @@
 
 		.mouse-icon {
 
-			position: absolute; 
+			position: absolute;
 
-			bottom: 90px; left: 50%; 
+			bottom: 90px; left: 50%;
 
-			width: 14px; height: 22px; 
+			width: 14px; height: 22px;
 
 			margin: -7px 0 0 -7px;
-			
+
 			@include transition( all .6s map-get( $ease, cubic_out ) );
-			
+
 			@include transition-delay( 0.1s );
 
 			&.off {
 
 				@include translate( 0, 15px );
 
-				opacity: 0;	
+				opacity: 0;
 			}
 
 			&.mobile {
@@ -253,20 +236,20 @@
 
 			.gsap {
 
-				position: absolute; 
+				position: absolute;
 
 				top: 0; left: 0;
 
-				width: 100%; height: 100%; 	
+				width: 100%; height: 100%;
 			}
 
 			.border {
-				
-				position: absolute; 
 
-				top: 0; left: 0; right: 0; bottom: 0; 
+				position: absolute;
 
-				border: 2px solid map-get( $colors, cyan ); 
+				top: 0; left: 0; right: 0; bottom: 0;
+
+				border: 2px solid map-get( $colors, cyan );
 
 				border-radius: 10px;
 
@@ -275,16 +258,16 @@
 
 			.point {
 
-				position: absolute; 
+				position: absolute;
 
-				top: 5px; left: 50%; 
+				top: 5px; left: 50%;
 
-				width: 4px; height: 4px; 
+				width: 4px; height: 4px;
 
-				margin-left: -2px; 
+				margin-left: -2px;
 
 				>span {
-						
+
 					position: absolute;
 
 					top: 0; left: 0;
@@ -305,11 +288,11 @@
 			.label {
 
 				position: absolute;
-				
+
 				top: 50%; left: 0;
 
 				margin: -6px 0 0 30px;
-			
+
 				color: map-get( $colors, white );
 
 				letter-spacing: map-get( $ls, s );
@@ -333,10 +316,10 @@
 			position: absolute;
 
 			overflow: hidden;
-				
+
 			bottom: 30px; left: 50%;
 
-			width: 2px; height: 40px; 
+			width: 2px; height: 40px;
 
 			margin: 0px 0 0 -1px;
 
@@ -344,9 +327,9 @@
 
 			&.off {
 
-				opacity: 0;	
+				opacity: 0;
 			}
-			
+
 			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
 				bottom: -45px;
@@ -355,13 +338,13 @@
 			span {
 
 				position: absolute;
-				
+
 				top: 0; left: 0; right: 0; bottom: 0;
 
 				>span {
 
 					position: absolute;
-				
+
 					top: 0; left: 0; right: 0; bottom: 0;
 
 					background: {
@@ -395,23 +378,23 @@
 
 			.gsap {
 
-				position: absolute; 
+				position: absolute;
 
 				top: 0; left: 0;
 
-				width: 100%; height: 100%; 	
+				width: 100%; height: 100%;
 			}
-			
+
 			.icon {
-				
-				position: relative; 
+
+				position: relative;
 
 				width: 100%; height: 100%;
 
 				cursor: pointer;
 
 				@include transition( opacity .5s map-get( $ease, cubic_out ) );
-				
+
 				&:hover {
 
 					@include transition( opacity .5s map-get( $ease, cubic_in_out ) );
@@ -463,7 +446,7 @@
 			}
 
 			&.muted {
-	
+
 				.icon:after {
 
 					@include transform( rotate( -45deg ) scaleX( 1 ) );
@@ -514,23 +497,23 @@
 
 			.gsap {
 
-				position: absolute; 
+				position: absolute;
 
 				top: 0; left: 0;
 
-				width: 100%; height: 100%; 	
+				width: 100%; height: 100%;
 			}
 
 			.icon {
-				
-				position: relative; 
+
+				position: relative;
 
 				width: 100%; height: 100%;
 
 				cursor: pointer;
 
 				@include transition( opacity .5s map-get( $ease, cubic_out ) );
-				
+
 				&:hover {
 
 					@include transition( opacity .5s map-get( $ease, cubic_in_out ) );
@@ -575,7 +558,7 @@
 			}
 
 			a {
-				
+
 				color: map-get( $colors, rgb_full_white );
 
 				@include transition( color .8s map-get( $ease, cubic_out ) );
@@ -583,7 +566,7 @@
 				text: {
 
 					decoration: none;
-				}		
+				}
 
 				margin: {
 
@@ -595,7 +578,7 @@
 
 				position: relative;
 
-				display: inline-block;	
+				display: inline-block;
 
 				>span {
 
@@ -615,12 +598,12 @@
 			.mouse-icon {
 
 				.border {
-    			
+
     				border: 2px solid map-get( $colors, gray );
 				}
 
 				.point {
-					
+
 					>span {
 
 						background: {
@@ -639,7 +622,7 @@
 			.scroll-line {
 
 				span {
-					
+
 					>span {
 
 						background: {
@@ -689,7 +672,7 @@
 
 				a {
 
-					color: map-get( $colors, gray );	
+					color: map-get( $colors, gray );
 				}
 			}
 		}
@@ -699,12 +682,12 @@
 			.mouse-icon {
 
 				.border {
-    			
+
     				border: 2px solid map-get( $colors, white );
 				}
 
 				.point {
-					
+
 					>span {
 
 						background: {
@@ -731,9 +714,9 @@
 			}
 
 			p {
-				
+
 				.gsap {
-					
+
 					>span {
 
 						@include translate( 0, 20px );

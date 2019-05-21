@@ -1,376 +1,275 @@
 
 <template>
 
-	<div id="app-stage">
-		
-		<canvas ref="canvas"></canvas>
+  <div id="app-stage">
 
-	</div>
+    <!-- <canvas ref="canvas"></canvas> -->
+
+    <section>
+      <!-- <div class="sun"></div>   -->
+
+      <article class="mercury">
+        <div></div>
+      </article>
+      <article class="venus">
+        <div></div>
+      </article>
+      <article class="earth">
+        <div></div>
+      </article>
+      <article class="mars">
+        <div></div>
+      </article>
+      <article class="jupiter">
+        <div></div>
+      </article>
+      <article class="saturn">
+        <div></div>
+      </article>
+      <article class="uranus">
+        <div></div>
+      </article>
+      <article class="neptune">
+        <div></div>
+      </article>
+
+    </section>
+
+  </div>
 
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
-	import { States, Actions, Events, Sizes } from '../../constants'
+import { States, Actions, Events, Sizes } from '../../constants'
 
-	import Carousel from '../../factories/visuals/carousel'
+import Carousel from '../../factories/visuals/carousel'
 
-	import Projects from '../../factories/visuals/projects'
+import Projects from '../../factories/visuals/projects'
 
-	import Sample from '../../factories/visuals/sample'
+import Sample from '../../factories/visuals/sample'
 
-	import Post from '../../factories/post'
+import Post from '../../factories/post'
 
-	import Commons from '../mixins/Commons'
+import Commons from '../mixins/Commons'
 
-	import meta from '../../meta'
+import meta from '../../meta'
 
-	export default {
+export default {
+  name: 'AppStage',
 
-		name: 'AppStage',
+  mixins: [Commons],
 
-		mixins: [ Commons ],
+  data () {
+    return {
+      visuals: [],
 
-		data () {
-	
-			return {
+      dragvalue: 0,
 
-				visuals: [],
+      timeline: null,
 
-				dragvalue: 0,
+      postactive: true,
 
-				timeline: null,
+      transforms: {},
 
-				postactive: true,
+      prev: -1,
 
-				transforms: {},
+      next: 0
+    }
+  },
 
-				prev: -1,
+  watch: {
+    $route (to, from) {
+      // this.update( to, from )
+    }
+  },
 
-				next: 0
-			}
-		},
+  methods: {
+    resize () {
+      if (!this.renderer) return
 
-		watch: {
+      let width = window.innerWidth
+      let height = window.innerHeight
 
-			$route ( to, from ) {
+      this.renderer.setSize(width, height)
 
-				this.update( to, from )
-			}
-		},
+      this.camera.aspect = width / height
 
-		methods: {
+      this.camera.updateProjectionMatrix()
 
-			initialize () {
+      this.post.width = this.renderer.domElement.width
 
-				let canvas = this.$refs.canvas,
+      this.post.height = this.renderer.domElement.height
+    }
+  },
 
-					dpr = 1 //window.devicePixelRatio || 1
-
-
-				this.renderer = new THREE.WebGLRenderer( { canvas, alpha: true, antialias: true } )
-
-				this.renderer.setClearColor( 0x000000, 0 )
-
-				this.renderer.setSize( 1280, 720 )
-
-				this.renderer.setPixelRatio( dpr )
-
-
-				this.camera = new THREE.PerspectiveCamera( 40, 1280 / 720, 1, 100000 )
-	
-				this.camera.position.set( 0, 0, 2000 )
-
-				this.camera.lookAt( new THREE.Vector3() )
-
-
-				this.zero = new THREE.Vector3()
-
-
-				this.raycaster = new THREE.Raycaster()
-
-
-				//this.controls = new THREE.OrbitControls( this.camera, document ) // this.renderer.domElement
-
-				//this.controls.enabled = false
-
-
-				this.visuals = [
-
-					new Carousel( { camera: this.camera, color: 0x0c0c0c, dpr } ),
-
-					new Projects( { camera: this.camera, color: 0xffffff, dpr } ),
-					
-					new Sample( { camera: this.camera, color: 0xff7200, dpr } ),
-					
-					new Sample( { camera: this.camera, color: 0x181818, dpr } ),
-
-					new Sample( { camera: this.camera, color: 0xcccccc, dpr } ) ]
-
-				
-				this.post = new Post()
-
-
-				this.resize()
-
-				this.update()
-			},
-
-			render () {
-
-				if ( !this.renderer ) return
-
-
-				this.camera.position.x += ( ( this.$swiper.mouse.x * .5 ) - this.camera.position.x ) * .05
-				
-				this.camera.position.y += ( - ( this.$swiper.mouse.y * .5 ) - this.camera.position.y ) * .05
-
-				this.camera.lookAt( this.zero )
-			
-
-				let progress = this.timeline ? this.timeline.progress() : 0
-
-				if ( progress > 0 && progress < 1 && this.prev > -1 )
-
-					this.renderVisual( this.prev )
-
-				this.renderVisual( this.next )
-
-
-				this.renderer.render( this.post.scene, this.post.camera, null, true )
-
-				this.post.render()
-			},
-
-			renderVisual( index ) {
-
-				let camera = this.camera,
-
-					renderer = this.renderer,
-
-					visual = this.visuals[ index ]
-
-
-				visual.render()
-
-				renderer.setClearColor( visual.color )
-
-				renderer.render( visual.scene, visual.camera, visual.fbo, true )
-			},
-
-			update ( to, from ) {
-
-				let delay = meta.scrollontop ? 0 : 2,
-
-					name = to ? to.name : this.$route.name
-
-				this.prev = from ? this.tree.indexOfName( this.normalize( from.name ) ) : -1,
-
-				this.next = this.tree.indexOfName( this.normalize( name ) )
-
-
-				meta.route = { to, from }
-
-
-				if ( this.sid > -1 )
-
-					TweenMax.delayedCall( delay, () => this.visuals[0].index = this.sid )
-
-				if ( this.lid > -1 )
-
-					TweenMax.delayedCall( delay, () => this.visuals[1].index = this.lid )
-				
-
-				if ( this.prev < 0 ) {
-
-					this.post.samplerOut = null
-
-					this.post.samplerIn = this.visuals[ this.next ].fbo.texture
-
-					TweenMax.set( this.post.transition.value, { x: 1, y: 1, z: 1, w: 1 } )
-				
-				} else {
-
-					this.post.samplerOut = this.visuals[ this.prev ].fbo.texture
-
-					this.post.samplerIn = this.visuals[ this.next ].fbo.texture
-
-					
-					if ( this.timeline )
-
-						this.timeline.kill()
-
-					this.timeline = new TimelineMax( { tweens: [ 
-
-						TweenMax.fromTo( this.post.transition.value, 1, { x: 0 }, { x: 1, ease: Cubic.easeInOut } ),
-						TweenMax.fromTo( this.post.transition.value, 1, { y: 0 }, { y: 1, ease: Cubic.easeInOut } ),
-						TweenMax.fromTo( this.post.transition.value, 1, { z: 0 }, { z: 1, ease: Cubic.easeInOut } ),
-						TweenMax.fromTo( this.post.transition.value, 1, { w: 0 }, { w: 1, ease: Cubic.easeInOut } )
-
-					], stagger: .12, delay } )
-				}
-			},
-
-			adjustLeaf () {
-
-				this.visuals[ 1 ].adjust( () => {
-
-					if ( this.prev > -1 && this.prev != this.next ) 
-
-						this.renderVisual( this.prev )
-				} )
-			},
-
-			drag ( event ) {
-
-				let sid = this.sid,
-
-					current = this.current,
-
-					visual = this.visuals[ current ],
-
-					move = this.dragvalue - event.dist.y
-
-
-				if ( sid > -1 ) {
-
-					if ( visual.timeline )
-
-						visual.timeline.kill()
-
-					visual.angle += move * .0005
-				
-				} else {
-
-					//console.log( '::drag visual::' )
-				}
-
-				
-				this.dragvalue = event.dist.y
-			},
-
-			drop ( event ) {
-
-				let dir = event.dir,
-
-					leave = event.leave,
-
-					length = this.slider.length - 1,
-
-					sid = this.sid
-
-
-				if ( ( sid == 0 && dir < 0 ) ||
-
-					 ( sid == length && dir > 0 ) || 
-
-				 	 !leave ) this.visuals[0].slide()
-
-
-				this.dragvalue = 0
-			},
-
-			transform ( transforms ) {
-
-				this.transforms = transforms
-
-				this.postactive = transforms.post.clouds || transforms.post.noise
-
-
-				if ( this.post )
-
-					this.post.transforms = transforms
-
-
-				for ( let visual of this.visuals ) {
-
-					visual.transforms = transforms
-				}
-
-
-				if ( this.camera ) {
-
-					let deskscreen = window.innerWidth > Sizes.CUSTOM - 1
-
-					this.camera.position.z = deskscreen ? transforms.camera.dist : 3000
-
-					this.camera.far = deskscreen ? transforms.camera.far : 4500
-
-					this.camera.updateProjectionMatrix()
-				}
-			},
-
-			resize () {
-				
-				if ( !this.renderer ) return
-
-
-				let width = window.innerWidth,
-
-					height = window.innerHeight
-
-				
-				this.renderer.setSize( width, height )
-				
-				this.camera.aspect = width / height
-
-				this.camera.updateProjectionMatrix()
-
-				
-				this.post.width = this.renderer.domElement.width
-
-				this.post.height = this.renderer.domElement.height
-			}
-		},
-
-		mounted () {
-
-			this.initialize()
-
-
-			this.$ticker.add( this.render )
-
-			this.$swiper.bus.on( Events.DRAG, this.drag )
-
-			this.$swiper.bus.on( Events.DROP, this.drop )
-
-			this.$resizer.bus.on( Events.RESIZE, this.resize )
-
-
-			this.$bus.on( Events.LEAF_LEAVE, this.adjustLeaf )
-
-			this.$bus.on( Events.TRANSFORM, this.transform )
-		}
-	}
-
+  mounted () {}
+}
 </script>
 
 <style lang="scss">
+#app-stage {
+  position: absolute;
 
-	#app-stage {
+  top: -40em;
+  left: 80em;
+  bottom: 0;
+  right: 0;
 
-		position: absolute;
+  overflow: hidden;
 
-		top: 0; left: 0; bottom: 0; right: 0;
+  z-index: 1;
+}
 
-		overflow: hidden;
+$planet-names: mercury, venus, earth, mars, jupiter, saturn, uranus, neptune;
 
-		z-index: 1;
-		
-		canvas {
-	
-			position: relative;
+$planet-diameter: 0.4878, 1.2104, 1.276, 0.6787, 3.84, 1.95, 1.812, 1.753;
 
-			width: 100% !important; 
+$orbit-time: 10.88, 20.25, 30.6525, 60.87, 430.46475, 1070.74875, 3060.81,
+  6020.6625;
+//days devided by 100
 
-			height: 100% !important;
+$planet-colors: #a1a1a1, #f5cc96, #495391, #b95730, #d5ba8e, #dab37a, #c4eaed,
+  #6393e5;
 
-			background: transparent;
+html {
+  background: black;
+  font-size: 10px;
+}
 
-			z-index: 1;
-		}
-	}
+%center {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 
+article {
+  border-radius: 50%;
+  border: 0.1em solid rgba(white, 0.2);
+  height: 30em;
+  @extend %center;
+  position: absolute;
+  transition: 1s transform ease-in-out;
+  width: 30em;
+
+  section:hover &:before {
+    background: black;
+    color: #ccc;
+    position: absolute;
+    left: 50%;
+    margin-left: -2rem;
+    text-align: center;
+    top: -0.6rem;
+    width: 4rem;
+  }
+
+  div {
+    border-radius: 50%;
+    height: 100%;
+    position: relative;
+    width: 100%;
+
+    &:after {
+      border-radius: 50%;
+      background: blue;
+      box-shadow: inset 0 0.4rem 0.8rem rgba(black, 0.2),
+        inset 0 -0.4rem 0.4rem rgba(white, 0.2);
+      content: '';
+      left: 50%;
+      height: 3em;
+      margin-left: -1.5em;
+      position: absolute;
+      top: -1.5em;
+      width: 3em;
+    }
+  }
+}
+
+// .saturn div:after {
+//   box-shadow: 0 0 0 0.1em #000, 0 0 0.1em 0.5em #8f6200,
+//     inset 0 0.4rem 0.8rem rgba(black, 0.2),
+//     inset 0 -0.4rem 0.4rem rgba(white, 0.2);
+// }
+
+@for $i from 1 through length($planet-names) {
+  .#{nth($planet-names, $i)} {
+    height: $i * 6rem;
+    width: $i * 6rem;
+
+    // section:hover &:before {
+    //   content: "#{nth($planet-names, $i)}";
+    // }
+
+    div {
+      animation: orbit nth($orbit-time, $i) + s linear infinite;
+    }
+
+    $half: -0.5rem;
+
+    div:after {
+      background: nth($planet-colors, $i);
+      height: nth($planet-diameter, $i) + rem;
+      margin-left: nth($planet-diameter, $i) * $half;
+      top: nth($planet-diameter, $i) * $half;
+      width: nth($planet-diameter, $i) + rem;
+    }
+  }
+}
+
+.sun {
+  background: yellow;
+  border-radius: 50%;
+  height: 3em;
+  box-shadow: 0 0 15px rgba(white, 0.8);
+  @extend %center;
+  transition: 1s transform ease-in-out;
+  width: 3em;
+}
+
+.slider {
+  margin-top: 100px;
+  transform: rotate(90deg);
+}
+
+input[type='range'] {
+  appearance: none !important;
+  background: #444;
+  height: 15px;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  background: #6393e5;
+  height: 30px;
+  width: 15px;
+  border: 2px solid white;
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.mercury {
+  border: 0.5px solid rgba(white, 0.9);
+}
+.venus {
+  border: 0.5px solid rgba(white, 0.8);
+}
+.earth {
+  border: 0.5px solid rgba(white, 0.7);
+}
+.mars {
+  border: 0.5px solid rgba(white, 0.6);
+}
+.jupiter {
+  border: 0.5px solid rgba(white, 0.5);
+}
 </style>

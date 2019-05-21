@@ -1,21 +1,21 @@
 
 <template>
 
-	<transition 
+	<transition
 
-    	@enter="enter" 
-    	
+    	@enter="enter"
+
     	@leave="leave"
 
     	:css="false">
-		
+
 		<section id="index" class="root">
-				
+
 			<router-view :key="slide" ref="slide"></router-view>
 
 			<slider-nav ref="slideNav"></slider-nav>
 
-			<counter ref="counter"></counter>
+			<!-- <counter ref="counter"></counter> -->
 
 		</section>
 
@@ -24,78 +24,75 @@
 </template>
 
 <script>
-	
-	import { Sizes } from '../../constants'
 
-	import Section from '../mixins/Section'
+import { Sizes } from '../../constants'
 
-	import Counter from '../include/Counter.vue'
-		
-	import SliderNav from '../include/SliderNav.vue'
+import Section from '../mixins/Section'
 
-	export default {
+import Counter from '../include/Counter.vue'
 
-		name: 'Home',
+import SliderNav from '../include/SliderNav.vue'
 
-		mixins: [ Section ],
+export default {
 
-		data () {
-	
-			return {
-				
-			}
-		},
+  name: 'Home',
 
-		computed: {
+  mixins: [ Section ],
 
-			slide () { return this.$route.params.slide },
+  data () {
+    return {
 
-			deskscreen () { return window.innerWidth > Sizes.CUSTOM - 1 },
-		},
+    }
+  },
 
-		components: {
+  computed: {
 
-			'slider-nav': SliderNav,
+    slide () { return this.$route.params.slide },
 
-			'counter': Counter
-		},
+    deskscreen () { return window.innerWidth > Sizes.CUSTOM - 1 }
+  },
 
-		methods: {
+  components: {
 
-			leave ( el, done ) {
+    'slider-nav': SliderNav,
 
-				return new TimelineMax( { tweens: [
+    'counter': Counter
+  },
 
-					this.$refs.counter.current().leave(),
+  methods: {
 
-					this.$refs.slideNav.leave(),
+    leave (el, done) {
+      return new TimelineMax({ tweens: [
 
-					this.$refs.slide.leave()
+        this.$refs.counter.current().leave(),
 
-					], onComplete: done } )
-			},
+        this.$refs.slideNav.leave(),
 
-			enter ( el, done ) {
+        this.$refs.slide.leave()
 
-				return new TimelineMax( { tweens: [
+      ],
+      onComplete: done })
+    },
 
-					this.$refs.slide.enter(),
+    enter (el, done) {
+      return new TimelineMax({ tweens: [
 
-					this.$refs.slideNav.enter(),
+        this.$refs.slide.enter(),
 
-					this.$refs.counter.current().enter()
+        this.$refs.slideNav.enter(),
 
-					], stagger: .5, onComplete: () => {
+        // this.$refs.counter.current().enter()
 
-						this.$refs.counter.play()
+      ],
+      stagger: 0.5,
+      onComplete: () => {
+        // this.$refs.counter.play()
 
-						if ( done instanceof Function )
-
-							done()
-					} } )
-			}
-		}
-	}
+        if (done instanceof Function) { done() }
+      } })
+    }
+  }
+}
 </script>
 
 <style lang="scss">

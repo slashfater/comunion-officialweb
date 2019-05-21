@@ -1,44 +1,44 @@
-import { Chunk } from "../core/Chunk";
+import { Chunk } from '../core/Chunk'
 
 export default class Shader {
-  constructor(options) {
+  constructor (options) {
     return {
       uniforms: {
-        uResolution: { type: "v2", value: new THREE.Vector2() },
+        uResolution: { type: 'v2', value: new THREE.Vector2() },
 
-        uCol: { type: "v3", value: new THREE.Color(0x42d1d3) },
+        uCol: { type: 'v3', value: new THREE.Color(0x42d1d3) },
 
-        uTransition: { type: "v4", value: new THREE.Vector4() },
+        uTransition: { type: 'v4', value: new THREE.Vector4() },
 
-        uDocument: { type: "v2", value: new THREE.Vector2() },
+        uDocument: { type: 'v2', value: new THREE.Vector2() },
 
-        uMaskSize: { type: "v2", value: new THREE.Vector2() },
+        uMaskSize: { type: 'v2', value: new THREE.Vector2() },
 
-        uMask: { type: "v2", value: new THREE.Vector2() },
+        uMask: { type: 'v2', value: new THREE.Vector2() },
 
-        uActiveTransition: { type: "f", value: null },
+        uActiveTransition: { type: 'f', value: null },
 
-        uActiveClouds: { type: "f", value: null },
+        uActiveClouds: { type: 'f', value: null },
 
-        uActiveNoise: { type: "f", value: null },
+        uActiveNoise: { type: 'f', value: null },
 
-        uSamplerOut: { type: "t", value: null },
+        uSamplerOut: { type: 't', value: null },
 
-        uSamplerIn: { type: "t", value: null },
+        uSamplerIn: { type: 't', value: null },
 
-        uSampler: { type: "t", value: null },
+        uSampler: { type: 't', value: null },
 
-        uAmount: { type: "f", value: 0.2 },
+        uAmount: { type: 'f', value: 0.2 },
 
-        uAlpha: { type: "f", value: 0.2 },
+        uAlpha: { type: 'f', value: 0.2 },
 
-        uTime: { type: "f", value: 0.2 },
+        uTime: { type: 'f', value: 0.2 },
 
-        uBlur: { type: "f", value: 0.0 },
+        uBlur: { type: 'f', value: 0.0 },
 
-        uRad: { type: "f", value: 0.0 },
+        uRad: { type: 'f', value: 0.0 },
 
-        uDir: { type: "f", value: 1.0 }
+        uDir: { type: 'f', value: 1.0 }
       },
 
       vertexShader: `
@@ -242,6 +242,6 @@ export default class Shader {
 					gl_FragColor = vec4( color, 1.0 );
 				}
 			`
-    };
+    }
   }
 }

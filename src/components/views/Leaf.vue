@@ -1,10 +1,10 @@
 
 <template>
-	
-	<transition 
 
-    	@enter="enter" 
-    	
+	<transition
+
+    	@enter="enter"
+
     	@leave="leave"
 
     	:css="false">
@@ -12,12 +12,12 @@
 		<section class="leaf">
 
 			<scroller ref="scroller">
-				
+
 				<div class="main row" ref="mainrow">
 
 					<div class="table">
 						<div class="table-cell">
-							
+
 							<h1>
 								<span>
 									<span class="font-reg">
@@ -26,12 +26,12 @@
 									<span class="line" ref="line"></span>
 								</span>
 							</h1>
-							
+
 						</div>
 					</div>
-				
+
 				</div>
-				
+
 				<div class="row" v-for="content in model.contents">
 
 					<component :is="'leaf-'+content.type" :model="content" ref="compo"></component>
@@ -47,299 +47,259 @@
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
 
-	import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
-	import { Actions, Events } from '../../constants'
+import { Actions, Events } from '../../constants'
 
-	import Scroller from '../include/Scroller.vue'
+import Scroller from '../include/Scroller.vue'
 
-	import Section from '../mixins/Section'
+import Section from '../mixins/Section'
 
-	import Video from '../leaf/Video.vue'
-	
-	import Image from '../leaf/Image.vue'
+import Video from '../leaf/Video.vue'
 
-	import Quote from '../leaf/Quote.vue'
+import Image from '../leaf/Image.vue'
 
-	import Tbox from '../leaf/Tbox.vue'
+import Quote from '../leaf/Quote.vue'
 
-	import Link from '../leaf/Link.vue'
+import Tbox from '../leaf/Tbox.vue'
 
-	import meta from '../../meta'
+import Link from '../leaf/Link.vue'
 
-	export default {
+import meta from '../../meta'
 
-		name: 'Leaf',
+export default {
 
-		props: [ 'model' ],
+  name: 'Leaf',
 
-		mixins: [ Section ],
+  props: [ 'model' ],
 
-		data () {
-		
-			return {
+  mixins: [ Section ],
 
-				loaded: false,
+  data () {
+    return {
 
-				ontop: true
-			}
-		},
+      loaded: false,
 
-		components: {
+      ontop: true
+    }
+  },
 
-			'scroller': Scroller,
+  components: {
 
-			'leaf-video': Video,
+    'scroller': Scroller,
 
-			'leaf-image': Image,
+    'leaf-video': Video,
 
-			'leaf-quote': Quote,
+    'leaf-image': Image,
 
-			'leaf-tbox': Tbox,
+    'leaf-quote': Quote,
 
-			'leaf-link': Link
-		},
+    'leaf-tbox': Tbox,
 
-		methods: {
+    'leaf-link': Link
+  },
 
-			...mapActions( [ 
+  methods: {
 
-				Actions.UPDATE_UISTATE ] ),
+    ...mapActions([
 
-			initialize () {
+      Actions.UPDATE_UISTATE ]),
 
-				this.setup()
+    initialize () {
+      this.setup()
 
-				this.resize()
+      this.resize()
 
-				this.preload()
-			},
+      this.preload()
+    },
 
-			preload () {
+    preload () {
+      let manifest = []
 
-				let manifest = [],
+      let loader = new createjs.LoadQueue(true)
 
-					loader = new createjs.LoadQueue( true )
+      console.time('leaf')
 
-				console.time( 'leaf' )
+      for (let content of this.model.contents) {
+        let src = content.type == 'image'
+          ? content.source
+          : content.type == 'video'
+            ? content.poster
+            : null
 
-				for ( let content of this.model.contents ) {
+        if (src) manifest.push({ src })
+      }
 
-					let src = content.type == 'image'
-							? content.source 
-							: content.type == 'video'
-								? content.poster
-								: null
+      loader.on('complete', event => {
+        console.timeEnd('leaf')
 
-					if ( src ) manifest.push( { src } )
-				}
+        this.loaded = true
 
-				loader.on( 'complete', event => {
+        // this.resize()
+      })
 
-					console.timeEnd( 'leaf' )
+      if (manifest.length <= 0) {
+        console.timeEnd('leaf')
 
-					this.loaded = true
+        this.loaded = true
+      } else loader.loadManifest(manifest)
+    },
 
-					//this.resize()
-				} )
-				
-				if ( manifest.length <= 0 ) {
+    setup () {
+      let rows = []
 
-					console.timeEnd( 'leaf' )
+      let $rows = this.$el.querySelectorAll('.row')
 
-					this.loaded = true
-				
-				} else loader.loadManifest( manifest )
-			},
+      for (let i = this.$refs.compo.length - 1; i >= 0; i--) {
+        let $el = $rows[ i + 1 ]
 
-			setup () {
+        let compo = this.$refs.compo[ i ]
 
-				let rows = [],
+        let flag = false
 
-					$rows = this.$el.querySelectorAll( '.row' )
+        rows.push({ $el, compo, flag })
+      }
 
-				for ( let i = this.$refs.compo.length - 1; i >= 0; i-- ) {
+      this.rows = rows
+    },
 
-					let $el = $rows[ i + 1 ],
+    render () {
+      let $refs = this.$refs
 
-						compo = this.$refs.compo[ i ],
+      let scroller = $refs.scroller
 
-						flag = false
+      let scrollTop = scroller ? scroller.top() : 0
 
-					rows.push( { $el, compo, flag } )
-				}
+      let absScrollTop = Math.abs(scrollTop)
 
+      let offset = absScrollTop + window.innerHeight * 0.75
 
-				this.rows = rows
-			},
-
-			render () {
-
-				let $refs = this.$refs,
-					
-					scroller = $refs.scroller,
-
-					scrollTop = scroller ? scroller.top() : 0,
-
-					absScrollTop = Math.abs( scrollTop ),
-
-					offset = absScrollTop + window.innerHeight * .75
-
-				
-				if ( this.loaded ) {
-
-					for ( var i = this.rows.length - 1; i >= 0; i-- ) {
-	        			
+      if (this.loaded) {
+        for (var i = this.rows.length - 1; i >= 0; i--) {
 	        			let row = this.rows[ i ]
 
-						if ( row.$el.offsetTop < offset && !row.flag ) {
-
-							row.compo.enter()
+          if (row.$el.offsetTop < offset && !row.flag) {
+            row.compo.enter()
 
 	    					row.flag = true
-	        			
-	        			} else if ( row.$el.offsetTop > offset && row.flag ) {
-
+	        			} else if (row.$el.offsetTop > offset && row.flag) {
 	        				row.compo.leave()
 
 	        				row.flag = false
 	        			}
 	        		}
-				}
+      }
 
+      if (absScrollTop > 0 && this.ontop) {
+        meta.scrollontop = false
 
-				if ( absScrollTop > 0 && this.ontop ) {
+        this.$bus.emit(Events.UISTATE, { visible: false })
 
-					meta.scrollontop = false
+        this.ontop = false
+      } else if (absScrollTop == 0 && !this.ontop) {
+        meta.scrollontop = true
 
-					this.$bus.emit( Events.UISTATE, { visible: false } )
-				
-					this.ontop = false
+        this.$bus.emit(Events.UISTATE, { visible: true })
 
-				} else if ( absScrollTop == 0 && !this.ontop ) {
+        this.ontop = true
+      }
 
-					meta.scrollontop = true
-					
-					this.$bus.emit( Events.UISTATE, { visible: true } )
+      meta.scrollTop = absScrollTop
+    },
 
-					this.ontop = true
-				}
+    leave (el, done) {
+      let $refs = this.$refs
 
+      let scroller = $refs.scroller
 
-				meta.scrollTop = absScrollTop
-			},
+      let stagger = meta.scrollontop ? 0 : 2
 
-			leave ( el, done ) {
+      let $scrollbar = scroller.$el.querySelector('.iScrollIndicator')
 
-				let $refs = this.$refs,
-					
-					scroller = $refs.scroller,
+      this.$bus.emit(Events.LEAF_LEAVE)
 
-					stagger = meta.scrollontop ? 0 : 2,
+      return new TimelineMax({ tweens: [
 
-					$scrollbar = scroller.$el.querySelector( '.iScrollIndicator' )
+        this.ontop ? new TimelineMax() : scroller.gotoTop(),
 
-				
-				this.$bus.emit( Events.LEAF_LEAVE )
+        new TimelineMax({ tweens: [
 
-				
-				return new TimelineMax( { tweens: [
+          TweenMax.allTo($refs.letters, 1, { y: 75, force3D: true, ease: Cubic.easeInOut }, 0.02),
 
-					this.ontop ? new TimelineMax() : scroller.gotoTop(),
+          TweenMax.to($refs.line, 1, { scaleX: 0, ease: Cubic.easeInOut }),
 
-					new TimelineMax( { tweens: [
+          TweenMax.to($scrollbar || { scaleY: 1 }, 1, { scaleY: 0, opacity: 0, ease: Cubic.easeInOut })
 
-						TweenMax.allTo( $refs.letters, 1, { y: 75, force3D: true, ease: Cubic.easeInOut }, .02 ),
+        ] })
 
-						TweenMax.to( $refs.line, 1, { scaleX: 0, ease: Cubic.easeInOut } ),
+      ],
+      stagger,
+      onUpdate: () => {
+        this.render()
+      },
+      onComplete: () => {
+        scroller.destroy()
 
-						TweenMax.to( $scrollbar || { scaleY: 1 }, 1, { scaleY: 0, opacity: 0, ease: Cubic.easeInOut } )
+        if (done instanceof Function) { done() }
+      } })
+    },
 
-						] } )
+    enter (el, done) {
+      let $refs = this.$refs
 
-					], stagger, onUpdate: () => {
+      let scroller = $refs.scroller
 
-						this.render()
+      let delay = meta.scrollontop ? 0.75 : 2.75
 
-					}, onComplete: () => {
+      let $scrollbar = scroller.$el.querySelector('.iScrollIndicator')
 
-						scroller.destroy()
+      return new TimelineMax({ tweens: [
 
-						if ( done instanceof Function )
+        TweenMax.allFrom($refs.letters, 1, { y: 75, force3D: true, ease: Cubic.easeOut }, 0.06),
 
-							done()
-					} } )
-			},
+        TweenMax.from($refs.line, 1, { scaleX: 0, ease: Cubic.easeOut }),
 
-			enter ( el, done ) {
+        TweenMax.from($scrollbar || { scaleY: 1 }, 1, { scaleY: 0, opacity: 0, ease: Cubic.easeOut })
 
-				let $refs = this.$refs,
+      ],
+      delay,
+      onComplete: () => {
+        this.resize()
 
-					scroller = $refs.scroller,
+        this.$bus.emit(Events.LEAF_READY)
 
-					delay = meta.scrollontop ? .75 : 2.75,
+        if (done instanceof Function) { done() }
+      } })
+    },
 
-					$scrollbar = scroller.$el.querySelector( '.iScrollIndicator' )
+    resize () {
+      let $refs = this.$refs
 
+      let mainrow = $refs.mainrow
 
-				return new TimelineMax( { tweens: [
+      let scroller = $refs.scroller
 
-					TweenMax.allFrom( $refs.letters, 1, { y: 75, force3D: true, ease: Cubic.easeOut }, .06 ),
+      if (mainrow) { TweenMax.set(mainrow, { height: window.innerHeight }) }
 
-					TweenMax.from( $refs.line, 1, { scaleX: 0, ease: Cubic.easeOut } ),
+      if (scroller) { scroller.resize() }
+    }
+  },
 
-					TweenMax.from( $scrollbar || { scaleY: 1 }, 1, { scaleY: 0, opacity: 0, ease: Cubic.easeOut } )
+  mounted () {
+    this.$resizer.bus.on(Events.RESIZE, this.resize)
 
-					], delay, onComplete: () => {
+    this.$ticker.add(this.render)
 
-						this.resize()
+    this.initialize()
+  },
 
-						this.$bus.emit( Events.LEAF_READY )
+  destroyed () {
+    this.$ticker.remove(this.render)
 
-						if ( done instanceof Function )
-
-							done()
-					} } )
-			},
-
-			resize () {
-
-				let $refs = this.$refs,
-
-					mainrow = $refs.mainrow,
-
-					scroller = $refs.scroller
-
-				
-				if ( mainrow )
-					
-					TweenMax.set( mainrow, { height: window.innerHeight } )
-
-				if ( scroller ) 
-
-					scroller.resize()
-			}
-		},
-
-		mounted () {
-
-			this.$resizer.bus.on( Events.RESIZE, this.resize )
-
-			this.$ticker.add( this.render )
-
-			this.initialize()
-		},
-
-		destroyed () { 
-
-			this.$ticker.remove( this.render )
-
-			this.$resizer.bus.off( Events.RESIZE, this.resize )
-		}
-	}
+    this.$resizer.bus.off(Events.RESIZE, this.resize)
+  }
+}
 </script>
 
 <style lang="scss">
@@ -347,7 +307,7 @@
 	section.leaf {
 
 		//display: none;
-		
+
 		position: absolute;
 
 		top: 0; left: 0; bottom: 0; right: 0;
@@ -376,7 +336,7 @@
 			}
 
 			.line {
-					
+
 				position: absolute;
 
 				bottom: -25px; left: 50px; right: 50px;
@@ -389,7 +349,7 @@
 				}
 
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-					
+
 					bottom: -15px; left: 30px; right: 30px;
 				}
 			}
@@ -399,18 +359,18 @@
 
 			left: 90px; right: 87px;
 
-			@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-				
+			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 				left: 0; right: 0;
 			}
 
 			.scroller-body {
-				
+
 				padding: 0 0 40px;
 
 				margin-right: 3px;
 
-				@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
+				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
 					margin-right: 0;
 				}
@@ -421,7 +381,7 @@
 				top: 4px; bottom: 4px;
 
 				width: 2px;
-				
+
 				.iScrollIndicator {
 
 					background: {

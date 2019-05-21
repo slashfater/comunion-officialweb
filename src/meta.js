@@ -4,4 +4,4 @@ export default {
   scrollTop: 0,
 
   route: null
-};
+}

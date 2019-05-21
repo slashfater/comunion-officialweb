@@ -1,10 +1,10 @@
 
 <template>
-	
+
 	<div id="app-ui" :class="theme">
-		
+
 		<app-header ref="header"></app-header>
-		
+
 		<app-footer ref="footer"></app-footer>
 
 		<app-lines ref="lines"></app-lines>
@@ -17,74 +17,68 @@
 
 <script>
 
-	import { Events } from '../../constants'
-	
-	import Header from '../include/Header.vue'
+import { Events } from '../../constants'
 
-	import Footer from '../include/Footer.vue'
+import Header from '../include/Header.vue'
 
-	import Lines from '../include/Lines.vue'
+import Footer from '../include/Footer.vue'
 
-	import Hamb from '../include/Hamb.vue'
+import Lines from '../include/Lines.vue'
 
-	export default {
+import Hamb from '../include/Hamb.vue'
 
-		name: 'AppUI',
+export default {
 
-		data () {
-	
-			return {
+  name: 'AppUI',
 
-				theme: 'dark'
-			}
-		},
+  data () {
+    return {
 
-		components: {
+      theme: 'dark'
+    }
+  },
 
-			'app-header': Header,
+  components: {
 
-			'app-footer': Footer,
+    'app-header': Header,
 
-			'app-lines': Lines,
+    'app-footer': Footer,
 
-			'app-hamb': Hamb
-		},
+    'app-lines': Lines,
 
-		methods: {
+    'app-hamb': Hamb
+  },
 
-			update ( state ) {
+  methods: {
 
-				if ( state.theme !== undefined )
+    update (state) {
+      if (state.theme !== undefined) { this.theme = state.theme }
+    },
 
-					this.theme = state.theme
-			},
+    enter () {
+      return new TimelineMax({ tweens: [
 
-			enter () {
+        this.$refs.lines.enter(),
 
-				return new TimelineMax( { tweens: [
+        this.$refs.header.enter(),
 
-					this.$refs.lines.enter(),
+        this.$refs.footer.enter(),
 
-					this.$refs.header.enter(),
+        this.$refs.hamb.enter()
 
-					this.$refs.footer.enter(),
+      ],
+      stagger: 0.25 })
+    }
+  },
 
-					this.$refs.hamb.enter()
+  created () {
+    this.$bus.on(Events.UISTATE, this.update)
+  },
 
-					], stagger: .25 } )
-			}
-		},
-
-		created () {
-
-			this.$bus.on( Events.UISTATE, this.update )
-		},
-
-		destroyed () {
-
-			this.$bus.off( Events.UISTATE, this.update )
-		}
-	}
+  destroyed () {
+    this.$bus.off(Events.UISTATE, this.update)
+  }
+}
 </script>
 
 <style lang="scss">

@@ -113,15 +113,16 @@ export default class LoaderManager {
   }
 
   loadProjects(collection, callback) {
-    let loader = this._loaders.prj,
-      scope = this,
-      count = 0,
-      prjsProgress = [],
-      manifest = [],
-      response = [],
-      length = 0;
+    console.log("-coll--", collection);
+    let loader = this._loaders.prj;
+    let scope = this;
+    let count = 0;
+    let prjsProgress = [];
+    let manifest = [];
+    let response = [];
+    let length = 0;
 
-    for (let model of JSON.parse(collection)) {
+    for (let model of collection) {
       // collection | JSON.parse( collection )
 
       manifest.push(model.threefile);
@@ -133,9 +134,9 @@ export default class LoaderManager {
       loader.load(
         manifest[count],
         group => {
-          let mesh = group.children[0].clone(),
-            attrs = mesh.geometry.attributes,
-            index = count;
+          let mesh = group.children[0].clone();
+          let attrs = mesh.geometry.attributes;
+          let index = count;
 
           response.push({ attrs, index });
 
@@ -166,20 +167,20 @@ export default class LoaderManager {
   }
 
   loadFbx(manifest, callback) {
-    let loader = this._loaders.fbx,
-      scope = this,
-      count = 0,
-      length = manifest.length,
-      fbxsProgress = [],
-      response = [];
+    let loader = this._loaders.fbx;
+    let scope = this;
+    let count = 0;
+    let length = manifest.length;
+    let fbxsProgress = [];
+    let response = [];
 
     function preload() {
       loader.load(
         manifest[count].src,
         group => {
-          let mesh = group.children[0].clone(),
-            attrs = mesh.geometry.attributes,
-            index = count;
+          let mesh = group.children[0].clone();
+          let attrs = mesh.geometry.attributes;
+          let index = count;
 
           response.push({ attrs, index });
 

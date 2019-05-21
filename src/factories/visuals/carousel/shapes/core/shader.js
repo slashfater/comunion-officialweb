@@ -1,16 +1,16 @@
-import { Chunk } from "../../../../core/Chunk";
+import { Chunk } from '../../../../core/Chunk'
 
 export default class Shader {
-  constructor(options) {
+  constructor (options) {
     return {
       uniforms: THREE.UniformsUtils.merge([
-        THREE.ShaderLib["phong"].uniforms,
+        THREE.ShaderLib['phong'].uniforms,
         {
           color: { value: new THREE.Color(0x000000) },
 
           emissive: { value: new THREE.Color(0xffffff).multiplyScalar(0.15) },
 
-          envMap: { type: "t", value: null },
+          envMap: { type: 't', value: null },
 
           radius: { value: 2.0 },
 
@@ -116,6 +116,6 @@ export default class Shader {
       lights: true,
 
       fog: true
-    };
+    }
   }
 }

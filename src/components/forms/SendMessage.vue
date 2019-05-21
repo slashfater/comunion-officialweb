@@ -1,31 +1,31 @@
 
 <template>
-	
+
 	<div class="send-message">
 
 		<div class="table">
 			<div class="table-cell">
-				
+
 				<form @submit.prevent="">
-						
+
 					<span class="row" ref="nameRow">
 						<span class="left line"><span ref="nameLeftLineFocus"></span></span>
 						<span class="input"><input type="text" v-model="name" name="name" :placeholder="locale.form.name+'*'" @focus="focus" @blur="blur" ref="name"></span>
 						<span class="right line" ref="nameLine"><span ref="nameRightLineFocus"></span></span>
 					</span>
-					
+
 					<span class="row" ref="emailRow">
 						<span class="left line"><span ref="emailLeftLineFocus"></span></span>
 						<span class="input"><input type="text" v-model="email" name="email" :placeholder="locale.form.email+'*'" @focus="focus" @blur="blur" ref="email"></span>
 						<span class="right line" ref="emailLine"><span ref="emailRightLineFocus"></span></span>
 					</span>
-					
+
 					<span class="row text" ref="messRow">
 						<span class="left line"><span ref="messLeftLineFocus"></span></span>
 						<span class="input"><textarea type="text" v-model="message" name="mess" :placeholder="locale.form.message+'*'" @focus="focus" @blur="blur" ref="mess"></textarea></span>
 						<span class="right line" ref="messLine"><span ref="messRightLineFocus"></span></span>
 					</span>
-	
+
 					<main-btn class="red" :click="submit" ref="submit">
 						<span class="font-reg">{{ locale.form.send }}</span>
 					</main-btn>
@@ -37,180 +37,162 @@
 					<!--p class="error" :class="{ 'show': error.active }" ref="error"><span class="font-reg">{{ error.message }}</span></p-->
 
 				</form>
-			
+
 			</div>
 		</div>
-	
+
 	</div>
-	
+
 </template>
 
 <script>
 
-	import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
-	import { mapActions } from 'vuex'
+import { Actions, Sizes } from '../../constants'
 
-	import { Actions, Sizes } from '../../constants'
-	
-	import MainBtn from '../btns/MainBtn.vue'
+import MainBtn from '../btns/MainBtn.vue'
 
-	export default {
+export default {
 
-		name: 'SendMessage',
+  name: 'SendMessage',
 
-		props: [ 'submit', 'status', 'clear' ],
+  props: [ 'submit', 'status', 'clear' ],
 
-		data () {
-			
-			return {
+  data () {
+    return {
 
-			}
-		},
+    }
+  },
 
-		watch: {
+  watch: {
 
-			locale ( value ) {
+    locale (value) {
+      if (value) { this.resize() }
+    }
+  },
 
-				if ( value )
+  computed: {
 
-					this.resize()
-			}
-		},
+    ...mapState({
 
-		computed: {
+      locale: state => state.site.locale
+    }),
 
-			...mapState( {
+    name: {
 
-				locale: state => state.site.locale
-			} ),
+      get () {
+        return this.$store.state.site.user.name
+      },
 
-			name: {
+      set (value) {
+        this.updateUser({ name: value })
+      }
+    },
 
-				get () {
+    email: {
 
-					return this.$store.state.site.user.name
-				},
+      get () {
+        return this.$store.state.site.user.email
+      },
 
-				set ( value ) {
+      set (value) {
+        this.updateUser({ email: value })
+      }
+    },
 
-					this.updateUser( { name: value } )
-				}
-			},
+    message: {
 
-			email: {
+      get () {
+        return this.$store.state.site.user.message
+      },
 
-				get () {
+      set (value) {
+        this.updateUser({ message: value })
+      }
+    }
+  },
 
-					return this.$store.state.site.user.email
-				},
+  components: {
 
-				set ( value ) {
+    'main-btn': MainBtn
+  },
 
-					this.updateUser( { email: value } )
-				}
-			},
+  methods: {
 
-			message: {
+    ...mapActions([ Actions.UPDATE_USER ]),
 
-				get () {
+    focus (event) {
+      let name = event.target.name
 
-					return this.$store.state.site.user.message
-				},
+      let leftLine = this.$refs[ name + 'LeftLineFocus' ]
 
-				set ( value ) {
+      let rightLine = this.$refs[ name + 'RightLineFocus' ]
 
-					this.updateUser( { message: value } )
-				}
-			}
-		},
+      TweenMax.killTweensOf(leftLine)
 
-		components: {
+      TweenMax.killTweensOf(rightLine)
 
-			'main-btn': MainBtn
-		},
+      this.clear()
 
-		methods: {
+      return new TimelineMax({ tweens: [
 
-			...mapActions( [ Actions.UPDATE_USER ] ),
+        TweenMax.to(leftLine, 1, { scaleX: 1, ease: Cubic.easeInOut }),
 
-			focus ( event ) {
+        TweenMax.to(rightLine, 1, { scaleX: 1, ease: Cubic.easeOut })
 
-				let name = event.target.name,
+      ],
+      stagger: 0.65 })
+    },
 
-					leftLine = this.$refs[ name + 'LeftLineFocus' ],
+    blur (event) {
+      let name = event.target.name
 
-					rightLine = this.$refs[ name + 'RightLineFocus' ]
-				
+      let leftLine = this.$refs[ name + 'LeftLineFocus' ]
 
-				TweenMax.killTweensOf( leftLine )
+      let rightLine = this.$refs[ name + 'RightLineFocus' ]
 
-				TweenMax.killTweensOf( rightLine )
-				
-				this.clear()
+      TweenMax.killTweensOf(leftLine)
 
-				
-				return new TimelineMax( { tweens: [
+      TweenMax.killTweensOf(rightLine)
 
-					TweenMax.to( leftLine, 1, { scaleX: 1, ease: Cubic.easeInOut } ),
+      this.clear()
 
-					TweenMax.to( rightLine, 1, { scaleX: 1, ease: Cubic.easeOut } )
+      return new TimelineMax({ tweens: [
 
-					], stagger: .65 } )
-			},
+        TweenMax.to(rightLine, 1, { scaleX: 0, ease: Cubic.easeOut }),
 
-			blur ( event ) {
+        TweenMax.to(leftLine, 1, { scaleX: 0, ease: Cubic.easeOut })
 
-				let name = event.target.name,
+      ],
+      stagger: 0.35 })
+    },
 
-					leftLine = this.$refs[ name + 'LeftLineFocus' ],
+    resize () {
+      let $refs = this.$refs
 
-					rightLine = this.$refs[ name + 'RightLineFocus' ]
-				
+      let deskscreen = window.innerWidth > Sizes.CUSTOM - 1
 
-				TweenMax.killTweensOf( leftLine )
-				
-				TweenMax.killTweensOf( rightLine )
-
-				this.clear()
-
-				
-				return new TimelineMax( { tweens: [
-
-					TweenMax.to( rightLine, 1, { scaleX: 0, ease: Cubic.easeOut } ),
-
-					TweenMax.to( leftLine, 1, { scaleX: 0, ease: Cubic.easeOut } )
-
-					], stagger: .35 } )
-			},
-
-			resize () {
-
-				let $refs = this.$refs,	
-
-					deskscreen = window.innerWidth > Sizes.CUSTOM - 1,
-
-					sideWidth = deskscreen
+      let sideWidth = deskscreen
 
 							  ? window.innerWidth / 2 - 90 - 60 * 2 - 20
 
 							  : window.innerWidth - 100 - 15
 
+      TweenMax.set([ $refs.name, $refs.email ], { width: sideWidth * 0.6 })
 
-				TweenMax.set( [ $refs.name, $refs.email ], { width: sideWidth * .6 } )
+      TweenMax.set([ $refs.nameLine, $refs.emailLine ], { width: sideWidth * 0.4 })
 
-				TweenMax.set( [ $refs.nameLine, $refs.emailLine ], { width: sideWidth * .4 } )
+      TweenMax.set([ $refs.mess ], { width: sideWidth * 0.8 })
 
-				TweenMax.set( [ $refs.mess ], { width: sideWidth * .8 } )
-
-				TweenMax.set( [ $refs.messLine ], { width: sideWidth * .2 } )
-			}
-		}
-	}
+      TweenMax.set([ $refs.messLine ], { width: sideWidth * 0.2 })
+    }
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	.send-message {
 
 		position: relative;
@@ -218,10 +200,10 @@
 		width: 100%; height: 100%;
 
 		@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-			
+
 		    padding-top: 50px;
 		}
-		
+
 		form {
 
 			position: relative;
@@ -229,12 +211,12 @@
 			text-align: right;
 
 			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-				
+
 				text-align: center;
 			}
 
 			.row {
-				
+
 				position: relative;
 
 				padding: 5px 0;
@@ -252,14 +234,14 @@
 					float: left;
 
 					@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-						
+
 						padding-left: 15px;
 					}
 
 					input {
 
 						width: 200px;
-						
+
 						padding: 15px;
 
 						background: none;
@@ -284,25 +266,25 @@
 						&:-webkit-autofill:hover,
 						&:-webkit-autofill:focus,
 						&:-webkit-autofill:active {
-							
+
 							-webkit-transition: color 9999s ease-out, background-color 9999s ease-out;
 							-webkit-transition-delay: 9999s;
 						}
 
 						@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-							
+
 							size: map-get( $typo, p_ );
 						}
 					}
 
 					textarea {
-						
+
 						width: 385px;
 
 						height: 120px;
 
 						padding: 15px;
-						
+
 						resize: none;
 
 						background: none;
@@ -326,18 +308,18 @@
 						}
 
 						@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-							
+
 							size: map-get( $typo, p_ );
 						}
 					}
 				}
-				
+
 				.line {
 
 					//display: none;
 
 					position: absolute;
-					
+
 					top: 28px; height: 2px;
 
 					margin-top: -1px;
@@ -348,11 +330,11 @@
 					}
 
 					&.left {
-						
+
 						left: 0; width: 20px;
 
 						@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-							
+
 							width: 15px;
 						}
 					}
@@ -393,11 +375,11 @@
 							}
 
 							@media ( max-width: map-get( $sizes, smarthphone ) - 1 ) {
-							
+
 								left: ( 185px + 20px );
 							}*/
 						}
-					}	
+					}
 				}
 			}
 
@@ -416,18 +398,18 @@
 				}
 
 				&.warning {
-						
+
 					color: map-get( $colors, white );
-					
+
 					margin-top: 35px;
 				}
 
 				&.status {
 
 					color: map-get( $colors, cyan );
-	
+
 					margin-top: 35px;
-					
+
 					opacity: 0;
 
 					@include transition( opacity .5s ease-out );
@@ -438,9 +420,9 @@
 					}
 
 					&.error {
-						
+
 						color: map-get( $colors, white );
-					}	
+					}
 				}
 			}
 		}

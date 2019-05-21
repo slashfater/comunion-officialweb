@@ -1,0 +1,89 @@
+{
+	"ui": {
+		"menu": "Menu",
+		"open": "Open",
+		"close": "Close",
+		"swipe": "Swipe",
+		"scroll": "Scroll",
+		"loading": "Loading",
+		"pressarea": "Private area"
+	},
+	"menu": {
+		"home": "Home",
+		"projects": "Projects",
+		"partners": "Partners",
+		"contacts": "Contacts",
+		"pressarea": "Private area"
+	},
+	"news": [],
+	"counter": [{
+		"label": "Generated Polygons",
+		"value": "19",
+		"type": "Bln"
+	}, {
+		"label": "Meditation time",
+		"value": "936",
+		"type": "hours"
+	}, {
+		"label": "lines<br \/>written",
+		"value": "298",
+		"type": "k"
+	}, {
+		"label": "Take Away",
+		"value": "5486",
+		"type": "Pizzas"
+	}],
+	"home": [{
+		"head": "Limitless",
+		"title": "Imagination"
+	}, {
+		"title": "Who",
+		"copy": "A high-tech project Factory. We connect Design with Artificial<br \/>Intelligence to create innovative objects and experiences. We monitor<br \/>and implement the ongoing digital evolution outcomes to continuously<br \/>improve our work.",
+		"mcopy": "A high-tech project Factory. We connect Design<br \/>with Artificial Intelligence to create innovative<br \/>objects and experiences. We monitor and implement<br \/>the ongoing digital evolution outcomes to continuously<br \/>improve our work."
+	}, {
+		"title": "Vision",
+		"copy": "When innovation is the goal, technology is the ultimate path to reach it. <br \/>But ideas are the true propellent.",
+		"mcopy": "When innovation is the goal,<br \/>technology is the ultimate path to reach it. <br \/>But ideas are the true propellent."
+	}, {
+		"title": "Mission",
+		"copy": "We redesign the way technology and Internet can offer people new perspectives.<br \/>We imagine what does not exist and then we create it.",
+		"mcopy": "We redesign the way technology and Internet can offer<br \/>people new perspectives. We imagine what does not exist<br \/>and then we create it."
+	}, {
+		"title": "Projects",
+		"copy": "\u201cInspiration exists, but it has to find you working\u201d<br \/>Pablo Picasso",
+		"mcopy": "\u201cInspiration exists, but it has to find you working\u201d<br \/>Pablo Picasso",
+		"cta": "Discover more"
+	}],
+	"partners": {
+		"copy": "We provide innovation opportunities for branding strategies. <br \/>Our projects generate new physical and digital experiences attracting interest and engagement.<br \/><br \/>This is how we manage to integrate and enhance a brand\u2019s world and the relevant communication strategies, adding value in terms of modernity, social appeal and data generation. <br \/><br \/>We focus on designing and offering customized services and solutions, rather than on applying standard cooperation models."
+	},
+	"contacts": {
+		"copy": "IGOODI S.r.l.",
+		"phone": "Phone: +39 010 8397849",
+		"email": "Email: <a href='mailto:info@igoodi.it'>info@igoodi.it<\/a>",
+		"address": "Via M. Gonzaga n.2, Milan (Italy)"
+	},
+	"form": {
+		"name": "Full name",
+		"email": "info@igoodi.it",
+		"message": "Message",
+		"send": "Send message",
+		"warn": "All fields are mandatory",
+		"empty_error": "All fields are mandatory",
+		"email_error": "Invalid email address",
+		"send_error": "Error, please try again later",
+		"sending": "Sending message",
+		"success": "Email sent",
+		"to": "info@igoodi.it"
+	},
+	"footer": {
+		"rights": "All rights reserved \u00a92019 Comunion",
+		"email": "info@comunion.io"
+	},
+	"cookies": {
+		"copy": "This site uses cookies.<br \/>By continuing to browse the site you are agreeing to our use of cookies.",
+		"cta": "Find out More",
+		"link": "\/pdf\/cookie-policy.pdf",
+		"accept": "Accept"
+	}
+}

@@ -1,34 +1,30 @@
 <template>
-	
+
 	<div id="stats">{{ }}</div>
 
 </template>
 
 <script>
 
-	export default {
-	
-		name: 'Stats',
-		
-		methods: {
+export default {
 
-			render () {
+  name: 'Stats',
 
-				if ( this.stats ) 
+  methods: {
 
-					this.stats.update()
-			}
-		},
+    render () {
+      if (this.stats) { this.stats.update() }
+    }
+  },
 
-		mounted () {
+  mounted () {
+    this.stats = new Stats()
 
-			this.stats = new Stats()
+    this.$el.appendChild(this.stats.dom)
 
-			this.$el.appendChild( this.stats.dom )
-
-			this.$ticker.add( this.render )
-		}
-	}
+    this.$ticker.add(this.render)
+  }
+}
 </script>
 
 <style lang="scss">
@@ -38,7 +34,7 @@
 		position: fixed;
 
 		bottom: 0; left: 5px;
-	
+
 		z-index: 99 !important;
 
 		>div {

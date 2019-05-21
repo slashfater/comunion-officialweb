@@ -1,10 +1,10 @@
- 
-<template>
-	
-	<transition 
 
-    	@enter="enter" 
-    	
+<template>
+
+	<transition
+
+    	@enter="enter"
+
     	@leave="leave"
 
     	:css="false">
@@ -58,7 +58,7 @@
 
 								</div>
 							</div>
-							
+
 							<span class="v-line"></span>
 
 						</div>
@@ -88,7 +88,7 @@
 				</div>
 
 			</div>
-			
+
 		</section>
 
 	</transition>
@@ -97,288 +97,273 @@
 
 <script>
 
-	import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
-	import { Events, Sizes } from '../../constants'
+import { Events, Sizes } from '../../constants'
 
-	import Section from '../mixins/Section'
+import Section from '../mixins/Section'
 
-	import Scroller from '../include/Scroller.vue'
+import Scroller from '../include/Scroller.vue'
 
-	import meta from '../../meta'
-	
-	export default {
+import meta from '../../meta'
 
-		name: 'Partners',
+export default {
 
-		mixins: [ Section ],
+  name: 'Partners',
 
-		data () {
+  mixins: [ Section ],
 
-			return {
+  data () {
+    return {
 
-				ontop: true
-			}	
-		},
+      ontop: true
+    }
+  },
 
-		computed: {
+  computed: {
 
-			...mapState( {
+    ...mapState({
 
-				locale: state => state.site.locale,
+      locale: state => state.site.locale,
 
-				collection: state => state.site.partners
-			} )
-		},
+      collection: state => state.site.partners
+    })
+  },
 
-		components: {
+  components: {
 
-			'scroller': Scroller
-		},
-		
-		methods: {
+    'scroller': Scroller
+  },
 
-			initialize () {
+  methods: {
 
-				this.resize()
+    initialize () {
+      this.resize()
 
-				this.preload()
-			},
+      this.preload()
+    },
 
-			preload () {
+    preload () {
+      let manifest = []
 
-				let manifest = [],
+      let loader = new createjs.LoadQueue(true)
 
-					loader = new createjs.LoadQueue( true )
+      for (let model of this.collection) {
+        let logo = model.logo
 
-				for ( let model of this.collection ) {
+        let image = model.image
 
-					let logo = model.logo,
+        if (logo) { manifest.push({ src: logo }) }
 
-						image = model.image
+        if (image) { manifest.push({ src: image }) }
+      }
 
-					if ( logo )
+      loader.on('complete', event => {
+        this.resize()
+      })
 
-						manifest.push( { src: logo } )
+      loader.loadManifest(manifest)
+    },
 
-					if ( image )
+    render () {
+      let $refs = this.$refs
 
-						manifest.push( { src: image } )
-				}
+      let scroller = $refs.scroller
 
-				loader.on( 'complete', event => {
+      let scrollTop = scroller ? scroller.top() : 0
 
-					this.resize()
-				} )
-				
-				loader.loadManifest( manifest )
-			},
+      let absScrollTop = Math.abs(scrollTop)
 
-			render () {
+      if (absScrollTop > 0 && this.ontop) {
+        this.$bus.emit(Events.UISTATE, { visible: false })
 
-				let $refs = this.$refs,
-					
-					scroller = $refs.scroller,
+        this.ontop = false
+      } else if (absScrollTop == 0 && !this.ontop) {
+        this.$bus.emit(Events.UISTATE, { visible: true })
 
-					scrollTop = scroller ? scroller.top() : 0,
+        this.ontop = true
+      }
+    },
 
-					absScrollTop = Math.abs( scrollTop )
+    leave (el, done) {
+      let $refs = this.$refs
 
+      let scroller = $refs.scroller
 
-				if ( absScrollTop > 0 && this.ontop ) {
+      let delay = meta.scrollontop ? 0 : 2
 
-					this.$bus.emit( Events.UISTATE, { visible: false } )
-				
-					this.ontop = false
+      let offset = window.innerHeight
 
-				} else if ( absScrollTop == 0 && !this.ontop ) {
+      let deskscreen = window.innerWidth > Sizes.CUSTOM - 1
 
-					this.$bus.emit( Events.UISTATE, { visible: true } )
-					
-					this.ontop = true
-				}
-			},
+      let $scrollbar = scroller.$el.querySelector('.iScrollIndicator')
 
-			leave ( el, done ) {
+      return deskscreen
 
-				let $refs = this.$refs,
+        ? new TimelineMax({ tweens: [
 
-					scroller = $refs.scroller,
+          new TimelineMax({ tweens: [ TweenMax.to({ value: 0 }, 1, { value: 1, ease: Cubic.easeInOut }) ] }),
 
-					delay = meta.scrollontop ? 0 : 2,
+          new TimelineMax({ tweens: [ TweenMax.to({ value: 0 }, 1, { value: 1, ease: Cubic.easeInOut }) ] }),
 
-					offset = window.innerHeight,
+          new TimelineMax({ tweens: [
 
-					deskscreen = window.innerWidth > Sizes.CUSTOM - 1,
+            TweenMax.to($refs.leftSide, 1, { y: -offset, force3D: true, ease: Cubic.easeInOut }),
 
-					$scrollbar = scroller.$el.querySelector( '.iScrollIndicator' )
+            TweenMax.to($refs.leftSideHold, 1, { y: offset * 0.5, force3D: true, ease: Cubic.easeInOut })
 
-				
-				return deskscreen
+          ] }),
 
-					? new TimelineMax( { tweens: [
+          new TimelineMax({ tweens: [
 
-						new TimelineMax( { tweens: [ TweenMax.to( { value: 0 }, 1, { value: 1, ease: Cubic.easeInOut } ) ] } ),
-						
-						new TimelineMax( { tweens: [ TweenMax.to( { value: 0 }, 1, { value: 1, ease: Cubic.easeInOut } ) ] } ),
-						
-						new TimelineMax( { tweens: [
-							
-							TweenMax.to( $refs.leftSide, 1, { y:-offset, force3D: true, ease: Cubic.easeInOut } ),
-							
-							TweenMax.to( $refs.leftSideHold, 1, { y: offset * .5, force3D: true, ease: Cubic.easeInOut } )
-							
-							] } ),
+            TweenMax.to($refs.rightSide, 1, { y: -offset, force3D: true, ease: Cubic.easeInOut }),
 
-						new TimelineMax( { tweens: [
-							
-							TweenMax.to( $refs.rightSide, 1, { y:-offset, force3D: true, ease: Cubic.easeInOut } ),
-							
-							TweenMax.to( $refs.rightSideHold, 1, { y: offset * .5, force3D: true, ease: Cubic.easeInOut } )
-							
-							] } ),
+            TweenMax.to($refs.rightSideHold, 1, { y: offset * 0.5, force3D: true, ease: Cubic.easeInOut })
 
-						TweenMax.to( $scrollbar || { scaleY: 1 }, 1, { scaleY: 0, ease: Cubic.easeInOut } )
-						
-						], stagger: .12, delay, onComplete: done } )
+          ] }),
 
-					
-					:new TimelineMax( { tweens: [
+          TweenMax.to($scrollbar || { scaleY: 1 }, 1, { scaleY: 0, ease: Cubic.easeInOut })
 
-						new TimelineMax( { tweens: [ TweenMax.to( { value: 0 }, 1, { value: 1, ease: Cubic.easeInOut } ) ] } ),
-						
-						new TimelineMax( { tweens: [ TweenMax.to( { value: 0 }, 1, { value: 1, ease: Cubic.easeInOut } ) ] } ),
+        ],
+        stagger: 0.12,
+        delay,
+        onComplete: done })
 
-						new TimelineMax( { tweens: [
-							
-							TweenMax.to( $refs.rightSide, 1, { y:-offset, force3D: true, ease: Cubic.easeInOut } ),
-							
-							TweenMax.to( $refs.rightSideHold, 1, { y: offset * .5, force3D: true, ease: Cubic.easeInOut } )
-							
-							] } )
+        : new TimelineMax({ tweens: [
 
-						], stagger: .12, delay, onComplete: done } )
-			},
+          new TimelineMax({ tweens: [ TweenMax.to({ value: 0 }, 1, { value: 1, ease: Cubic.easeInOut }) ] }),
 
-			enter ( el, done ) {
+          new TimelineMax({ tweens: [ TweenMax.to({ value: 0 }, 1, { value: 1, ease: Cubic.easeInOut }) ] }),
 
-				let $refs = this.$refs,
+          new TimelineMax({ tweens: [
 
-					scroller = $refs.scroller,
+            TweenMax.to($refs.rightSide, 1, { y: -offset, force3D: true, ease: Cubic.easeInOut }),
 
-					delay = meta.scrollontop ? 0 : 2,
+            TweenMax.to($refs.rightSideHold, 1, { y: offset * 0.5, force3D: true, ease: Cubic.easeInOut })
 
-					offset = window.innerHeight,
+          ] })
 
-					deskscreen = window.innerWidth > Sizes.CUSTOM - 1,
+        ],
+        stagger: 0.12,
+        delay,
+        onComplete: done })
+    },
 
-					$scrollbar = scroller.$el.querySelector( '.iScrollIndicator' )
+    enter (el, done) {
+      let $refs = this.$refs
 
+      let scroller = $refs.scroller
 
-				return deskscreen
+      let delay = meta.scrollontop ? 0 : 2
 
-					? new TimelineMax( { tweens: [
+      let offset = window.innerHeight
 
-						new TimelineMax( { tweens: [ TweenMax.to( { value: 0 }, 1, { value: 1, ease: Cubic.easeInOut } ) ] } ),
-						
-						new TimelineMax( { tweens: [ TweenMax.to( { value: 0 }, 1, { value: 1, ease: Cubic.easeInOut } ) ] } ),
-						
-						new TimelineMax( { tweens: [
-							
-							TweenMax.from( $refs.leftSide, 1, { y: offset, force3D: true, ease: Cubic.easeInOut } ),
-							
-							TweenMax.from( $refs.leftSideHold, 1, { y:-offset, force3D: true, ease: Cubic.easeInOut } ),
-							
-							new TimelineMax( { tweens: [
+      let deskscreen = window.innerWidth > Sizes.CUSTOM - 1
 
-								TweenMax.allFrom( $refs.leftSideLetters, 1.2, { y: offset * .25, force3D: true, ease: Cubic.easeOut } ),
-								
-								TweenMax.from( $refs.leftSideLine, 1.2, { y: offset * .25, force3D: true, ease: Cubic.easeOut } ),
-								
-								TweenMax.from( $refs.leftSideCopy, 1.2, { y: offset * .25, force3D: true, ease: Cubic.easeOut } )
+      let $scrollbar = scroller.$el.querySelector('.iScrollIndicator')
 
-								], stagger: .1 } )
-							
-							] } ),
+      return deskscreen
 
-						new TimelineMax( { tweens: [
-							
-							TweenMax.from( $refs.rightSide, 1, { y: offset, force3D: true, ease: Cubic.easeInOut } ),
-							
-							TweenMax.from( $refs.rightSideHold, 1, { y:-offset, force3D: true, ease: Cubic.easeInOut } ),
-							
-							TweenMax.allFrom( $refs.rightSideList, 1.2, { y: offset * .25, force3D: true, ease: Cubic.easeOut }, .1 )
-							
-							] } ),
+        ? new TimelineMax({ tweens: [
 
-						TweenMax.from( $scrollbar || { scaleY: 1 }, 1, { scaleY: 0, ease: Cubic.easeInOut } )
-						
-						], stagger: .12, delay, onComplete: done } )
+          new TimelineMax({ tweens: [ TweenMax.to({ value: 0 }, 1, { value: 1, ease: Cubic.easeInOut }) ] }),
 
-					
-					: new TimelineMax( { tweens: [
+          new TimelineMax({ tweens: [ TweenMax.to({ value: 0 }, 1, { value: 1, ease: Cubic.easeInOut }) ] }),
 
-						new TimelineMax( { tweens: [ TweenMax.to( { value: 0 }, 1, { value: 1, ease: Cubic.easeInOut } ) ] } ),
-						
-						new TimelineMax( { tweens: [ TweenMax.to( { value: 0 }, 1, { value: 1, ease: Cubic.easeInOut } ) ] } ),
+          new TimelineMax({ tweens: [
 
-						new TimelineMax( { tweens: [
-							
-							TweenMax.from( $refs.rightSide, 1, { y: offset, force3D: true, ease: Cubic.easeInOut } ),
-							
-							TweenMax.from( $refs.rightSideHold, 1, { y:-offset, force3D: true, ease: Cubic.easeInOut } ),
-							
-							new TimelineMax( { tweens: [
+            TweenMax.from($refs.leftSide, 1, { y: offset, force3D: true, ease: Cubic.easeInOut }),
 
-								TweenMax.allFrom( $refs.rightSideLetters, 1.2, { y: offset * .25, force3D: true, ease: Cubic.easeOut } ),
-								
-								TweenMax.from( $refs.rightSideLine, 1.2, { y: offset * .25, force3D: true, ease: Cubic.easeOut } ),
-								
-								TweenMax.from( $refs.rightSideCopy, 1.2, { y: offset * .25, force3D: true, ease: Cubic.easeOut } )
+            TweenMax.from($refs.leftSideHold, 1, { y: -offset, force3D: true, ease: Cubic.easeInOut }),
 
-								], stagger: .1 } )
+            new TimelineMax({ tweens: [
 
-							] } )
+              TweenMax.allFrom($refs.leftSideLetters, 1.2, { y: offset * 0.25, force3D: true, ease: Cubic.easeOut }),
 
-						], stagger: .12, delay, onComplete: done } )
-			},
+              TweenMax.from($refs.leftSideLine, 1.2, { y: offset * 0.25, force3D: true, ease: Cubic.easeOut }),
 
-			resize () {
+              TweenMax.from($refs.leftSideCopy, 1.2, { y: offset * 0.25, force3D: true, ease: Cubic.easeOut })
 
-				let $refs = this.$refs,
+            ],
+            stagger: 0.1 })
 
-					mainrow = $refs.mainrow,
+          ] }),
 
-					scroller = $refs.scroller
+          new TimelineMax({ tweens: [
 
+            TweenMax.from($refs.rightSide, 1, { y: offset, force3D: true, ease: Cubic.easeInOut }),
 
-				if ( mainrow )
-					
-					TweenMax.set( mainrow, { height: window.innerHeight } )
+            TweenMax.from($refs.rightSideHold, 1, { y: -offset, force3D: true, ease: Cubic.easeInOut }),
 
-				if ( scroller ) 
+            TweenMax.allFrom($refs.rightSideList, 1.2, { y: offset * 0.25, force3D: true, ease: Cubic.easeOut }, 0.1)
 
-					scroller.resize()
+          ] }),
 
-			}	
-		},
+          TweenMax.from($scrollbar || { scaleY: 1 }, 1, { scaleY: 0, ease: Cubic.easeInOut })
 
-		mounted () {
+        ],
+        stagger: 0.12,
+        delay,
+        onComplete: done })
 
-			this.$resizer.bus.on( Events.RESIZE, this.resize )
+        : new TimelineMax({ tweens: [
 
-			this.$ticker.add( this.render )
+          new TimelineMax({ tweens: [ TweenMax.to({ value: 0 }, 1, { value: 1, ease: Cubic.easeInOut }) ] }),
 
-			this.initialize()
-		},
+          new TimelineMax({ tweens: [ TweenMax.to({ value: 0 }, 1, { value: 1, ease: Cubic.easeInOut }) ] }),
 
-		destroyed () { 
+          new TimelineMax({ tweens: [
 
-			this.$ticker.remove( this.render )
+            TweenMax.from($refs.rightSide, 1, { y: offset, force3D: true, ease: Cubic.easeInOut }),
 
-			this.$resizer.bus.off( Events.RESIZE, this.resize )
-		}
-	}
+            TweenMax.from($refs.rightSideHold, 1, { y: -offset, force3D: true, ease: Cubic.easeInOut }),
+
+            new TimelineMax({ tweens: [
+
+              TweenMax.allFrom($refs.rightSideLetters, 1.2, { y: offset * 0.25, force3D: true, ease: Cubic.easeOut }),
+
+              TweenMax.from($refs.rightSideLine, 1.2, { y: offset * 0.25, force3D: true, ease: Cubic.easeOut }),
+
+              TweenMax.from($refs.rightSideCopy, 1.2, { y: offset * 0.25, force3D: true, ease: Cubic.easeOut })
+
+            ],
+            stagger: 0.1 })
+
+          ] })
+
+        ],
+        stagger: 0.12,
+        delay,
+        onComplete: done })
+    },
+
+    resize () {
+      let $refs = this.$refs
+
+      let mainrow = $refs.mainrow
+
+      let scroller = $refs.scroller
+
+      if (mainrow) { TweenMax.set(mainrow, { height: window.innerHeight }) }
+
+      if (scroller) { scroller.resize() }
+    }
+  },
+
+  mounted () {
+    this.$resizer.bus.on(Events.RESIZE, this.resize)
+
+    this.$ticker.add(this.render)
+
+    this.initialize()
+  },
+
+  destroyed () {
+    this.$ticker.remove(this.render)
+
+    this.$resizer.bus.off(Events.RESIZE, this.resize)
+  }
+}
 </script>
 
 <style lang="scss">
@@ -413,13 +398,13 @@
 						}
 
 						.head {
-							
+
 							position: relative;
 
 							.logo {
-								
+
 								display: block;
-   								
+
    								width: 190px;
 
 							    margin-left: 20px;
@@ -428,9 +413,9 @@
 
    									width: 120px;
 							    }
-								
+
 								img {
-										
+
 									width: auto; height: 50px;
 
 									margin: 0 auto;
@@ -447,7 +432,7 @@
 							.line {
 
 								position: absolute;
-								
+
 								top: 50%; height: 2px;
 
 								margin-top: -1px;
@@ -458,7 +443,7 @@
 								}
 
 								&.left {
-									
+
 									left: 0; width: 20px;
 								}
 
@@ -467,7 +452,7 @@
 									right: 0; left: ( 190px + 20px );
 
 									@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-										
+
 										right: 0; left: ( 120px + 20px );
 									}
 								}
@@ -486,9 +471,9 @@
 
 									padding-top: 25px;
 								}
-								
+
 								img {
-									
+
 									display: block;
 
 									width: 100%;
@@ -499,7 +484,7 @@
 
 							p {
 								padding-top: 40px;
-								
+
 							    text: {
 
 									transform: uppercase;
@@ -521,19 +506,19 @@
 
 				right: 87px;
 
-				@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-				
+				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 					right: 0;
 				}
 
 				.scroller-body {
-				
+
 					padding: 0 60px 100px;
 
 					margin-right: 3px;
 
-					@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-				
+					@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 						padding: 0 50px 100px;
 
 						margin-right: 0;
@@ -545,7 +530,7 @@
 					top: 4px; bottom: 4px;
 
 					width: 2px;
-					
+
 					.iScrollIndicator {
 
 						background: {

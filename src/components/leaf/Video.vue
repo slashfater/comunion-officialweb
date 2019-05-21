@@ -4,11 +4,11 @@
 	<div class="video" :class="config">
 
 		<img :src="assets['poster'].src" :width="model.width" :height="model.height" alt="" :style="{ 'max-width': model['max-width']+'px' }">
-			
+
 		<!--video controls preload="auto" :width="model.width" :height="model.height" :style="{ 'max-width': model['max-width']+'px' }" ref="video">
 			<source :src="model.source" type="video/mp4">
 		</video-->
-		
+
 		<div class="holder" ref="video">
 			<div id="youtube" ref="yt"></div>
 		</div>
@@ -18,164 +18,150 @@
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
 
-	import { Events } from '../../constants'
+import { mapState } from 'vuex'
 
-	import Compo from './Compo'
-	
-	export default {
+import { Events } from '../../constants'
 
-		name: 'VideoLeaf',
+import Compo from './Compo'
 
-		mixins: [ Compo ],
+export default {
 
-		props: [ 'model' ],
+  name: 'VideoLeaf',
 
-		data () {
-		
-			return {
+  mixins: [ Compo ],
 
-				ready: false
-			}
-		},
+  props: [ 'model' ],
 
-		computed: mapState( {
+  data () {
+    return {
 
-			assets: state => state.site.assets
-		} ),
+      ready: false
+    }
+  },
 
-		methods: {
+  computed: mapState({
 
-			setup () {
+    assets: state => state.site.assets
+  }),
 
-				this.player = new YT.Player( this.$refs.yt, {
+  methods: {
 
-					width: this.model.width,
-					
-					height: this.model.height,
-					
-					videoId: this.model.ytvid,
+    setup () {
+      this.player = new YT.Player(this.$refs.yt, {
 
-					playerVars: { 
+        width: this.model.width,
 
-						'playsinline': 0,
+        height: this.model.height,
 
-						'controls': 0,
-						
-						'showinfo': 0,
+        videoId: this.model.ytvid,
 
-						'autoplay': 0,
+        playerVars: {
 
-						'loop': 0,
+          'playsinline': 0,
 
-						'rel' : 0
-					},
+          'controls': 0,
 
-					events: {
+          'showinfo': 0,
 
-						'onReady': this.onPlayerReady,
+          'autoplay': 0,
 
-						'onStateChange': this.onPlayerStateChange
-					}
-				} )
-			},
+          'loop': 0,
 
-			onPlayerReady ( event ) {
+          'rel': 0
+        },
 
-				this.ready = true
-			},
+        events: {
 
-			onPlayerStateChange ( event ) {
+          'onReady': this.onPlayerReady,
 
-				switch ( event.data ) {
+          'onStateChange': this.onPlayerStateChange
+        }
+      })
+    },
 
-					case YT.PlayerState.UNSTARTED :
-						
-						console.log( ':: UNSTARTED ::' )
+    onPlayerReady (event) {
+      this.ready = true
+    },
 
-						break
+    onPlayerStateChange (event) {
+      switch (event.data) {
+        case YT.PlayerState.UNSTARTED :
 
-					case YT.PlayerState.ENDED :
-						
-						console.log( ':: ENDED ::' )
+          console.log(':: UNSTARTED ::')
 
-						this.$mixer.resume()
+          break
 
-						break
+        case YT.PlayerState.ENDED :
 
-					case YT.PlayerState.PLAYING :
+          console.log(':: ENDED ::')
 
-						console.log( ':: PLAYING ::' )
+          this.$mixer.resume()
 
-						this.$mixer.quiet()
+          break
 
-						break
+        case YT.PlayerState.PLAYING :
 
-					case YT.PlayerState.PAUSED :
+          console.log(':: PLAYING ::')
 
-						console.log( ':: PAUSED ::' )
+          this.$mixer.quiet()
 
-						this.$mixer.resume()
+          break
 
-						break
+        case YT.PlayerState.PAUSED :
 
-					case YT.PlayerState.BUFFERING :
+          console.log(':: PAUSED ::')
 
-						console.log( ':: BUFFERING ::' )
+          this.$mixer.resume()
 
-						break
-				}
-			},
+          break
 
-			leave () {
+        case YT.PlayerState.BUFFERING :
 
-				if ( this.player )
+          console.log(':: BUFFERING ::')
 
-					this.player.stopVideo()
+          break
+      }
+    },
 
-				if ( this.timeline ) 
+    leave () {
+      if (this.player) { this.player.stopVideo() }
 
-					this.timeline.reverse()
-			}
-		},
+      if (this.timeline) { this.timeline.reverse() }
+    }
+  },
 
-		created () {
+  created () {
+    this.$bus.on(Events.LEAF_READY, this.setup)
+  },
 
-			this.$bus.on( Events.LEAF_READY, this.setup )
-		},	
+  mounted () {
+    this.timeline = new TimelineMax({ tweens: [
 
-		mounted () {
-			
-			this.timeline = new TimelineMax( { tweens: [
+      TweenMax.from(this.$refs.video, 1, { y: '115%', scale: 1.2, force3D: false, ease: Cubic.easeInOut })
 
-				TweenMax.from( this.$refs.video, 1, { y: '115%', scale: 1.2, force3D: false, ease: Cubic.easeInOut } )
+    ],
+    paused: true })
+  },
 
-				], paused: true } )
-		},
+  destroyed () {
+    this.$bus.off(Events.LEAF_READY, this.setup)
 
-		destroyed () {
+    this.$mixer.resume()
 
-			this.$bus.off( Events.LEAF_READY, this.setup )
+    if (this.timeline) {
+      this.timeline.kill()
 
-			this.$mixer.resume()
+      this.timeline = null
+    }
 
-			if ( this.timeline ) {
+    if (this.player) {
+      this.player.destroy()
 
-				this.timeline.kill()
-
-				this.timeline = null
-			}
-
-			if ( this.player ) {
-
-				this.player.destroy()
-
-				this.player = null
-			}
-		}
-	}
+      this.player = null
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -187,16 +173,16 @@
 		overflow: hidden;
 
 		float: left;
-		
+
 		video, iframe, .holder {
-			
+
 			position: absolute;
 
 			top: 0; left: 0;
 
 			width: 100%; height: 100%;
 
-			display: block;	
+			display: block;
 
 			z-index: 2;
 		}
@@ -204,7 +190,7 @@
 		img {
 
 			position: relative;
-			
+
 			width: 100%; height: auto;
 
 			display: block;
@@ -213,13 +199,13 @@
 		}
 
 		&.left {
-			
+
 			float: left;
 		}
 
 		&.right {
 
-			float: right;	
+			float: right;
 		}
 	}
 

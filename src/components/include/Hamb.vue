@@ -2,9 +2,9 @@
 <template>
 
 	<div id="hamb">
-		
+
 		<div class="open" ref="open">
-			
+
 			<div class="icon" @click="toggle" @mouseenter="openMouseenter" @mouseleave="openMouseleave" ref="openIcon">
 
 				<div class="line-top">
@@ -13,7 +13,7 @@
 				</div>
 				<div class="line-bot">
 					<div class="line-1" ref="openLineBot1"><span></span></div>
-					<div class="line-2" ref="openLineBot2"><span></span></div>	
+					<div class="line-2" ref="openLineBot2"><span></span></div>
 				</div>
 
 			</div>
@@ -28,18 +28,18 @@
 			</div>
 
 		</div>
-		
+
 		<div class="close" ref="close">
-			
+
 			<div class="icon" @click="toggle" @mouseenter="closeMouseenter" @mouseleave="closeMouseleave" ref="closeIcon">
-				
+
 				<div class="line-top">
 					<div class="line-1" ref="closeLineTop1"><span></span></div>
 					<div class="line-2" ref="closeLineTop2"><span></span></div>
 				</div>
 				<div class="line-bot">
 					<div class="line-1" ref="closeLineBot1"><span></span></div>
-					<div class="line-2" ref="closeLineBot2"><span></span></div>	
+					<div class="line-2" ref="closeLineBot2"><span></span></div>
 				</div>
 
 			</div>
@@ -60,358 +60,344 @@
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
-	
-	import { Actions } from '../../constants'
 
-	export default {
+import { mapState } from 'vuex'
 
-		name: 'Hamb',
+import { Actions } from '../../constants'
 
-		data () {
-	
-			return {
+export default {
 
-				isOpen: false
-			}
-		},
+  name: 'Hamb',
 
-		computed: {
+  data () {
+    return {
 
-			...mapState( {
+      isOpen: false
+    }
+  },
 
-				locale: state => state.site.locale
-			} ),
+  computed: {
 
-			mobile () { return isMobile.any }
-		},
+    ...mapState({
 
-		watch: {
+      locale: state => state.site.locale
+    }),
 
-			$route: function ( to, from ) {
+    mobile () { return isMobile.any }
+  },
 
-				if ( this.isOpen )
+  watch: {
 
-					this.isOpen = false
-			},
+    $route: function (to, from) {
+      if (this.isOpen) { this.isOpen = false }
+    },
 
-			isOpen ( value ) {
+    isOpen (value) {
+      if (this.timeline) { this.timeline.kill() }
 
-				if ( this.timeline )
+      let $refs = this.$refs
 
-					this.timeline.kill()
+      TweenMax.set($refs.openLineTop1, { height: 12, y: 0 })
 
-				
+      TweenMax.set($refs.openLineBot1, { height: 32, y: 0 })
 
-				let $refs = this.$refs
+      TweenMax.set($refs.openLineTop2, { height: 0, y: 12 })
 
-				
-				TweenMax.set( $refs.openLineTop1, { height: 12, y: 0 } )
-				
-				TweenMax.set( $refs.openLineBot1, { height: 32, y: 0 } )
+      TweenMax.set($refs.openLineBot2, { height: 0, y: 12 })
 
-				TweenMax.set( $refs.openLineTop2, { height: 0, y: 12  } )
-				
-				TweenMax.set( $refs.openLineBot2, { height: 0, y: 12 } )
+      TweenMax.set($refs.closeLineTop1, { scaleY: 1, y: 0 })
 
+      TweenMax.set($refs.closeLineBot1, { scaleY: 1, y: 0 })
 
-				TweenMax.set( $refs.closeLineTop1, { scaleY: 1, y: 0 } )
-				
-				TweenMax.set( $refs.closeLineBot1, { scaleY: 1, y: 0 } )
+      TweenMax.set($refs.closeLineTop2, { scaleY: 0, y: 25 })
 
-				TweenMax.set( $refs.closeLineTop2, { scaleY: 0, y: 25 } )
-				
-				TweenMax.set( $refs.closeLineBot2, { scaleY: 0, y: 25 } )
+      TweenMax.set($refs.closeLineBot2, { scaleY: 0, y: 25 })
 
-				
-				if ( value ) 
+      if (value) {
+        this.timeline = new TimelineMax({ tweens: [
 
-					this.timeline = new TimelineMax( { tweens: [
+          new TimelineMax({ tweens: [
 
-						new TimelineMax( { tweens: [
-						
-							TweenMax.to( $refs.openLabel, .8, { x: 50, force3D: true, ease: Cubic.easeInOut } ),
+            TweenMax.to($refs.openLabel, 0.8, { x: 50, force3D: true, ease: Cubic.easeInOut }),
 
-							TweenMax.to( $refs.closeLabel, .8, { x: 0, force3D: true, ease: Cubic.easeInOut } )
+            TweenMax.to($refs.closeLabel, 0.8, { x: 0, force3D: true, ease: Cubic.easeInOut })
 
-							], stagger: .1 } ),
+          ],
+          stagger: 0.1 }),
 
-						new TimelineMax( { tweens: [
+          new TimelineMax({ tweens: [
 
-							new TimelineMax( { tweens: [
-								
-								TweenMax.to( $refs.openLineTop1, .6, { bezier: { values:[ { height: 32, y: 0 }, { height: 0, y: -37 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-							
-								TweenMax.to( $refs.openLineBot1, .6, { bezier: { values:[ { height: 32, y: 0 }, { height: 0, y: -37 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
-			
-								], stagger: .1 } ),
+            new TimelineMax({ tweens: [
 
-							new TimelineMax( { tweens: [
+              TweenMax.to($refs.openLineTop1, 0.6, { bezier: { values: [ { height: 32, y: 0 }, { height: 0, y: -37 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
 
-								TweenMax.fromTo( $refs.closeLineTop1, .6, { scaleY: 0, y: 25 }, { bezier: { values:[ { scaleY: 1.25, y: 25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-							
-								TweenMax.fromTo( $refs.closeLineBot1, .6, { scaleY: 0, y: 25 }, { bezier: { values:[ { scaleY: 1.25, y: 25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
+              TweenMax.to($refs.openLineBot1, 0.6, { bezier: { values: [ { height: 32, y: 0 }, { height: 0, y: -37 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-								], onStart: () => {
+            ],
+            stagger: 0.1 }),
 
-									TweenMax.set( $refs.closeIcon, { autoAlpha: 1 } )
+            new TimelineMax({ tweens: [
 
-								}, stagger: .1 } )
+              TweenMax.fromTo($refs.closeLineTop1, 0.6, { scaleY: 0, y: 25 }, { bezier: { values: [ { scaleY: 1.25, y: 25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
 
-							], stagger: .2 } )
+              TweenMax.fromTo($refs.closeLineBot1, 0.6, { scaleY: 0, y: 25 }, { bezier: { values: [ { scaleY: 1.25, y: 25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-						] } )
+            ],
+            onStart: () => {
+              TweenMax.set($refs.closeIcon, { autoAlpha: 1 })
+            },
+            stagger: 0.1 })
 
-				else this.timeline = new TimelineMax( { tweens: [
+          ],
+          stagger: 0.2 })
 
-						new TimelineMax( { tweens: [
-						
-							TweenMax.to( $refs.closeLabel, .8, { x: -50, force3D: true, ease: Cubic.easeInOut } ),
+        ] })
+      } else {
+        this.timeline = new TimelineMax({ tweens: [
 
-							TweenMax.to( $refs.openLabel, .8, { x: 0, force3D: true, ease: Cubic.easeInOut } )
+          new TimelineMax({ tweens: [
 
-							], stagger: .1 } ),
+            TweenMax.to($refs.closeLabel, 0.8, { x: -50, force3D: true, ease: Cubic.easeInOut }),
 
-						new TimelineMax( { tweens: [
+            TweenMax.to($refs.openLabel, 0.8, { x: 0, force3D: true, ease: Cubic.easeInOut })
 
-							new TimelineMax( { tweens: [
-	
-								TweenMax.to( $refs.closeLineTop1, .6, { bezier: { values:[ { scaleY: 1.25, y: 25 }, { scaleY: 0, y: 25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
+          ],
+          stagger: 0.1 }),
 
-								TweenMax.to( $refs.closeLineBot1, .6, { bezier: { values:[ { scaleY: 1.25, y: 25 }, { scaleY: 0, y: 25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
+          new TimelineMax({ tweens: [
 
-								], onComplete: () => {
+            new TimelineMax({ tweens: [
 
-									TweenMax.set( $refs.closeIcon, { autoAlpha: 0 } )
+              TweenMax.to($refs.closeLineTop1, 0.6, { bezier: { values: [ { scaleY: 1.25, y: 25 }, { scaleY: 0, y: 25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
 
-								}, stagger: .1 } ),
+              TweenMax.to($refs.closeLineBot1, 0.6, { bezier: { values: [ { scaleY: 1.25, y: 25 }, { scaleY: 0, y: 25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-							new TimelineMax( { tweens: [
-	
-								TweenMax.fromTo( $refs.openLineTop1, .6, { height: 0, y: -37 }, { bezier: { values:[ { height: 32, y: 0 }, { height: 12, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
+            ],
+            onComplete: () => {
+              TweenMax.set($refs.closeIcon, { autoAlpha: 0 })
+            },
+            stagger: 0.1 }),
 
-								TweenMax.fromTo( $refs.openLineBot1, .6, { height: 0, y: -37 }, { bezier: { values:[ { height: 32, y: 0 }, { height: 32, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
-									
-								], stagger: .1 } )
+            new TimelineMax({ tweens: [
 
-							], stagger: .2 } )
+              TweenMax.fromTo($refs.openLineTop1, 0.6, { height: 0, y: -37 }, { bezier: { values: [ { height: 32, y: 0 }, { height: 12, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
 
-						] } )
-			}
-		},
+              TweenMax.fromTo($refs.openLineBot1, 0.6, { height: 0, y: -37 }, { bezier: { values: [ { height: 32, y: 0 }, { height: 32, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-		methods: {
+            ],
+            stagger: 0.1 })
 
-			open () {
+          ],
+          stagger: 0.2 })
 
-				this.isOpen = true
-			},
+        ] })
+      }
+    }
+  },
 
-			close () {
+  methods: {
 
-				this.isOpen = false
-			},
+    open () {
+      this.isOpen = true
+    },
 
-			toggle () {
+    close () {
+      this.isOpen = false
+    },
 
-				if ( this.isOpen ) {
+    toggle () {
+      if (this.isOpen) {
+        this.$bus.emit(Actions.CLOSE_MENU)
 
-					this.$bus.emit( Actions.CLOSE_MENU )
+        this.close()
+      } else {
+        this.$bus.emit(Actions.OPEN_MENU)
 
-					this.close()
-				
-				} else {
+        this.open()
+      }
+    },
 
-					this.$bus.emit( Actions.OPEN_MENU )
+    openMouseenter (event) {
+      if (this.isOpen || this.mobile) return
 
-					this.open()
-				}
-			},
+      this.$mixer.play('tic')
 
-			openMouseenter ( event ) {
+      let $refs = this.$refs
 
-				if ( this.isOpen || this.mobile ) return
+      let $target = $refs.open
 
+      let $holder = $target.querySelector('.holder')
 
-				this.$mixer.play( 'tic' )
+      return new TimelineMax({ tweens: [
 
+        new TimelineMax({ tweens: [
 
-				let $refs = this.$refs,
+          new TimelineMax({ tweens: [
 
-					$target = $refs.open,
+            TweenMax.to($refs.openLineTop1, 0.6, { bezier: { values: [ { height: 32, y: 0 }, { height: 0, y: -37 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
+            TweenMax.to($refs.openLineTop2, 0.6, { bezier: { values: [ { height: 0, y: 12 }, { height: 12, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-					$holder = $target.querySelector( '.holder' )
+          ],
+          stagger: 0.06 }),
 
-				
-				return new TimelineMax( { tweens: [
+          new TimelineMax({ tweens: [
 
-					new TimelineMax( { tweens: [
-	
-						new TimelineMax( { tweens: [
+            TweenMax.to($refs.openLineBot1, 0.6, { bezier: { values: [ { height: 32, y: 0 }, { height: 0, y: -37 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
+            TweenMax.to($refs.openLineBot2, 0.6, { bezier: { values: [ { height: 0, y: 12 }, { height: 32, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-							TweenMax.to( $refs.openLineTop1, .6, { bezier: { values:[ { height: 32, y: 0 }, { height: 0, y: -37 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-							TweenMax.to( $refs.openLineTop2, .6, { bezier: { values:[ { height: 0, y: 12 }, { height: 12, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
+          ],
+          stagger: 0.06 })
 
-							], stagger: .06 } ),
+        ],
+        stagger: 0.09 })
 
-						new TimelineMax( { tweens: [
+        // TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeOut } )
 
-							TweenMax.to( $refs.openLineBot1, .6, { bezier: { values:[ { height: 32, y: 0 }, { height: 0, y: -37 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-							TweenMax.to( $refs.openLineBot2, .6, { bezier: { values:[ { height: 0, y: 12 }, { height: 32, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
-						
-							], stagger: .06 } )
+      ] })
+    },
 
-						], stagger: .09 } )
+    openMouseleave (event) {
+      if (this.isOpen || this.mobile) return
 
-					//TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeOut } )
-					
-					] } )
-			},
+      let $refs = this.$refs
 
-			openMouseleave ( event ) {
+      let $target = $refs.open
 
-				if ( this.isOpen || this.mobile ) return
+      let $holder = $target.querySelector('.holder')
 
+      return new TimelineMax({ tweens: [
 
-				let $refs = this.$refs,
+        new TimelineMax({ tweens: [
 
-					$target = $refs.open,
+          new TimelineMax({ tweens: [
 
-					$holder = $target.querySelector( '.holder' )
+            TweenMax.to($refs.openLineTop2, 0.6, { bezier: { values: [ { height: 0, y: 12 }, { height: 0, y: 12 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut }),
+            TweenMax.to($refs.openLineTop1, 0.6, { bezier: { values: [ { height: 32, y: 0 }, { height: 12, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut })
 
+          ],
+          stagger: 0.06 }),
 
-				return new TimelineMax( { tweens: [
+          new TimelineMax({ tweens: [
 
-					new TimelineMax( { tweens: [
-	
-						new TimelineMax( { tweens: [
+            TweenMax.to($refs.openLineBot2, 0.6, { bezier: { values: [ { height: 0, y: 12 }, { height: 0, y: 12	 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut }),
+            TweenMax.to($refs.openLineBot1, 0.6, { bezier: { values: [ { height: 32, y: 0 }, { height: 32, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut })
 
-							TweenMax.to( $refs.openLineTop2, .6, { bezier: { values:[ { height: 0, y: 12 }, { height: 0, y: 12 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut } ),
-							TweenMax.to( $refs.openLineTop1, .6, { bezier: { values:[ { height: 32, y: 0 }, { height: 12, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut } )
+          ],
+          stagger: 0.06 })
 
-							], stagger: .06 } ),
+        ],
+        stagger: 0.09 })
 
-						new TimelineMax( { tweens: [
+        // TweenMax.to( $holder, .6, { y: 0, force3D: true, ease: Cubic.easeInOut } )
 
-							TweenMax.to( $refs.openLineBot2, .6, { bezier: { values:[ { height: 0, y: 12 }, { height: 0, y: 12	 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut } ),
-							TweenMax.to( $refs.openLineBot1, .6, { bezier: { values:[ { height: 32, y: 0 }, { height: 32, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut } )
+      ] })
+    },
 
-							], stagger: .06 } )
-						
-						], stagger: .09 } )
+    closeMouseenter (event) {
+      if (!this.isOpen || this.mobile) return
 
-					//TweenMax.to( $holder, .6, { y: 0, force3D: true, ease: Cubic.easeInOut } )
+      this.$mixer.play('tic')
 
-					] } )
-			},
+      let $refs = this.$refs
 
-			closeMouseenter ( event ) {
+      let $target = $refs.close
 
-				if ( !this.isOpen || this.mobile ) return
+      let $holder = $target.querySelector('.holder')
 
+      return new TimelineMax({ tweens: [
 
-				this.$mixer.play( 'tic' )
+        new TimelineMax({ tweens: [
 
+          new TimelineMax({ tweens: [
 
-				let $refs = this.$refs,
+            TweenMax.to($refs.closeLineBot1, 0.5, { bezier: { values: [ { scaleY: 1.25, y: -25 }, { scaleY: 0, y: -25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
+            TweenMax.to($refs.closeLineBot2, 0.5, { bezier: { values: [ { scaleY: 1.25, y: 25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-					$target = $refs.close,
+          ],
+          stagger: 0.05 }),
 
-					$holder = $target.querySelector( '.holder' )
+          new TimelineMax({ tweens: [
 
+            TweenMax.to($refs.closeLineTop1, 0.5, { bezier: { values: [ { scaleY: 1.25, y: -25 }, { scaleY: 0, y: -25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
+            TweenMax.to($refs.closeLineTop2, 0.5, { bezier: { values: [ { scaleY: 1.25, y: 25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-				return new TimelineMax( { tweens: [
+          ],
+          stagger: 0.05 })
 
-					new TimelineMax( { tweens: [
-	
-						new TimelineMax( { tweens: [
+        ],
+        stagger: 0.05 })
 
-							TweenMax.to( $refs.closeLineBot1, .5, { bezier: { values:[ { scaleY: 1.25, y: -25 }, { scaleY: 0, y: -25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-							TweenMax.to( $refs.closeLineBot2, .5, { bezier: { values:[ { scaleY: 1.25, y: 25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
+        // TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeInOut } )
 
-							], stagger: .05 } ),
+      ] })
+    },
 
-						new TimelineMax( { tweens: [
+    closeMouseleave (event) {
+      if (!this.isOpen || this.mobile) return
 
-							TweenMax.to( $refs.closeLineTop1, .5, { bezier: { values:[ { scaleY: 1.25, y: -25 }, { scaleY: 0, y: -25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-							TweenMax.to( $refs.closeLineTop2, .5, { bezier: { values:[ { scaleY: 1.25, y: 25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
+      let $refs = this.$refs
 
-							], stagger: .05 } )
-						
-						], stagger: .05 } )
+      let $target = $refs.close
 
-					//TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeInOut } )
-					
-					] } )
-			},
+      let $holder = $target.querySelector('.holder')
 
-			closeMouseleave ( event ) {
+      return new TimelineMax({ tweens: [
 
-				if ( !this.isOpen || this.mobile ) return
+        new TimelineMax({ tweens: [
 
+          new TimelineMax({ tweens: [
 
-				let $refs = this.$refs,
+            TweenMax.to($refs.closeLineTop1, 0.5, { bezier: { values: [ { scaleY: 1.25, y: -25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut }),
+            TweenMax.to($refs.closeLineTop2, 0.5, { bezier: { values: [ { scaleY: 1.25, y: 25 }, { scaleY: 0, y: 25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut })
 
-					$target = $refs.close,
+          ],
+          stagger: 0.05 }),
 
-					$holder = $target.querySelector( '.holder' )
+          new TimelineMax({ tweens: [
 
+            TweenMax.to($refs.closeLineBot1, 0.5, { bezier: { values: [ { scaleY: 1.25, y: -25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut }),
+            TweenMax.to($refs.closeLineBot2, 0.5, { bezier: { values: [ { scaleY: 1.25, y: 25 }, { scaleY: 0, y: 25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut })
 
-				return new TimelineMax( { tweens: [
+          ],
+          stagger: 0.05 })
 
-					new TimelineMax( { tweens: [
+        ],
+        stagger: 0.05 })
 
-						new TimelineMax( { tweens: [
+        // TweenMax.to( $holder, .6, { y: 0, force3D: true, ease: Cubic.easeInOut } )
 
-							TweenMax.to( $refs.closeLineTop1, .5, { bezier: { values:[ { scaleY: 1.25, y: -25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut } ),
-							TweenMax.to( $refs.closeLineTop2, .5, { bezier: { values:[ { scaleY: 1.25, y: 25 }, { scaleY: 0, y: 25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut } )
+      ] })
+    },
 
-							], stagger: .05 } ),
+    enter () {
+      let $refs = this.$refs
 
-						new TimelineMax( { tweens: [
+      return new TimelineMax({ tweens: [
 
-							TweenMax.to( $refs.closeLineBot1, .5, { bezier: { values:[ { scaleY: 1.25, y: -25 }, { scaleY: 1, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut } ),
-							TweenMax.to( $refs.closeLineBot2, .5, { bezier: { values:[ { scaleY: 1.25, y: 25 }, { scaleY: 0, y: 25 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut } )
+        TweenMax.from($refs.openLabel, 1.5, { y: 34, force3D: true, ease: Cubic.easeInOut }),
 
-							], stagger: .05 } )
+        new TimelineMax({ tweens: [
 
-						], stagger: .05 } )
-					
-					//TweenMax.to( $holder, .6, { y: 0, force3D: true, ease: Cubic.easeInOut } )
-					
-					] } )
-			},
+          TweenMax.fromTo($refs.openLineTop1, 1.2, { height: 0, y: 24 }, { bezier: { values: [ { height: 20, y: 12 }, { height: 12, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
 
-			enter () {
+          TweenMax.fromTo($refs.openLineBot1, 1.2, { height: 0, y: 24 }, { bezier: { values: [ { height: 40, y: 12 }, { height: 32, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-				let $refs = this.$refs
+        ],
+        stagger: 0.15 })
 
-				return new TimelineMax( { tweens: [
+      ],
+      stagger: 0.5 })
+    }
+  },
 
-					TweenMax.from( $refs.openLabel, 1.5, { y: 34, force3D: true, ease: Cubic.easeInOut } ),
-
-					new TimelineMax( { tweens: [
-
-						TweenMax.fromTo( $refs.openLineTop1, 1.2, { height: 0, y: 24 }, { bezier: { values:[ { height: 20, y: 12 }, { height: 12, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-
-						TweenMax.fromTo( $refs.openLineBot1, 1.2, { height: 0, y: 24 }, { bezier: { values:[ { height: 40, y: 12 }, { height: 32, y: 0 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
-
-						], stagger: .15 } )
-
-					], stagger: .5 } )
-			}
-		},
-
-		created () {
-
-			this.$bus.on( Actions.CLOSE_MENU, this.close )
-		}
-	}
+  created () {
+    this.$bus.on(Actions.CLOSE_MENU, this.close)
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	#hamb {
 
 		position: absolute;
@@ -432,7 +418,7 @@
 			overflow: hidden;
 
 			color: map-get( $colors, white );
-			
+
 			letter-spacing: map-get( $ls, s );
 
 			@include rotate( -90deg );
@@ -452,7 +438,7 @@
 			@include transition( color .8s map-get( $ease, cubic_out ) );
 
 			>span {
-	
+
 				position: relative;
 
 				display: block;
@@ -466,7 +452,7 @@
 					span {
 
 						display: block;
-						
+
 						padding: 10px;
 
 						&.open, &.close {
@@ -483,24 +469,24 @@
 		.icon {
 
 			position: absolute;
-			
+
 			cursor: pointer;
 
 			background-color: rgba(0,0,0,0);
 
 			.line-top {
-				
+
 				position: absolute;
 
 				.line-1, .line-2 {
-					
+
 					position: absolute;
 
 					>span {
 
 						position: absolute;
-						
-						top: 0; left: 0; 
+
+						top: 0; left: 0;
 
 						width: 100%; height: 100%;
 
@@ -515,18 +501,18 @@
 			}
 
 			.line-bot {
-				
+
 				position: absolute;
 
 				.line-1, .line-2 {
-					
+
 					position: absolute;
 
 					>span {
 
 						position: absolute;
-						
-						top: 0; left: 0; 
+
+						top: 0; left: 0;
 
 						width: 100%; height: 100%;
 
@@ -540,9 +526,9 @@
 				}
 			}
 		}
-		
+
 		.open {
-			
+
 			position: absolute;
 
 			top: 0; left: 0;
@@ -554,7 +540,7 @@
 				width: 22px; height: 42px;
 
 				.line-top {
-					
+
 					width: 2px; height: 32px;
 
 					bottom: 5px; left: 5px;
@@ -567,13 +553,13 @@
 					.line-2 {
 
 						left: 0; right: 0; bottom: 0; height: 0px;
-						
+
 						@include translate( 0, 12px );
 					}
 				}
 
 				.line-bot {
-					
+
 					width: 2px; height: 32px;
 
 					bottom: 5px; right: 5px;
@@ -586,12 +572,12 @@
 					.line-2 {
 
 						left: 0; right: 0; bottom: 0; height: 0px;
-						
+
 						@include translate( 0, 12px );
 					}
 				}
 			}
-			
+
 			.label {
 
 				top: 55px; left: -24px;
@@ -604,7 +590,7 @@
 		}
 
 		.close {
-			
+
 			position: absolute;
 
 			top: 0; left: 0;
@@ -620,9 +606,9 @@
 				opacity: 0;
 
 				.line-top {
-					
+
 					width: 2px; height: 34px;
-					
+
 					top: 4px; right: 20px;
 
 					overflow: hidden;
@@ -641,8 +627,8 @@
 				}
 
 				.line-bot {
-					
-					width: 2px; height: 34px; 
+
+					width: 2px; height: 34px;
 
 			    	bottom: 4px; left: 20px;
 
@@ -661,7 +647,7 @@
 					}
 				}
 			}
-			
+
 			.label {
 
 				top: -90px; left: -28px;
@@ -672,22 +658,22 @@
 				}
 
 				>span {
-					
+
 					@include translate( -140%, 0 );
 				}
 			}
 		}
 
 		.light & {
-			
+
 			.icon {
-				
+
 				.line-top {
 
 					.line-1, .line-2 {
 
 						>span {
-							
+
 							background: {
 
 								color: map-get( $colors, gray );
@@ -697,9 +683,9 @@
 				}
 
 				.line-bot {
-					
+
 					.line-1, .line-2 {
-						
+
 						>span {
 
 							background: {

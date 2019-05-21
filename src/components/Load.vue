@@ -1,19 +1,19 @@
 
 <template>
-	
+
 	<transition
-			
-		@enter="enter" 
-    	
+
+		@enter="enter"
+
     	@leave="leave"
 
     	:css="false">
-		
+
 		<div id="load" v-if="!ready">
-				
+
 			<div class="table">
 				<div class="table-cell">
-					
+
 					<cookies ref="cookies"></cookies>
 
 					<button :class="{ 'active': loaded }" class="accept-btn" v-if="locale" @click="accept" @mouseenter="mouseenter" @mouseleave="mouseleave">
@@ -35,150 +35,147 @@
 
 <script>
 
-	import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
-	import { Actions } from '../constants'
+import { Actions } from '../constants'
 
-	import Cookies from './include/Cookies.vue'
-	
-	export default {
+import Cookies from './include/Cookies.vue'
 
-		name: 'Load',
+export default {
 
-		data () {
-			
-			return {
+  name: 'Load',
 
-				ready: false
-			}	
-		},
+  data () {
+    return {
 
-		computed: {
+      ready: false
+    }
+  },
 
-			...mapState( {
+  computed: {
 
-				progress: state => state.site.progress,
+    ...mapState({
 
-				loaded: state => state.site.loaded,
-				
-				locale: state => state.site.locale
-			} ),
+      progress: state => state.site.progress,
 
-			vprogress () { return Math.round( this.progress * 100 ) + '%' },
+      loaded: state => state.site.loaded,
 
-			mobile () { return isMobile.any }
-		},
+      locale: state => state.site.locale
+    }),
 
-		components: {
+    vprogress () { return Math.round(this.progress * 100) + '%' },
 
-			'cookies': Cookies
-		},
+    mobile () { return isMobile.any }
+  },
 
-		watch: {
+  components: {
 
-			progress ( value ) {
+    'cookies': Cookies
+  },
 
-				TweenMax.to( this.$refs.line, 1, { scaleX: value, delay: .1, ease: Cubic.easeOut } )
-			},
+  watch: {
 
-			loaded ( value ) {
+    progress (value) {
+      TweenMax.to(this.$refs.line, 1, { scaleX: value, delay: 0.1, ease: Cubic.easeOut })
+    },
 
-				let $refs = this.$refs
+    loaded (value) {
+      let $refs = this.$refs
 
-				if ( value )
+      if (value) { this.$bus.emit(Actions.APP_READY) }
+      this.ready = true
 
-					new TimelineMax( { tweens: [
+      new TimelineMax({ tweens: [
 
-						$refs.cookies.enter(),
+        $refs.cookies.enter(),
 
-						new TimelineMax( { tweens: [
+        new TimelineMax({ tweens: [
 
-							TweenMax.to( $refs.loading, 1, { y: '-100%', force3D: true, ease: Cubic.easeInOut } ),
+          TweenMax.to($refs.loading, 1, { y: '-100%', force3D: true, ease: Cubic.easeInOut }),
 
-							TweenMax.to( $refs.accept, 1, { y: '0%', force3D: true, ease: Cubic.easeInOut } )
+          TweenMax.to($refs.accept, 1, { y: '0%', force3D: true, ease: Cubic.easeInOut })
 
-							] } )
+        ] })
 
-						], stagger: .25, delay: 1 } )
-			}
-		},
+      ],
+      stagger: 0.25,
+      delay: 1 })
+    }
+  },
+  mounted () {
 
-		methods: {
+  },
 
-			mouseenter ( event ) {
+  methods: {
 
-				if ( !this.loaded || this.mobile ) return
+    mouseenter (event) {
+      if (!this.loaded || this.mobile) return
 
-				TweenMax.to( this.$refs.line || { scaleX: 1 }, .8, { scaleX: 0, ease: Cubic.easeOut } )
-			},
+      TweenMax.to(this.$refs.line || { scaleX: 1 }, 0.8, { scaleX: 0, ease: Cubic.easeOut })
+    },
 
-			mouseleave ( event ) {
+    mouseleave (event) {
+      if (!this.loaded || this.mobile) return
 
-				if ( !this.loaded || this.mobile ) return
+      TweenMax.to(this.$refs.line || { scaleX: 0 }, 0.8, { scaleX: 1, ease: Cubic.easeOut })
+    },
 
-				TweenMax.to( this.$refs.line || { scaleX: 0 }, .8, { scaleX: 1, ease: Cubic.easeOut } )	
-			},
+    accept () {
+      if (!this.loaded) return
 
-			accept () {
+      this.$bus.emit(Actions.APP_READY)
 
-				if ( !this.loaded ) return
+      this.ready = true
+    },
 
-				this.$bus.emit( Actions.APP_READY )
+    leave (el, done) {
+      let $accept = this.$el.querySelector('.accept-btn .accept')
 
-				this.ready = true
-			},
+      let $copy = this.$el.querySelector('#cookies .copy')
 
-			leave ( el, done ) {
+      let $cta = this.$el.querySelector('#cookies .cta')
 
-				let $accept = this.$el.querySelector( '.accept-btn .accept' ),
-					
-					$copy = this.$el.querySelector( '#cookies .copy' ),
+      let $line = this.$el.querySelector('.line')
 
-					$cta = this.$el.querySelector( '#cookies .cta' ),
+      return new TimelineMax({ tweens: [
 
-					$line = this.$el.querySelector( '.line' )
+        new TimelineMax({ tweens: [
 
-				return new TimelineMax( { tweens: [
+          new TimelineMax({ tweens: [
 
-					new TimelineMax( { tweens: [
+            TweenMax.to($accept, 0.8, { y: '100%', force3D: true, ease: Cubic.easeOut }),
 
-						new TimelineMax( { tweens: [
+            TweenMax.to($line, 0.8, { scaleX: 0, ease: Cubic.easeOut })
 
-							TweenMax.to( $accept, .8, { y: '100%', force3D: true, ease: Cubic.easeOut } ),
+          ] }),
 
-							TweenMax.to( $line, .8, { scaleX: 0, ease: Cubic.easeOut } )
+          TweenMax.to($cta, 0.8, { y: '100%', force3D: true, ease: Cubic.easeInOut }),
 
-							] } ),
-						
-						TweenMax.to( $cta, .8, { y: '100%', force3D: true, ease: Cubic.easeInOut } ),
-						
-						TweenMax.to( $copy, .8, { y: '100%', force3D: true, ease: Cubic.easeInOut } ),
-						
-						], stagger: .08 } ),
+          TweenMax.to($copy, 0.8, { y: '100%', force3D: true, ease: Cubic.easeInOut })
 
-					TweenMax.to( this.$el, 2, { autoAlpha: 0, ease: Cubic.easeInOut } )
+        ],
+        stagger: 0.08 }),
 
-					], stagger: 1, onComplete: () => {
+        TweenMax.to(this.$el, 2, { autoAlpha: 0, ease: Cubic.easeInOut })
 
-						if ( done instanceof Function )
+      ],
+      stagger: 1,
+      onComplete: () => {
+        if (done instanceof Function) { done() }
+      } })
+    },
 
-							done()
-					
-					} } )
-			},
-
-			enter ( el, done ) {
-
-				done()
-			}
-		}
-	}
+    enter (el, done) {
+      done()
+    }
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	#load {
-	
+
 		position: absolute;
 
 		top: 0; left: 0; right: 0; bottom: 0;
@@ -201,7 +198,7 @@
 		}
 
 		button.accept-btn {
-			
+
 			position: relative;
 
 			color: map-get( $colors, white );
@@ -250,9 +247,9 @@
 					}
 
 					&.accept {
-						
+
 						position: absolute;
-						
+
 						top: 0; left: 0;
 
 						width: 100%; height: 100%;

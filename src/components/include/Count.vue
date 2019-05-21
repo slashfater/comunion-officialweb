@@ -2,15 +2,15 @@
 <template>
 
 	<transition
-			
-		@enter="enter" 
-    	
+
+		@enter="enter"
+
     	@leave="leave"
 
     	:css="false">
 
     	<div class="count" v-if="active">
-    			
+
     		<div class="label">
 				<span class="font-reg">
 					<span class="row" v-for="( row, i ) in model.label.split('<br />')" ref="rows"><span ref="lines">{{ row }}</span></span>
@@ -33,100 +33,94 @@
 </template>
 
 <script>
-	
-	export default {
 
-		name: 'Count',
+export default {
 
-		props: [ 'model', 'active' ],
+  name: 'Count',
 
-		data () {
-			
-			return {
+  props: [ 'model', 'active' ],
 
-				refs: []
-			}
-		},
+  data () {
+    return {
 
-		methods: {
+      refs: []
+    }
+  },
 
-			leave ( el, done ) {
+  methods: {
 
-				let $el = this.$el,
+    leave (el, done) {
+      let $el = this.$el
 
-					$refs = this.$refs,
+      let $refs = this.$refs
 
-					$type = $refs.type || $el.querySelector( '.type' ) || { y: 0 },
+      let $type = $refs.type || $el.querySelector('.type') || { y: 0 }
 
-					$value = $refs.value || $el.querySelector( '.value' ) || { y: 0 }
+      let $value = $refs.value || $el.querySelector('.value') || { y: 0 }
 
+      return new TimelineMax({ tweens: [
 
-				return new TimelineMax( { tweens: [
+        new TimelineMax({ tweens: [
 
-					new TimelineMax( { tweens: [
+          TweenMax.to($value, 1, { y: -50, force3D: true, ease: Cubic.easeInOut }),
 
-						TweenMax.to( $value, 1, { y: -50, force3D: true, ease: Cubic.easeInOut } ),
+          TweenMax.to($type, 1, { y: -50, force3D: true, ease: Cubic.easeInOut })
 
-						TweenMax.to( $type, 1, { y: -50, force3D: true, ease: Cubic.easeInOut } )
+        ],
+        stagger: 0.1 }),
 
-						], stagger: .1 } ),
+        new TimelineMax({ tweens: [
 
-					new TimelineMax( { tweens: [
-						
-						TweenMax.allTo( $refs.rows, 1, { width: '0%', x: 150, ease: Cubic.easeInOut }, .08 ),
+          TweenMax.allTo($refs.rows, 1, { width: '0%', x: 150, ease: Cubic.easeInOut }, 0.08),
 
-						TweenMax.allTo( $refs.lines, 1, { x: -150, ease: Cubic.easeInOut }, .08 )
-				
-						] } )
+          TweenMax.allTo($refs.lines, 1, { x: -150, ease: Cubic.easeInOut }, 0.08)
 
-					], onComplete: () => {
+        ] })
 
-						if ( done instanceof Function )
+      ],
+      onComplete: () => {
+        if (done instanceof Function) { done() }
+      } })
+    },
 
-							done()
-					} } )
-			},
+    enter (el, done) {
+      let $el = this.$el
 
-			enter ( el, done ) {
+      let $refs = this.$refs
 
-				let $el = this.$el,
+      let $type = $refs.type || $el.querySelector('.type') || { y: 0 }
 
-					$refs = this.$refs,
+      let $value = $refs.value || $el.querySelector('.value') || { y: 0 }
 
-					$type = $refs.type || $el.querySelector( '.type' ) || { y: 0 },
+      return new TimelineMax({ tweens: [
 
-					$value = $refs.value || $el.querySelector( '.value' ) || { y: 0 }
+        new TimelineMax({ tweens: [
 
+          TweenMax.from($value, 1, { y: 50, force3D: true, ease: Cubic.easeInOut }),
 
-				return new TimelineMax( { tweens: [
+          TweenMax.from($type, 1, { y: 50, force3D: true, ease: Cubic.easeInOut })
 
-					new TimelineMax( { tweens: [
+        ],
+        stagger: 0.1 }),
 
-						TweenMax.from( $value, 1, { y: 50, force3D: true, ease: Cubic.easeInOut } ),
+        new TimelineMax({ tweens: [
 
-						TweenMax.from( $type, 1, { y: 50, force3D: true, ease: Cubic.easeInOut } )
-						
-						], stagger: .1 } ),
+          TweenMax.allFrom($refs.rows, 1, { width: '0%', ease: Cubic.easeInOut }, 0.08)
 
-					new TimelineMax( { tweens: [
+        ] })
 
-						TweenMax.allFrom( $refs.rows, 1, { width: '0%', ease: Cubic.easeInOut }, .08 )
-
-						] } )
-
-					], stagger: .25, onComplete: () => {
-
-						if ( done instanceof Function )
-
-							done()
-					} } )
-			}
-		}
-	}
+      ],
+      stagger: 0.25,
+      onComplete: () => {
+        if (done instanceof Function) { done() }
+      } })
+    }
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	.count {
 
 		position: absolute;
@@ -136,10 +130,10 @@
 		color: map-get( $colors, white );
 
 		@media ( max-width: map-get( $sizes, custom ) - 1 ) {
-	
+
 			display: none;
 		}
-		
+
 		.label {
 
 			@include transform-origin( 0 0 );
@@ -149,14 +143,14 @@
 			margin-bottom: -10px;
 
 			letter-spacing: map-get( $ls, s );
-			
+
 			opacity: .4;
 
 			font: {
 
 				size: map-get( $typo, p_ );
 			}
-			
+
 			text: {
 
 				transform: uppercase;
@@ -204,7 +198,7 @@
 			.type {
 
 				position: relative;
-				
+
 				display: inline-block;
 			}
 		}

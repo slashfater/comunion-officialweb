@@ -2,9 +2,9 @@
 <template>
 
 	<div class="scroller">
-		
+
 		<div class="scroller-body">
-			
+
 			<slot></slot>
 
 		</div>
@@ -15,62 +15,53 @@
 
 <script>
 
-	import IScroll from 'iscroll/build/iscroll'
+import IScroll from 'iscroll/build/iscroll'
 
-	//import IScroll from 'iscroll/build/iscroll-probe.js'
-	
-	export default {
+// import IScroll from 'iscroll/build/iscroll-probe.js'
 
-		name: 'Scroller',
+export default {
 
-		data () {
-			
-			return {
+  name: 'Scroller',
 
-				disposed: false
-			}
-		},
+  data () {
+    return {
 
-		methods: {
+      disposed: false
+    }
+  },
 
-			top () {
+  methods: {
 
-				return this.iscroll ? this.iscroll.y : this.$el.scrollTop
-			},
+    top () {
+      return this.iscroll ? this.iscroll.y : this.$el.scrollTop
+    },
 
-			disable () {
+    disable () {
+      let iscroll = this.iscroll
 
-				let iscroll = this.iscroll
+      if (iscroll) { iscroll.disable() }
+    },
 
-				if ( iscroll )
+    gotoTop () {
+      let scope = this
 
-					iscroll.disable()
-			},
+      return TweenMax.to({ y: scope.top() }, 2, { y: 0,
+        ease: Expo.easeInOut,
+        onUpdate: function () {
+			   				if (scope.iscroll) { scope.iscroll.scrollTo(0, this.target.y, 0) } else scope.$el.scrollTop = this.target.y
+					   	},
+        onComplete: () => {
 
-			gotoTop () {
+					     	// console.log( this.disposed )
 
-				let scope = this
+        } })
 
-				return TweenMax.to( { y: scope.top() }, 2, { y: 0, ease: Expo.easeInOut, onUpdate: function () {
-
-			   				if ( scope.iscroll ) 
-
-			   					scope.iscroll.scrollTo( 0, this.target.y, 0 )
-					     
-			   				else scope.$el.scrollTop = this.target.y
-
-					   	}, onComplete: () => {
-
-					     	//console.log( this.disposed )
-
-						} } )
-
-				/*return this.iscroll
+      /* return this.iscroll
 
 					   ? TweenMax.to( { y: this.iscroll.y }, 2, { y: 0, ease: Expo.easeInOut, onUpdate: function () {
 
 				   			scope.iscroll.scrollTo( 0, this.target.y, 0 )
-					     
+
 					     }, onComplete: () => {
 
 					     	//console.log( this.disposed )
@@ -79,69 +70,59 @@
 
 					   : TweenMax.to( this.$el, 2, { autoAlpha: 0, ease: Expo.easeInOut, onUpdate: function () {
 
-
 					     }, onComplete: () => {
 
 					     	//console.log( this.disposed )
 
-					     } } )*/				
-			},
+					     } } ) */
+    },
 
-			resize () {
+    resize () {
+      let iscroll = this.iscroll
 
-				let iscroll = this.iscroll
+      if (iscroll) { iscroll.refresh() }
+    },
 
-				if ( iscroll )
+    destroy () {
+      if (this.disposed) {
+        let iscroll = this.iscroll
 
-					iscroll.refresh()
-			},
+        if (iscroll) { iscroll.destroy() }
+      }
+    }
+  },
 
-			destroy () {
+  mounted () {
+    let mobile = isMobile.any
 
-				if ( this.disposed ) {
+    if (!mobile) {
+      this.iscroll = new IScroll(this.$el, {
 
-					let iscroll = this.iscroll
-
-					if ( iscroll )
-
-						iscroll.destroy()
-				}
-			}
-		},
-
-		mounted () {
-
-			let mobile = isMobile.any
-
-			if ( !mobile )
-
-				this.iscroll = new IScroll( this.$el, {
-			
-					interactiveScrollbars: true,
-					scrollbars: 'custom',
+        interactiveScrollbars: true,
+        scrollbars: 'custom',
 		 			wheelspeed: 800,
 		 			mouseWheel: true,
-					scrollY: true,
+        scrollY: true,
 		 			scrollX: false,
 		 			bounce: false,
 		 			probeType: 3,
 		 			click: true
-		 			//tap: true
-				} )
+		 			// tap: true
+      })
+    } else {
+      TweenMax.set(this.$el, {
 
-			else TweenMax.set( this.$el, { 
+        overflow: 'auto',
 
-					overflow: 'auto',
+        webkitOverflowScrolling: 'touch'
+      })
+    }
+  },
 
-					webkitOverflowScrolling: 'touch'
-				} )
-		},
-
-		destroyed () {
-
-			this.disposed = true
-		}
-	}
+  destroyed () {
+    this.disposed = true
+  }
+}
 </script>
 
 <style lang="scss">
@@ -153,7 +134,7 @@
 		top: 0; left: 0; bottom: 0; right: 0;
 
 		.scroller-body {
-			
+
 			position: relative;
 
 			overflow: hidden;
@@ -170,7 +151,7 @@
 			width: 10px;
 
 			z-index: 99;
-			
+
 			.iScrollIndicator {
 
 				position: absolute;
@@ -189,4 +170,4 @@
 		}
 	}
 
-</style>	
+</style>

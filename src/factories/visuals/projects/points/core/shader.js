@@ -1,10 +1,10 @@
-import { Chunk } from "../../../../core/Chunk";
+import { Chunk } from '../../../../core/Chunk'
 
 export default class Shader {
-  constructor(options) {
+  constructor (options) {
     return {
       uniforms: {
-        texture: { type: "t", value: null },
+        texture: { type: 't', value: null },
 
         index: { value: 0.0 },
 
@@ -128,13 +128,13 @@ export default class Shader {
 				}
 			`,
 
-      //blending: THREE.MultiplyBlending,
+      // blending: THREE.MultiplyBlending,
 
       depthTest: true,
 
       transparent: true,
 
       vertexColors: true
-    };
+    }
   }
 }

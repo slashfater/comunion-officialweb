@@ -12,7 +12,7 @@
 			<span class="color" ref="rightColor"></span>
 			<span class="fill" ref="rightFill"></span>
 		</span>
-		
+
 		<div class="side">
 			<h2>
 				<span class="font-reg">
@@ -22,7 +22,7 @@
 			</h2>
 			<span class="line" ref="line"></span>
 		</div>
-		
+
 		<div class="side">
 			<p><span class="font-reg" v-html="model.content" ref="text"></span></p>
 		</div>
@@ -33,66 +33,66 @@
 
 <script>
 
-	import Compo from './Compo'
-	
-	export default {
+import Compo from './Compo'
 
-		name: 'TboxLeaf',
+export default {
 
-		mixins: [ Compo ],
+  name: 'TboxLeaf',
 
-		props: [ 'model' ],
+  mixins: [ Compo ],
 
-		data () {
-		
-			return {
+  props: [ 'model' ],
 
-			}
-		},
+  data () {
+    return {
 
-		mounted () {
+    }
+  },
 
-			this.timeline = new TimelineMax( { tweens: [
+  mounted () {
+    this.timeline = new TimelineMax({ tweens: [
 
-				new TimelineMax( { tweens: [
+      new TimelineMax({ tweens: [
 
-					TweenMax.from( this.$refs.rightColor, 1, { y: '100%', force3D: true, ease: Cubic.easeOut } ),
-				
-					TweenMax.from( this.$refs.rightFill, 1, { y: '100%', force3D: true, ease: Cubic.easeOut } )
+        TweenMax.from(this.$refs.rightColor, 1, { y: '100%', force3D: true, ease: Cubic.easeOut }),
 
-					], stagger: .1 } ),
+        TweenMax.from(this.$refs.rightFill, 1, { y: '100%', force3D: true, ease: Cubic.easeOut })
 
-				new TimelineMax( { tweens: [
+      ],
+      stagger: 0.1 }),
 
-					TweenMax.from( this.$refs.leftColor, 1, { y: '100%', force3D: true, ease: Cubic.easeOut } ),
-				
-					TweenMax.from( this.$refs.leftFill, 1, { y: '100%', force3D: true, ease: Cubic.easeOut } )
+      new TimelineMax({ tweens: [
 
-					], stagger: .1 } ),
+        TweenMax.from(this.$refs.leftColor, 1, { y: '100%', force3D: true, ease: Cubic.easeOut }),
 
-				TweenMax.from( this.$refs.text, 1, { opacity: 0, y: '50%', force3D: true, ease: Cubic.easeOut } ),
+        TweenMax.from(this.$refs.leftFill, 1, { y: '100%', force3D: true, ease: Cubic.easeOut })
 
-				TweenMax.from( this.$refs.line, 1, { scaleX: 0, ease: Cubic.easeOut } ),
+      ],
+      stagger: 0.1 }),
 
-				TweenMax.from( this.$refs.letters, 1, { y: '100%', force3D: true, ease: Cubic.easeOut } )
+      TweenMax.from(this.$refs.text, 1, { opacity: 0, y: '50%', force3D: true, ease: Cubic.easeOut }),
 
-				], stagger: .14, paused: true } )
-		},
+      TweenMax.from(this.$refs.line, 1, { scaleX: 0, ease: Cubic.easeOut }),
 
-		destroyed () {
+      TweenMax.from(this.$refs.letters, 1, { y: '100%', force3D: true, ease: Cubic.easeOut })
 
-			if ( this.timeline ) {
+    ],
+    stagger: 0.14,
+    paused: true })
+  },
 
-				this.timeline.kill()
+  destroyed () {
+    if (this.timeline) {
+      this.timeline.kill()
 
-				this.timeline = null
-			}
-		}
-	}
+      this.timeline = null
+    }
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	@import 'src/components/sass/vars.scss';
 
 	section.leaf .tbox {
@@ -113,7 +113,7 @@
 
 			&.left {
 
-				left: 0; 
+				left: 0;
 
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
@@ -125,14 +125,14 @@
 
 				right: 0;
 
-				@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-					
+				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 					display: none;
 				}
 			}
 
 			.color, .fill {
-				
+
 				position: absolute;
 
 				bottom: 0; left: 0;
@@ -143,7 +143,7 @@
 			.color {
 
 				z-index: 1;
-				
+
 				background: {
 
 					color: map-get( $colors, red );
@@ -171,10 +171,10 @@
 				align: left;
 			}
 
-			@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-				
+			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 				padding: 50px 50px 0;
-	        	
+
 	        	margin-top: 0;
 			}
 		}
@@ -192,8 +192,8 @@
 				align: justify;
 			}
 
-			@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-				
+			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 				padding: 50px;
 			}
 
@@ -211,13 +211,13 @@
 
 			z-index: 2;
 
-			@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-				
+			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 				width: 100%;
 			}
 
 			.line {
-					
+
 				position: absolute;
 
 				bottom: 100px; left: 60px;
@@ -238,16 +238,16 @@
 					width: 65px;
 
 				    margin-bottom: -15px;
-				
+
 					bottom: 0; left: 50px;
 				}
 			}
 		}
 
 		&.left {
-			
-			.side { 
-			
+
+			.side {
+
 				float: left;
 			}
 		}
@@ -256,7 +256,7 @@
 
 			.side {
 
-				float: right;	
+				float: right;
 			}
 		}
 
@@ -280,7 +280,7 @@
 		}
 
 		&.dark {
-			
+
 			.background {
 
 				.fill {
@@ -317,7 +317,7 @@
 
 				&.left {
 
-					.background.left {	
+					.background.left {
 
 						.color, .fill {
 
@@ -325,9 +325,9 @@
 						}
 
 						.color {
-							
-							@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-							
+
+							@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 								background: {
 
 									color: map-get( $colors, red );
@@ -336,9 +336,9 @@
 						}
 
 						.fill {
-							
-							@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-							
+
+							@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 								background: {
 
 									color: map-get( $colors, white );
@@ -350,7 +350,7 @@
 
 				&.right {
 
-					.background.right {	
+					.background.right {
 
 						.color, .fill {
 
@@ -360,11 +360,11 @@
 				}
 			}
 
-			&.dark { 
+			&.dark {
 
 				&.left {
 
-					.background.left {	
+					.background.left {
 
 						.color, .fill {
 
@@ -375,7 +375,7 @@
 
 				&.right {
 
-					.background.right {	
+					.background.right {
 
 						.color, .fill {
 
@@ -383,7 +383,7 @@
 						}
 					}
 				}
-				
+
 				h2 {
 
 					color: rgba( 79,79,79,1 );
@@ -397,8 +397,8 @@
 					}
 				}
 
-				@media ( max-width: map-get( $sizes, custom ) - 1 ) { 
-				
+				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
+
 					h2 {
 
 						color: map-get( $colors, white );

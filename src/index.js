@@ -1,103 +1,102 @@
-import "./polyfill";
+import './polyfill'
 
-import "babel-polyfill";
+import 'babel-polyfill'
 
-import Vue from "vue";
+import Vue from 'vue'
 
-import Vuex from "vuex";
+import Vuex from 'vuex'
 
-import VueBus from "vue-bus";
+import VueBus from 'vue-bus'
 
-import VueRouter from "vue-router";
+import VueRouter from 'vue-router'
 
-import App from "./components/App.vue";
+import App from './components/App.vue'
 
-import Resizer from "./plugins/resizer/";
+import Resizer from './plugins/resizer/'
 
-import Ticker from "./plugins/ticker/";
+import Ticker from './plugins/ticker/'
 
-import Swiper from "./plugins/swiper/";
+import Swiper from './plugins/swiper/'
 
-import Sender from "./plugins/sender/";
+import Sender from './plugins/sender/'
 
-import Wheel from "./plugins/wheel/";
+import Wheel from './plugins/wheel/'
 
-import Mixer from "./plugins/mixer/";
+import Mixer from './plugins/mixer/'
 
-import TweenMax from "gsap";
+import TweenMax from 'gsap'
 
-import modules from "./store";
+import modules from './store'
 
-import manifest from "./manifest";
+import manifest from './manifest'
 
-import AppRouter from "./router";
+import AppRouter from './router'
 
-import LoaderManager from "./loaders/LoaderManager";
+import LoaderManager from './loaders/LoaderManager'
 
-import { Events, States } from "./constants";
+import { Events, States } from './constants'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
-Vue.use(VueBus);
+Vue.use(VueBus)
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
-Vue.use(Ticker);
+Vue.use(Ticker)
 
-Vue.use(Swiper);
+Vue.use(Swiper)
 
-Vue.use(Wheel);
+Vue.use(Wheel)
 
-Vue.use(Mixer);
+Vue.use(Mixer)
 
-Vue.use(Sender);
+Vue.use(Sender)
 
-Vue.use(Resizer);
+Vue.use(Resizer)
 
-let store = new Vuex.Store({ modules, strict: true });
+let store = new Vuex.Store({ modules, strict: true })
 
-let router = new VueRouter(AppRouter);
+let router = new VueRouter(AppRouter)
 
 router.beforeEach((to, from, next) => {
-  router.data = { to, from };
+  router.data = { to, from }
 
-  let collections = store.getters.collections,
-    slider = collections.slider,
-    slide = to.params.slide || "",
-    leaf = to.params.leaf || "",
-    validate = slider.indexOfName(slide);
+  let collections = store.getters.collections
+  let slider = collections.slider
+  let slide = to.params.slide || ''
+  let leaf = to.params.leaf || ''
+  let validate = slider.indexOfName(slide)
 
-  if ((to.name == States.SLIDER && validate < 0) || to.name == States.HOME)
-    return next({ name: States.SLIDER, params: { slide: slider[0].name } });
-  //console.log( to.name, States.HOME, States.SLIDER )
-  else next();
+  if ((to.name == States.SLIDER && validate < 0) || to.name == States.HOME) { return next({ name: States.SLIDER, params: { slide: slider[0].name } }) }
+  // console.log( to.name, States.HOME, States.SLIDER )
+  else next()
 
-  let loaded = store.getters.loaded;
+  let loaded = store.getters.loaded
 
   if (!loaded) {
-    let loaderManager = new LoaderManager();
+    let loaderManager = new LoaderManager()
 
     loaderManager.bus.on(Events.PROGRESS, progress =>
       store.dispatch(Events.PROGRESS, progress)
-    );
+    )
 
     loaderManager.bus.on(Events.LOADED, response =>
       store.dispatch(Events.LOADED, response)
-    );
+    )
 
     loaderManager.bus.on(Events.LOCALE, response =>
       store.dispatch(Events.LOCALE, response)
-    );
+    )
 
-    loaderManager.load(manifest);
+    loaderManager.load(manifest)
   }
-});
+})
 
 let app = new Vue({
   store,
   router,
 
-  el: "#application",
+  el: '#application',
 
   render: h => h(App)
-});
+})

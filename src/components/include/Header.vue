@@ -2,7 +2,7 @@
 <template>
 
 	<header :class="{ 'off': !active }">
-		
+
 		<div id="gsap-logo" @click="backToHome">
 			<div id="logo">
 				<img :src="assets['logo'].src" :class="{ 'show': !inversed }" alt="">
@@ -14,71 +14,61 @@
 
 </template>
 
-<script>	
+<script>
 
-	import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
-	import { States, Events } from '../../constants'
-	
-	export default {
+import { States, Events } from '../../constants'
 
-		name: 'Header',
+export default {
 
-		data () {
-	
-			return {
+  name: 'Header',
 
-				active: true,
+  data () {
+    return {
 
-				inversed: false
-			}
-		},
+      active: true,
 
-		computed: mapState( {
+      inversed: false
+    }
+  },
 
-			assets: state => state.site.assets
-		} ),
+  computed: mapState({
 
-		methods: {
+    assets: state => state.site.assets
+  }),
 
-			update ( state ) {
+  methods: {
 
-				if ( state.visible !== undefined )
+    update (state) {
+      if (state.visible !== undefined) { this.active = state.visible }
 
-					this.active = state.visible
+      if (state.theme !== undefined) { this.inversed = state.theme == 'light' }
+    },
 
-				if ( state.theme !== undefined )
+    enter () {
+      let $logo = this.$el.querySelector('#gsap-logo')
 
-					this.inversed = state.theme == 'light'
-			},
+      return new TimelineMax({ tweens: [
 
-			enter () {
+        TweenMax.from($logo, 1, { y: -40, force3D: true, ease: Cubic.easeInOut })
 
-				let $logo = this.$el.querySelector( '#gsap-logo' )
+      ] })
+    },
 
-				return new TimelineMax( { tweens: [
+    backToHome () {
+      this.$router.push({ name: States.HOME })
+    }
+  },
 
-					TweenMax.from( $logo, 1, { y: -40, force3D: true, ease: Cubic.easeInOut } )
+  created () {
+    this.$bus.on(Events.UISTATE, this.update)
+  },
 
-					] } )
-			},
-
-			backToHome () {
-
-				this.$router.push( { name: States.HOME  } )
-			}
-		},
-
-		created () {
-
-			this.$bus.on( Events.UISTATE, this.update )
-		},
-
-		destroyed () {
-
-			this.$bus.off( Events.UISTATE, this.update )
-		}
-	}
+  destroyed () {
+    this.$bus.off(Events.UISTATE, this.update)
+  }
+}
 </script>
 
 <style lang="scss">
@@ -88,7 +78,7 @@
 		position: absolute;
 
 		top: 35px; left: 0; right: 0;
-		
+
 		overflow: hidden;
 
 		padding: 5px 0;
@@ -109,7 +99,7 @@
 
 			position: relative;
 
-			width: 154px; height: 26px;
+			width: 61px; height: 68px;
 
 			margin: 0 auto;
 
@@ -123,12 +113,12 @@
 
 			position: relative;
 
-			width: 154px; height: 26px;
+			width: 61px; height: 68px;
 
 			margin: 0 auto;
 
 			cursor: pointer;
-	
+
 			@include translate( 0, 0 );
 
 			@include transition( all .8s map-get( $ease, cubic_out ) );

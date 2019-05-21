@@ -1,39 +1,39 @@
-import { States } from "./constants";
+import { States } from './constants'
 
-import Home from "./components/views/Home.vue";
+import Home from './components/views/Home.vue'
 
-import Projects from "./components/views/Projects.vue";
+import Projects from './components/views/Projects.vue'
 
-import Partners from "./components/views/Partners.vue";
+import Partners from './components/views/Partners.vue'
 
-import Contacts from "./components/views/Contacts.vue";
+import Contacts from './components/views/Contacts.vue'
 
-import Slide from "./components/views/Slide.vue";
+import Slide from './components/views/Slide.vue'
 
-import Leaf from "./components/views/Leaf.vue";
+import Leaf from './components/views/Leaf.vue'
 
 export default {
-  mode: "history",
+  mode: 'history',
 
-  base: "/",
+  base: window.appconf.base + window.appconf.lang,
 
   routes: [
-    { path: "/contacts", name: States.CONTACTS, component: Contacts },
+    { path: '/contacts', name: States.CONTACTS, component: Contacts },
 
-    { path: "/partners", name: States.PARTNERS, component: Partners },
+    { path: '/partners', name: States.PARTNERS, component: Partners },
 
     {
-      path: "/",
+      path: '/',
       name: States.HOME,
       component: Home,
-      children: [{ path: ":slide", name: States.SLIDER, component: Slide }]
+      children: [{ path: ':slide', name: States.SLIDER, component: Slide }]
     },
 
     {
-      path: "/projects",
+      path: '/projects',
       name: States.PROJECTS,
       component: Projects,
-      children: [{ path: ":leaf", name: States.LEAF, component: Leaf }]
+      children: [{ path: ':leaf', name: States.LEAF, component: Leaf }]
     }
   ]
-};
+}

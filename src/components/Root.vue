@@ -1,6 +1,6 @@
 
 <template>
-	
+
 	<main id="main" v-if="loaded">
 
 		<app-nav></app-nav>
@@ -10,7 +10,7 @@
 		<app-main ref="main"></app-main>
 
 		<app-stage></app-stage>
-		
+
 		<stats></stats>
 
 		<gui></gui>
@@ -20,232 +20,200 @@
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
 
-	import { States, Actions, Events } from '../constants'
+import { mapState } from 'vuex'
 
-	import Commons from './mixins/Commons'
+import { States, Actions, Events } from '../constants'
 
-	import AppUI from './core/AppUI.vue'
+import Commons from './mixins/Commons'
 
-	import AppNav from './core/AppNav.vue'
+import AppUI from './core/AppUI.vue'
 
-	import AppMain from './core/AppMain.vue'
+import AppNav from './core/AppNav.vue'
 
-	import AppStage from './core/AppStage.vue'
+import AppMain from './core/AppMain.vue'
 
-	import Stats from './controls/Stats.vue'
+import AppStage from './core/AppStage.vue'
 
-	import Gui from './controls/Gui.vue'
+import Stats from './controls/Stats.vue'
 
-	import meta from '../meta'
+import Gui from './controls/Gui.vue'
 
-	export default {
+import meta from '../meta'
 
-		name: 'Root',
+export default {
 
-		mixins: [ Commons ],
+  name: 'Root',
 
-		data () {
-			
-			return {
+  mixins: [ Commons ],
 
-				ready: false,
+  data () {
+    return {
 
-				timer: 0,
+      ready: false,
 
-				delta: 0
-			}
-		},
+      timer: 0,
 
-		computed: mapState( {
+      delta: 0
+    }
+  },
 
-			loaded: state => state.site.loaded
-		} ),
+  computed: mapState({
 
-		components: {
+    loaded: state => state.site.loaded
+  }),
 
-			'app-ui': AppUI,
+  components: {
 
-			'app-nav': AppNav,
+    'app-ui': AppUI,
 
-			'app-main': AppMain,
+    'app-nav': AppNav,
 
-			'app-stage': AppStage,
+    'app-main': AppMain,
 
-			'stats': Stats,
+    'app-stage': AppStage,
 
-			'gui': Gui
-		},
+    'stats': Stats,
 
-		watch: {
+    'gui': Gui
+  },
 
-			$route ( to, from ) {
+  watch: {
 
-				this.update( to, from )
-			}
-		},
+    $route (to, from) {
+      this.update(to, from)
+    }
+  },
 
-		methods: {
+  methods: {
 
-			initialize () {
+    initialize () {
+      this.update()
 
-				this.update()
+      this.addListeners()
 
-				this.addListeners()
+      this.$mixer.play('ambient')
 
-				this.$mixer.play( 'ambient' )
+      this.ready = true
 
-				this.ready = true
+      return new TimelineMax({ tweens: [
 
-				return new TimelineMax( { tweens: [
+        this.$refs.main.enter(),
 
-					this.$refs.main.enter(),
+        this.$refs.ui.enter()
 
-					this.$refs.ui.enter()
+      ],
+      stagger: 0.5,
+      delay: 1 })
+    },
 
-					], stagger: .5, delay: 1 } )
-			},
+    update (to, from) {
+      let name = to ? to.name : this.$route.name
 
-			update ( to, from ) {
+      let params = to ? to.params : this.$route.params
 
-				let name = to ? to.name : this.$route.name,
+      let theme = name == States.LEAF ? 'light' : name == States.PARTNERS ? 'color' : 'dark'
 
-					params = to ? to.params : this.$route.params,
+      let scroll = name != States.PARTNERS && name != States.CONTACTS && params.slide != States.PROJECTS
 
-					theme = name == States.LEAF ? 'light': name == States.PARTNERS ? 'color': 'dark',
+      let ontop = meta.scrollontop
 
-					scroll = name != States.PARTNERS && name != States.CONTACTS && params.slide != States.PROJECTS,
+      let delay = ontop ? 0 : 2
 
-					ontop = meta.scrollontop,
+      let visible = true
 
-					delay = ontop ? 0 : 2,
+      if (this.ready) {
+        if (name != States.SLIDER) { TweenMax.delayedCall(delay, () => { this.$mixer.play('section') }) } else TweenMax.delayedCall(delay, () => { this.$mixer.play('swipe') })
+      }
 
-					visible = true
+      this.$bus.emit(Events.UISTATE, { theme, scroll, visible })
+    },
 
+    addListeners () {
+      this.$wheel.bus.on(Events.WHEEL, this.wheel)
 
-				if ( this.ready ) {
+       		 	this.$swiper.bus.on(Events.DROP, this.drop)
+    },
 
-					if ( name != States.SLIDER )
+    wheel (delta) {
+      let curr = this.current
 
-						TweenMax.delayedCall( delay, () => { this.$mixer.play( 'section' ) } )
+      let sid = this.sid
 
-					else TweenMax.delayedCall( delay, () => { this.$mixer.play( 'swipe' ) } )
-				}
+      let next = curr
 
+      next -= delta
 
-				this.$bus.emit( Events.UISTATE, { theme, scroll, visible } )
-			},
+      if (next < 0) { next = 0 }
 
-			addListeners () {
+      sid -= delta
 
-				this.$wheel.bus.on( Events.WHEEL, this.wheel )
+      if (this.delta != delta) {
+        this.passThrough(curr, next, sid)
 
-       		 	this.$swiper.bus.on( Events.DROP, this.drop )
-			},
+        clearTimeout(this.timer)
 
-			wheel ( delta ) {
+        this.timer = setTimeout(() => {
+          this.delta = 0
+        }, 1200)
+      }
 
-				let curr = this.current,
-					
-					sid = this.sid,
+      this.delta = delta
+    },
 
-					next = curr
+    drop (event) {
+      let dir = event.dir
 
+      let leave = event.leave
 
-				next -= delta
+      let curr = this.current
 
-				if ( next < 0 ) 
+      let sid = this.sid
 
-					next = 0
+      let next = curr
 
-				sid -= delta
+      next += dir
 
+      if (next < 0) { next = 0 }
 
-				if ( this.delta != delta ) {
+      sid += dir
 
-					this.passThrough( curr, next, sid )
+      if (leave) {
+        this.passThrough(curr, next, sid)
+      }
+    },
 
+    passThrough (curr, next, sid) {
+      let model = this.tree[ next ]
 
-					clearTimeout( this.timer )
+      let slide = this.slider[ sid ] || this.slider[ 0 ]
 
-					this.timer = setTimeout( () => {
+      let length = this.slider.length - 1
 
-						this.delta = 0
+      if (curr == 0) {
+        if (sid > -1) {
+          if (sid <= length) {
+            this.navigateTo(States.SLIDER, { slide: slide.name })
 
-					}, 1200 )
-				}
+            // this.$mixer.swipe()
+          }
+        }
+      }
+    }
+  },
 
-				this.delta = delta
-			},
+  created () {
+    this.$bus.on(Actions.APP_READY, this.initialize)
 
-			drop ( event ) {
-
-				let dir = event.dir,
-
-					leave = event.leave,
-
-					curr = this.current,
-					
-					sid = this.sid,
-
-					next = curr
-
-
-				next += dir
-
-				if ( next < 0 ) 
-
-					next = 0
-
-				sid += dir
-
-
-				if ( leave ) {
-
-					this.passThrough( curr, next, sid )
-				}
-			},
-
-			passThrough ( curr, next, sid ) {
-
-				let model = this.tree[ next ],
-
-					slide = this.slider[ sid ] || this.slider[ 0 ],
-
-					length = this.slider.length - 1
-
-
-				if ( curr == 0 ) {
-
-					if ( sid > -1 ) {
-
-						if ( sid <= length ) {
-
-							
-							this.navigateTo( States.SLIDER, { slide: slide.name } )
-
-							//this.$mixer.swipe()
-						}
-					}
-				}
-			}
-		},
-
-		created () {
-
-			this.$bus.on( Actions.APP_READY, this.initialize )
-
-			this.$ticker.fps( 60 )
+    this.$ticker.fps(60)
 
         	this.update()
-		}
-	}
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	main {
 
 		position: absolute;
@@ -255,11 +223,14 @@
 		overflow: hidden;
 
 		z-index: 1;
+		// opacity: 0.38;
+  	background-blend-mode: hard-light;
+  	background-image: linear-gradient(58deg, rgba(103, 163, 239, 0), #7b87f0);
 
-		background: {
+		// background: {
 
-			color: map-get( $colors, black );
-		}
+		// 	color: map-get( $colors, black );
+		// }
 	}
 
-</style>	
+</style>

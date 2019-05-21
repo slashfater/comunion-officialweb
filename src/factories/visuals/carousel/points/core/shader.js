@@ -1,10 +1,10 @@
-import { Chunk } from "../../../../core/Chunk";
+import { Chunk } from '../../../../core/Chunk'
 
 export default class Shader {
-  constructor(options) {
+  constructor (options) {
     return {
       uniforms: {
-        texture: { type: "t", value: null },
+        texture: { type: 't', value: null },
 
         angle: { value: 0.0 },
 
@@ -153,6 +153,6 @@ export default class Shader {
       transparent: true,
 
       vertexColors: true
-    };
+    }
   }
 }

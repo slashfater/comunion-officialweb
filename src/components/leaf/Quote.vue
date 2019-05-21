@@ -2,12 +2,12 @@
 <template>
 
 	<div class="quote" :class="config">
-		
+
 		<span class="background">
 			<span class="color" ref="color"></span>
 			<span class="fill" ref="fill"></span>
 		</span>
-		
+
 		<p><span class="font-reg" v-html="model.content" ref="text"></span></p>
 
 	</div>
@@ -16,58 +16,56 @@
 
 <script>
 
-	import Compo from './Compo'
-	
-	export default {
+import Compo from './Compo'
 
-		name: 'QuoteLeaf',
+export default {
 
-		mixins: [ Compo ],
+  name: 'QuoteLeaf',
 
-		props: [ 'model' ],
+  mixins: [ Compo ],
 
-		data () {
-		
-			return {
+  props: [ 'model' ],
 
-			}
-		},
+  data () {
+    return {
 
-		mounted () {
+    }
+  },
 
-			this.timeline = new TimelineMax( { tweens: [
+  mounted () {
+    this.timeline = new TimelineMax({ tweens: [
 
-				TweenMax.from( this.$refs.color, 1, { y: '100%', force3D: true, ease: Cubic.easeOut } ),
-				
-				TweenMax.from( this.$refs.fill, 1, { y: '100%', force3D: true, ease: Cubic.easeOut } ),
+      TweenMax.from(this.$refs.color, 1, { y: '100%', force3D: true, ease: Cubic.easeOut }),
 
-				TweenMax.from( this.$refs.text, 1, { y: '100%', force3D: true, ease: Cubic.easeOut } )
+      TweenMax.from(this.$refs.fill, 1, { y: '100%', force3D: true, ease: Cubic.easeOut }),
 
-				], stagger: .1, paused: true } )
-		},
+      TweenMax.from(this.$refs.text, 1, { y: '100%', force3D: true, ease: Cubic.easeOut })
 
-		destroyed () {
+    ],
+    stagger: 0.1,
+    paused: true })
+  },
 
-			if ( this.timeline ) {
+  destroyed () {
+    if (this.timeline) {
+      this.timeline.kill()
 
-				this.timeline.kill()
-
-				this.timeline = null
-			}
-		}
-	}
+      this.timeline = null
+    }
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	@import 'src/components/sass/vars.scss';
 
 	section.leaf .quote {
 
 		position: relative;
-		
+
 		text-align: left;
-			
+
 		padding: 50px 120px 50px 60px;
 
 		.background {
@@ -79,7 +77,7 @@
 			z-index: 1;
 
 			.color, .fill {
-				
+
 				position: absolute;
 
 				bottom: 0; left: 0;
@@ -90,7 +88,7 @@
 			.color {
 
 				z-index: 1;
-				
+
 				background: {
 
 					color: map-get( $colors, red );
@@ -102,7 +100,7 @@
 				z-index: 2;
 			}
 		}
-			
+
 		p {
 			z-index: 2;
 
@@ -133,7 +131,7 @@
 		&.left {
 
 			text-align: left;
-			
+
 			padding: 50px 120px 50px 60px;
 		}
 
@@ -141,19 +139,19 @@
 
 			text-align: right;
 
-			padding: 50px 60px 50px 120px;	
+			padding: 50px 60px 50px 120px;
 		}
 
-		&.left, &.right { 
+		&.left, &.right {
 
 			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
-				padding: 50px;  	
+				padding: 50px;
 			}
 		}
-		
+
 		&.light {
-			
+
 			.background {
 
 				.fill {
@@ -172,7 +170,7 @@
 		}
 
 		&.dark {
-			
+
 			.background {
 
 				.fill {
@@ -191,7 +189,7 @@
 		}
 
 		&.none {
-			
+
 			.background {
 
 				.color, .fill {

@@ -1,10 +1,10 @@
 
 <template>
-	
-	<transition 
 
-    	@enter="enter" 
-    	
+	<transition
+
+    	@enter="enter"
+
     	@leave="leave"
 
     	:css="false">
@@ -13,22 +13,22 @@
 
 			<router-view :key="leaf" :model="model" ref="leaf"></router-view>
 
-			<leaf-nav 
-				
+			<leaf-nav
+
 				ref="leafNav"
 
-				:prev="prev" 
+				:prev="prev"
 
-				:next="next" 
+				:next="next"
 
-				:prevCount="prevCount" 
+				:prevCount="prevCount"
 
 				:nextCount="nextCount"
 
 				:prevActive="prevActive"
 
 				:nextActive="nextActive">
-					
+
 			</leaf-nav>
 
 		</section>
@@ -38,122 +38,117 @@
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
 
-	import { States} from '../../constants'
+import { mapState } from 'vuex'
 
-	import Commons from '../mixins/Commons'
+import { States } from '../../constants'
 
-	import Section from '../mixins/Section'
+import Commons from '../mixins/Commons'
 
-	import Nav from '../leaf/Nav.vue'
-	
-	export default {
+import Section from '../mixins/Section'
 
-		name: 'Projects',
+import Nav from '../leaf/Nav.vue'
 
-		mixins: [ Section, Commons ],
+export default {
 
-		data () {
-	
-			return {
+  name: 'Projects',
 
-			}
-		},
+  mixins: [ Section, Commons ],
 
-		computed: {
+  data () {
+    return {
 
-			...mapState( {
+    }
+  },
 
-				collection: state => state.site.projects
-			} ),
+  computed: {
 
-			model () { return this.collection ? this.collection.filter( l => l.route == this.leaf )[0] : null },
+    ...mapState({
 
-			prevCount () { let count = this.lid; return this.getCount( --count, this.collection ) },
+      collection: state => state.site.projects
+    }),
 
-			nextCount () { let count = this.lid; return this.getCount( ++count, this.collection ) },
+    model () { return this.collection ? this.collection.filter(l => l.route == this.leaf)[0] : null },
 
-			lid () { return this.collection ? this.collection.indexOfName( this.leaf ) : 0 },
+    prevCount () { let count = this.lid; return this.getCount(--count, this.collection) },
 
-			nextActive () { return this.lid + 1 < ( this.collection ? this.collection.length : 9999 ) },
+    nextCount () { let count = this.lid; return this.getCount(++count, this.collection) },
 
-			prevActive () { return this.lid - 1 > -1 },
+    lid () { return this.collection ? this.collection.indexOfName(this.leaf) : 0 },
 
-			leaf () { return this.$route.params.leaf }
-		},
+    nextActive () { return this.lid + 1 < (this.collection ? this.collection.length : 9999) },
 
-		components: {
+    prevActive () { return this.lid - 1 > -1 },
 
-			'leaf-nav': Nav
-		},
+    leaf () { return this.$route.params.leaf }
+  },
 
-		methods: {
+  components: {
 
-			prev () {
+    'leaf-nav': Nav
+  },
 
-				let lid = this.lid,
+  methods: {
 
-					leaf = this.getLeaf( --lid, this.collection )
-				
-				this.navigateTo( States.LEAF, { leaf: leaf.route } )
-			},
+    prev () {
+      let lid = this.lid
 
-			next () {
+      let leaf = this.getLeaf(--lid, this.collection)
 
-				let lid = this.lid,
+      this.navigateTo(States.LEAF, { leaf: leaf.route })
+    },
 
-					leaf = this.getLeaf( ++lid, this.collection )
-				
-				this.navigateTo( States.LEAF, { leaf: leaf.route } )
-			},
+    next () {
+      let lid = this.lid
 
-			getLeaf ( id, collection ) {
+      let leaf = this.getLeaf(++lid, this.collection)
 
-				let length = collection.length - 1
+      this.navigateTo(States.LEAF, { leaf: leaf.route })
+    },
 
-				if ( id > length ) id = length
+    getLeaf (id, collection) {
+      let length = collection.length - 1
 
-				if ( id < 0 ) id = 0
+      if (id > length) id = length
 
-				return collection[ id ]
-			},
+      if (id < 0) id = 0
 
-			getCount ( count, collection ) {
+      return collection[ id ]
+    },
 
-				let length = collection ? collection.length - 1 : 0
+    getCount (count, collection) {
+      let length = collection ? collection.length - 1 : 0
 
-				if ( count < 0 || count > length ) count = -1
+      if (count < 0 || count > length) count = -1
 
-				let label = count < 0 ? '' : count < 10 ? '0' + ( count + 1 ) : count + 1
+      let label = count < 0 ? '' : count < 10 ? '0' + (count + 1) : count + 1
 
-				return label
-			},
+      return label
+    },
 
-			leave ( el, done ) {
+    leave (el, done) {
+      return new TimelineMax({ tweens: [
 
-				return new TimelineMax( { tweens: [
+        this.$refs.leafNav.leave(),
 
-					this.$refs.leafNav.leave(),
+        this.$refs.leaf.leave()
 
-					this.$refs.leaf.leave()
+      ],
+      onComplete: done })
+    },
 
-					], onComplete: done } )
-			},
+    enter (el, done) {
+      return new TimelineMax({ tweens: [
 
-			enter ( el, done ) {
+        this.$refs.leafNav.enter(),
 
-				return new TimelineMax( { tweens: [
+        this.$refs.leaf.enter()
 
-					this.$refs.leafNav.enter(),
-
-					this.$refs.leaf.enter()
-
-					], onComplete: done } )
-			}
-		}
-	}
+      ],
+      onComplete: done })
+    }
+  }
+}
 </script>
 
 <style lang="scss">

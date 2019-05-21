@@ -14,102 +14,91 @@
 </template>
 
 <script>
-	
-	export default {
 
-		name: 'MainBtn',
+export default {
 
-		props: [ 'click' ],
+  name: 'MainBtn',
 
-		data () {
-	
-			return {
+  props: [ 'click' ],
 
-				removed: false
-			}
-		},
+  data () {
+    return {
 
-		methods: {
+      removed: false
+    }
+  },
 
-			mouseenter ( event ) {
+  methods: {
 
-				if ( this.removed ) return
-					
+    mouseenter (event) {
+      if (this.removed) return
 
-				if ( this.timeline )
+      if (this.timeline) { this.timeline.kill() }
 
-					this.timeline.kill()
+      this.$mixer.play('hover')
 
+      let $refs = this.$refs
 
-				this.$mixer.play( 'hover' )
+      this.timeline = new TimelineMax({ tweens: [
 
-				
-				let $refs = this.$refs
+        TweenMax.to($refs.slot, 1, { opacity: 0.35, ease: Cubic.easeOut }),
 
-				this.timeline = new TimelineMax( { tweens: [
+        new TimelineMax({ tweens: [
 
-					TweenMax.to( $refs.slot, 1, { opacity: .35, ease: Cubic.easeOut } ),
+          TweenMax.to($refs.lt, 0.4, { bezier: { values: [ { left: '8%', width: 50 }, { left: '0%', width: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
+          TweenMax.to($refs.lb, 0.4, { bezier: { values: [ { right: '8%', width: 50 }, { right: '0%', width: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
+          TweenMax.to($refs.ll, 0.4, { top: '0%', bezier: { values: [ { height: 20 }, { height: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
+          TweenMax.to($refs.lr, 0.4, { bottom: '0%', bezier: { values: [ { height: 20 }, { height: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-					new TimelineMax( { tweens: [
+        ],
+        stagger: 0.03 })
 
-						TweenMax.to( $refs.lt, .4, { bezier: { values:[ { left: '8%', width: 50 }, { left: '0%', width: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-						TweenMax.to( $refs.lb, .4, { bezier: { values:[ { right: '8%', width: 50 }, { right: '0%', width: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-						TweenMax.to( $refs.ll, .4, { top: '0%', bezier: { values:[ { height: 20 }, { height: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-						TweenMax.to( $refs.lr, .4, { bottom: '0%', bezier: { values:[ { height: 20 }, { height: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
+      ] })
+    },
 
-						], stagger: .03 } )
-					
-					] } )
-			},
+    mouseleave (event) {
+      if (this.removed) return
 
-			mouseleave ( event ) {
+      if (this.timeline) { this.timeline.kill() }
 
-				if ( this.removed ) return
+      let $refs = this.$refs
 
-				
-				if ( this.timeline )
+      this.timeline = new TimelineMax({ tweens: [
 
-					this.timeline.kill()
+        new TimelineMax({ tweens: [
 
+          TweenMax.to($refs.lr, 0.6, { bottom: '60%', bezier: { values: [ { height: 20 }, { height: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
+          TweenMax.to($refs.ll, 0.6, { top: '60%', bezier: { values: [ { height: 20 }, { height: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
+          TweenMax.to($refs.lb, 0.6, { bezier: { values: [ { right: '8%', width: 50 }, { right: '15%', width: 40 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut }),
+          TweenMax.to($refs.lt, 0.6, { bezier: { values: [ { left: '8%', width: 50 }, { left: '15%', width: 40 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut })
 
-				let $refs = this.$refs
+        ],
+        stagger: 0.03 }),
 
-				this.timeline = new TimelineMax( { tweens: [
+        TweenMax.to($refs.slot, 1, { opacity: 1, ease: Cubic.easeOut })
 
-					new TimelineMax( { tweens: [
+      ] })
+    }
+  },
 
-						TweenMax.to( $refs.lr, .6, { bottom: '60%', bezier: { values:[ { height: 20 }, { height: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-						TweenMax.to( $refs.ll, .6, { top: '60%', bezier: { values:[ { height: 20 }, { height: 10 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-						TweenMax.to( $refs.lb, .6, { bezier: { values:[ { right: '8%', width: 50 }, { right: '15%', width: 40 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } ),
-						TweenMax.to( $refs.lt, .6, { bezier: { values:[ { left: '8%', width: 50 }, { left: '15%', width: 40 } ], curviness: 0 }, force3D: true, ease: Cubic.easeOut } )
-
-						], stagger: .03 } ),
-
-					TweenMax.to( $refs.slot, 1, { opacity: 1, ease: Cubic.easeOut } )
-
-					] } )
-			}
-		},
-
-		destroyed () {
-
-			this.removed = true
-		}
-	}
+  destroyed () {
+    this.removed = true
+  }
+}
 </script>
 
 <style lang="scss">
-	
+
 	button.main-btn {
-	
+
 		position: relative;
 
 		overflow: hidden;
 
 		display: block;
-		
+
 		color: map-get( $colors, white );
-		
+
 		letter-spacing: map-get( $ls, s ) * 1.25;
 
     	line-height: 1.45em;
@@ -117,16 +106,16 @@
 		margin: 0 auto;
 
 		padding: 5px;
-		
+
 		cursor: pointer;
-		
+
 		background: none;
 
 		font: {
 
 			size: map-get( $typo, btn_ );
 		}
-		
+
 		text: {
 
 			transform: uppercase;
@@ -164,37 +153,37 @@
 
 			&.lt, &.lb {
 
-				width: 40px; height: 1px;	
+				width: 40px; height: 1px;
 			}
 
 			&.ll, &.lr {
 
-				width: 1px; height: 10px;	
+				width: 1px; height: 10px;
 			}
 
 			&.lt {
-				
+
 				left: 15%; top: -1px;
 			}
 
 			&.lb {
-				
+
 				right: 15%; bottom: -1px;
 			}
-			
+
 			&.ll {
-				
+
 				left: -1px; top: 60%;
 			}
-			
+
 			&.lr {
-				
+
 				right: -1px; bottom: 60%;
 			}
 		}
 
 		&.red {
-			
+
 			.wrap {
 
 				border-color: map-get( $colors, rgb_light_red );

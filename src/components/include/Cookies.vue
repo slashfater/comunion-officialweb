@@ -2,7 +2,7 @@
 <template>
 
 	<div id="cookies">
-		
+
 		<p v-if="locale">
 			<span class="row">
 				<span class="copy" ref="copy">
@@ -23,48 +23,46 @@
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
 
-	export default {
+import { mapState } from 'vuex'
 
-		name: 'Cookies',
+export default {
 
-		data () {
-			
-			return {
+  name: 'Cookies',
 
-			}
-		},
+  data () {
+    return {
 
-		computed: mapState( {
+    }
+  },
 
-			locale: state => state.site.locale
-		} ),
+  computed: mapState({
 
-		methods: {
+    locale: state => state.site.locale
+  }),
 
-			enter () {
+  methods: {
 
-				let $refs = this.$refs
+    enter () {
+      let $refs = this.$refs
 
-				TweenMax.set( this.$el, { autoAlpha: 1 } )
+      TweenMax.set(this.$el, { autoAlpha: 1 })
 
-				return new TimelineMax( { tweens: [
+      return new TimelineMax({ tweens: [
 
-					TweenMax.from( $refs.copy, 1, { y: '100%', force3D: true, ease: Cubic.easeInOut } ),
+        TweenMax.from($refs.copy, 1, { y: '100%', force3D: true, ease: Cubic.easeInOut }),
 
-					TweenMax.from( $refs.cta, 1, { y: '100%', force3D: true, ease: Cubic.easeInOut } )
+        TweenMax.from($refs.cta, 1, { y: '100%', force3D: true, ease: Cubic.easeInOut })
 
-					], stagger: .15 } )
-			}
-		},
+      ],
+      stagger: 0.15 })
+    }
+  },
 
-		mounted () {
-
-			TweenMax.set( this.$el, { autoAlpha: 0 } )
-		}
-	}
+  mounted () {
+    TweenMax.set(this.$el, { autoAlpha: 0 })
+  }
+}
 </script>
 
 <style lang="scss">
@@ -74,7 +72,7 @@
 		position: relative;
 
    		margin-top: 45px;
-	
+
 		p {
 
 			color: map-get( $colors, rgb_half_white );

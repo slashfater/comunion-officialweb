@@ -5,212 +5,195 @@
 </template>
 
 <script>
-	
-	import { mapState } from 'vuex'
 
-	import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
-	import { States, Actions, Events } from '../../constants'
+import { States, Actions, Events } from '../../constants'
 
-	import Commons from '../mixins/Commons'
+import Commons from '../mixins/Commons'
 
-	export default {
+export default {
 
-		name: 'Gui',
+  name: 'Gui',
 
-		mixins: [ Commons ],
+  mixins: [ Commons ],
 
-		data () {
-	
-			return {
+  data () {
+    return {
 
-				routes: {
+      routes: {
 
-					home: {
+        home: {
 
-						goToHome: () => { },
-						
-						goToWho: () => { },
-						
-						goToVision: () => { },
-						
-						goToMission: () => { },
-						
-						goToProjects: () => { }
-					},
-					
-					projects: {
+          goToHome: () => { },
 
-						gotoProject: () => { }
-					},
+          goToWho: () => { },
 
-					goToPartners: () => { },
+          goToVision: () => { },
 
-					goToContact: () => { }		
-				},
+          goToMission: () => { },
 
-				canvas: {
+          goToProjects: () => { }
+        },
 
-					scene: {
+        projects: {
 
-						radius: 2.5,
+          gotoProject: () => { }
+        },
 
-						burst: 1.75,
+        goToPartners: () => { },
 
-						amplitude: 12,
+        goToContact: () => { }
+      },
 
-						period: 5,
+      canvas: {
 
-						displ: 10
-					},
+        scene: {
 
-					camera: {
+          radius: 2.5,
 
-						dist: 2350,
+          burst: 1.75,
 
-						far: 3600
-					},
+          amplitude: 12,
 
-					post: {
+          period: 5,
 
-						noise: true,
+          displ: 10
+        },
 
-						clouds: true,
+        camera: {
 
-						amount: .09,
+          dist: 2350,
 
-						alpha: .11,
+          far: 3600
+        },
 
-						blur: .12,
+        post: {
 
-						rad: 1
-					}
-				}
-			}
-		},
+          noise: true,
 
-		computed: mapState( {
+          clouds: true,
 
-			slider: state => state.site.collections.slider
-		} ),
+          amount: 0.09,
 
-		methods: {
+          alpha: 0.11,
 
-			...mapActions( [ 
+          blur: 0.12,
 
-				Actions.OPEN_MENU,
+          rad: 1
+        }
+      }
+    }
+  },
 
-				Actions.CLOSE_MENU,
+  computed: mapState({
 
-				Actions.INVERSE ] ),
+    slider: state => state.site.collections.slider
+  }),
 
-			dispatch ( value ) {
+  methods: {
 
-				this.$bus.emit( Events.TRANSFORM, this.canvas )
-			}
-		},
+    ...mapActions([
 
-		mounted () {
+      Actions.OPEN_MENU,
 
-			let gui = new dat.GUI(),
+      Actions.CLOSE_MENU,
 
-				slider = this.slider,
+      Actions.INVERSE ]),
 
-				router = this.$router,
+    dispatch (value) {
+      this.$bus.emit(Events.TRANSFORM, this.canvas)
+    }
+  },
 
-				site = gui.addFolder( 'Site' )
+  mounted () {
+    let gui = new dat.GUI()
 
+    let slider = this.slider
 
-			let routes = site.addFolder( 'Routes' )
+    let router = this.$router
 
+    let site = gui.addFolder('Site')
 
-			let home = routes.addFolder( 'Home' )
+    let routes = site.addFolder('Routes')
 
-			home.add( this.routes.home, 'goToHome' ).name( 'Go To Home' ).onChange( value => this.navigateTo( States.SLIDER, { slide: slider[0].name } ) )
-			
-			home.add( this.routes.home, 'goToWho' ).name( 'Go To Who' ).onChange( value => { this.navigateTo( States.SLIDER, { slide: slider[1].name } ) } )
-			
-			home.add( this.routes.home, 'goToVision' ).name( 'Go To Vision' ).onChange( value => { this.navigateTo( States.SLIDER, { slide: slider[2].name } ) } )
-			
-			home.add( this.routes.home, 'goToMission' ).name( 'Go To Mission' ).onChange( value => { this.navigateTo( States.SLIDER, { slide: slider[3].name } ) } )
-			
-			home.add( this.routes.home, 'goToProjects' ).name( 'Go To Projects' ).onChange( value => { this.navigateTo( States.SLIDER, { slide: slider[4].name } ) } )
+    let home = routes.addFolder('Home')
 
-			home.open()
-			
+    home.add(this.routes.home, 'goToHome').name('Go To Home').onChange(value => this.navigateTo(States.SLIDER, { slide: slider[0].name }))
 
-			let projects = routes.addFolder( 'Projects' )
+    home.add(this.routes.home, 'goToWho').name('Go To Who').onChange(value => { this.navigateTo(States.SLIDER, { slide: slider[1].name }) })
 
-			projects.add( this.routes.projects, 'gotoProject' ).name( 'Go To Project' ).onChange( value => { this.navigateTo( States.LEAF, { leaf: 'the-gate' } ) } )
-			
-			projects.open()
+    home.add(this.routes.home, 'goToVision').name('Go To Vision').onChange(value => { this.navigateTo(States.SLIDER, { slide: slider[2].name }) })
 
+    home.add(this.routes.home, 'goToMission').name('Go To Mission').onChange(value => { this.navigateTo(States.SLIDER, { slide: slider[3].name }) })
 
-			routes.add( this.routes, 'goToPartners' ).name( 'Go To Partners' ).onChange( value => { this.navigateTo( States.PARTNERS ) } )
-			
-			routes.add( this.routes, 'goToContact' ).name( 'Go To Contact' ).onChange( value => { this.navigateTo( States.CONTACTS ) } )
+    home.add(this.routes.home, 'goToProjects').name('Go To Projects').onChange(value => { this.navigateTo(States.SLIDER, { slide: slider[4].name }) })
 
-			//routes.open()
+    home.open()
 
+    let projects = routes.addFolder('Projects')
 
-			let canvas = site.addFolder( 'Canvas' )
+    projects.add(this.routes.projects, 'gotoProject').name('Go To Project').onChange(value => { this.navigateTo(States.LEAF, { leaf: 'the-gate' }) })
 
-			
-			let scene = canvas.addFolder( 'Scene' )
+    projects.open()
 
-			scene.add( this.canvas.scene, 'radius', 0, 5, .001 ).name( 'Radius' ).onChange( this.dispatch )
+    routes.add(this.routes, 'goToPartners').name('Go To Partners').onChange(value => { this.navigateTo(States.PARTNERS) })
 
-			scene.add( this.canvas.scene, 'burst', 0, 5, .001 ).name( 'Burst' ).onChange( this.dispatch )
+    routes.add(this.routes, 'goToContact').name('Go To Contact').onChange(value => { this.navigateTo(States.CONTACTS) })
 
-			scene.add( this.canvas.scene, 'amplitude', 0, 100, 1 ).name( 'Amplitude' ).onChange( this.dispatch )
-			
-			scene.add( this.canvas.scene, 'period', 0, 10, .01 ).name( 'Period' ).onChange( this.dispatch )
+    // routes.open()
 
-			scene.add( this.canvas.scene, 'displ', 0, 300, .1 ).name( 'Displ' ).onChange( this.dispatch )
+    let canvas = site.addFolder('Canvas')
 
+    let scene = canvas.addFolder('Scene')
 
-			let camera = canvas.addFolder( 'Camera' )
+    scene.add(this.canvas.scene, 'radius', 0, 5, 0.001).name('Radius').onChange(this.dispatch)
 
-			camera.add( this.canvas.camera, 'dist', 100, 3000, 1 ).name( 'Distance' ).onChange( this.dispatch )
+    scene.add(this.canvas.scene, 'burst', 0, 5, 0.001).name('Burst').onChange(this.dispatch)
 
-			camera.add( this.canvas.camera, 'far', 2000, 5000, 1 ).name( 'Far' ).onChange( this.dispatch )
+    scene.add(this.canvas.scene, 'amplitude', 0, 100, 1).name('Amplitude').onChange(this.dispatch)
 
+    scene.add(this.canvas.scene, 'period', 0, 10, 0.01).name('Period').onChange(this.dispatch)
 
-			let post = canvas.addFolder( 'Post' )
-			
-			post.add( this.canvas.post, 'rad', 0, 1, .001 ).name( 'Cloud Rad' ).onChange( this.dispatch )
-			
-			post.add( this.canvas.post, 'blur', 0, 1, .001 ).name( 'Cloud Blur' ).onChange( this.dispatch )
-			
-			post.add( this.canvas.post, 'alpha', 0, 1, .001 ).name( 'Cloud Alpha' ).onChange( this.dispatch )
-			
-			post.add( this.canvas.post, 'amount', 0, 1, .001 ).name( 'Noise Amount' ).onChange( this.dispatch )
+    scene.add(this.canvas.scene, 'displ', 0, 300, 0.1).name('Displ').onChange(this.dispatch)
 
-			post.add( this.canvas.post, 'noise' ).name( 'Noise Active' ).onChange( this.dispatch )
-			
-			post.add( this.canvas.post, 'clouds' ).name( 'Clouds Active' ).onChange( this.dispatch )
+    let camera = canvas.addFolder('Camera')
 
+    camera.add(this.canvas.camera, 'dist', 100, 3000, 1).name('Distance').onChange(this.dispatch)
 
-			canvas.open()
+    camera.add(this.canvas.camera, 'far', 2000, 5000, 1).name('Far').onChange(this.dispatch)
 
+    let post = canvas.addFolder('Post')
 
-			this.$bus.emit( Events.TRANSFORM, this.canvas )
+    post.add(this.canvas.post, 'rad', 0, 1, 0.001).name('Cloud Rad').onChange(this.dispatch)
 
+    post.add(this.canvas.post, 'blur', 0, 1, 0.001).name('Cloud Blur').onChange(this.dispatch)
 
-			gui.updateDisplay()
+    post.add(this.canvas.post, 'alpha', 0, 1, 0.001).name('Cloud Alpha').onChange(this.dispatch)
 
+    post.add(this.canvas.post, 'amount', 0, 1, 0.001).name('Noise Amount').onChange(this.dispatch)
 
-			gui.close()
+    post.add(this.canvas.post, 'noise').name('Noise Active').onChange(this.dispatch)
 
-			this.gui = gui
-		}
-	}
+    post.add(this.canvas.post, 'clouds').name('Clouds Active').onChange(this.dispatch)
+
+    canvas.open()
+
+    this.$bus.emit(Events.TRANSFORM, this.canvas)
+
+    gui.updateDisplay()
+
+    gui.close()
+
+    this.gui = gui
+  }
+}
 </script>
 
 <style lang="scss">
 
 	.dg.ac {
-	
+
 		z-index: 99 !important;
 	}
 
