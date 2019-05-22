@@ -39,7 +39,7 @@ export default {
 
 	// @import 'src/components/sass/utils.scss';
 
-	@import 'src/components/sass/vars.scss';
+	// @import 'src/components/sass/vars.scss';
 
 	#application {
 

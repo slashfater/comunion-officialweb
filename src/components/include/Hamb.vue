@@ -249,9 +249,9 @@ export default {
           stagger: 0.06 })
 
         ],
-        stagger: 0.09 })
+        stagger: 0.09 }),
 
-        // TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeOut } )
+        TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeOut } )
 
       ] })
     },
@@ -286,9 +286,9 @@ export default {
           stagger: 0.06 })
 
         ],
-        stagger: 0.09 })
+        stagger: 0.09 }),
 
-        // TweenMax.to( $holder, .6, { y: 0, force3D: true, ease: Cubic.easeInOut } )
+        TweenMax.to( $holder, .6, { y: 0, force3D: true, ease: Cubic.easeInOut } )
 
       ] })
     },
@@ -325,9 +325,9 @@ export default {
           stagger: 0.05 })
 
         ],
-        stagger: 0.05 })
+        stagger: 0.05 }),
 
-        // TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeInOut } )
+        TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeInOut } )
 
       ] })
     },
@@ -362,9 +362,9 @@ export default {
           stagger: 0.05 })
 
         ],
-        stagger: 0.05 })
+        stagger: 0.05 }),
 
-        // TweenMax.to( $holder, .6, { y: 0, force3D: true, ease: Cubic.easeInOut } )
+        TweenMax.to( $holder, .6, { y: 0, force3D: true, ease: Cubic.easeInOut } )
 
       ] })
     },

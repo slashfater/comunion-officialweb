@@ -249,7 +249,7 @@ export default {
 
 				top: 0; left: 0; right: 0; bottom: 0;
 
-				border: 2px solid map-get( $colors, cyan );
+				border: 2px solid map-get( $colors, com_main );
 
 				border-radius: 10px;
 
@@ -278,7 +278,7 @@ export default {
 
 					background: {
 
-						color: map-get( $colors, cyan );
+						color: map-get( $colors, com_main );
 					}
 
 					@include transition( background-color .8s map-get( $ease, cubic_out ) );
@@ -599,7 +599,7 @@ export default {
 
 				.border {
 
-    				border: 2px solid map-get( $colors, gray );
+    				border: 2px solid map-get( $colors, com_main );
 				}
 
 				.point {
@@ -608,7 +608,7 @@ export default {
 
 						background: {
 
-							color: map-get( $colors, gray );
+							color: map-get( $colors, com_main );
 						}
 					}
 				}

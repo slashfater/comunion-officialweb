@@ -4,13 +4,6 @@ $sizes: (
   custom: 980px
 );
 
-// $colors: (
-//   red: #ff0000,
-//   white: #ffffff,
-//   dark: #000000,
-//   rgb_full_white: #ffffff,
-//   rgb_light_white: rgba(122, 41, 41, 0.6)
-// );
 
 
 $white:    #fff !default;
@@ -69,10 +62,20 @@ $colors: map-merge(
     "cyan":       $cyan,
     "white":      $white,
     "gray":       $gray-600,
-    "gray-dark":  $gray-800
+    "gray-dark":  $gray-800,
+    "rgb_full_white": #ffffff,
+    "rgb_light_white": rgba(123, 136, 255, 0.8),
+    "com_main": #7b88ff,
+    "com_primary": #fdcb61,
+    "com_minor": #fff3b1,
+    "rgb_xlight_white": rgba(255, 255, 255, 0.4)
   ),
   $colors
 );
+
+$color_com_main: #7b88ff;
+$color_com_primary: #fdcb61;
+$color_com_minor: #fff3b1;
 
 $ease: (
   cubic_ease: cubic-bezier(.25, .1, .25, 1),

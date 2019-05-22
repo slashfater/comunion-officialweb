@@ -5,7 +5,7 @@
 
     <!-- <canvas ref="canvas"></canvas> -->
 
-    <section>
+    <section class="stage-cont">
       <!-- <div class="sun"></div>   -->
 
       <article class="mercury">
@@ -112,8 +112,8 @@ export default {
 #app-stage {
   position: absolute;
 
-  top: -40em;
-  left: 80em;
+  top: 0;
+  left: 0;
   bottom: 0;
   right: 0;
 
@@ -121,13 +121,18 @@ export default {
 
   z-index: 1;
 }
-
+.stage-cont{
+	position:relative;
+	top: 40%;
+	left: 25%;
+	opacity: 0.5;
+}
 $planet-names: mercury, venus, earth, mars, jupiter, saturn, uranus, neptune;
 
 $planet-diameter: 0.4878, 1.2104, 1.276, 0.6787, 3.84, 1.95, 1.812, 1.753;
 
-$orbit-time: 10.88, 20.25, 30.6525, 60.87, 430.46475, 1070.74875, 3060.81,
-  6020.6625;
+$orbit-time: 10.88, 20.25, 30.6525, 60.87, 430.46475, 70.74875, 60.81,
+  20.6625;
 //days devided by 100
 
 $planet-colors: #a1a1a1, #f5cc96, #495391, #b95730, #d5ba8e, #dab37a, #c4eaed,
@@ -258,18 +263,27 @@ input[type='range']::-webkit-slider-thumb {
   }
 }
 .mercury {
-  border: 0.5px solid rgba(white, 0.9);
+  border: 1px solid rgba(white, 0.9);
 }
 .venus {
-  border: 0.5px solid rgba(white, 0.8);
+  border: 1px solid rgba(white, 0.8);
 }
 .earth {
-  border: 0.5px solid rgba(white, 0.7);
+  border: 1px solid rgba(white, 0.7);
 }
 .mars {
-  border: 0.5px solid rgba(white, 0.6);
+  border: 1px solid rgba(white, 0.6);
 }
 .jupiter {
-  border: 0.5px solid rgba(white, 0.5);
+  border: 1px solid rgba(white, 0.5);
+}
+.saturn{
+	border: 1px solid rgba(white, 0.4);
+}
+.uranus{
+	border: 1px solid rgba(white, 0.3);
+}
+.neptune{
+	border: 1px solid rgba(white, 0.2);
 }
 </style>

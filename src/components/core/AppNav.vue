@@ -283,7 +283,7 @@ export default {
 
 		top: 0; left: 0;
 
-		width: 50%;
+		width: 25%;
 
 		height: 100%;
 
@@ -431,7 +431,7 @@ export default {
 
 							.label {
 
-								color: #ff7200;
+								color: #7B88FF;
 
 								@include transition( color .5s map-get( $ease, cubic_out ) );
 							}
@@ -555,7 +555,7 @@ export default {
 
 					@include transition( color .5s map-get( $ease, cubic_in_out ) );
 
-					color: #ff7200;
+					color: #7B88FF;
 				}
 
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
@@ -654,7 +654,7 @@ export default {
 
 					color: map-get( $colors, rgb_full_white );
 
-					//@include transition( color .8s map-get( $ease, cubic_out ) );
+					@include transition( color .8s map-get( $ease, cubic_out ) );
 
 					text: {
 

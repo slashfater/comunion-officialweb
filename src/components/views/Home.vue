@@ -62,9 +62,10 @@ export default {
   methods: {
 
     leave (el, done) {
+      console.log('======')
       return new TimelineMax({ tweens: [
 
-        this.$refs.counter.current().leave(),
+        // this.$refs.counter.current().leave(),
 
         this.$refs.slideNav.leave(),
 
@@ -75,6 +76,7 @@ export default {
     },
 
     enter (el, done) {
+      console.log('--------')
       return new TimelineMax({ tweens: [
 
         this.$refs.slide.enter(),
