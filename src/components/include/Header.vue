@@ -77,13 +77,15 @@ export default {
 
 		position: absolute;
 
-		top: 35px; left: 0; right: 0;
+		top: 20px; left: 0; right: 0;
 
 		overflow: hidden;
 
 		padding: 5px 0;
 
 		z-index: 5;
+
+		height: 88px;
 
 		text: {
 
@@ -97,11 +99,13 @@ export default {
 
 		#gsap-logo {
 
-			position: relative;
+			position: absolute;
 
 			width: 61px; height: 68px;
 
 			margin: 0 auto;
+
+			right: 110px;
 
 			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 

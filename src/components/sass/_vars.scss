@@ -68,6 +68,7 @@ $colors: map-merge(
     "com_main": #7b88ff,
     "com_primary": #fdcb61,
     "com_minor": #fff3b1,
+    "com_fill": #484E7F,
     "rgb_xlight_white": rgba(255, 255, 255, 0.4)
   ),
   $colors
@@ -76,6 +77,7 @@ $colors: map-merge(
 $color_com_main: #7b88ff;
 $color_com_primary: #fdcb61;
 $color_com_minor: #fff3b1;
+$color_com_fill: #484E7F;
 
 $ease: (
   cubic_ease: cubic-bezier(.25, .1, .25, 1),

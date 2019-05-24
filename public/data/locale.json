@@ -34,20 +34,22 @@
 		"type": "Pizzas"
 	}],
 	"home": [{
-		"head": "Limitless",
-		"title": "Imagination"
+		"head": "Comunion",
+		"title": "DO THE VALUE FREE TO FLOW",
+		"copy": "THE DAO COLLABORATION NETWORK",
+		"mcopy": "THE DAO COLLABORATION NETWORK"
 	}, {
-		"title": "Who",
-		"copy": "A high-tech project Factory. We connect Design with Artificial<br \/>Intelligence to create innovative objects and experiences. We monitor<br \/>and implement the ongoing digital evolution outcomes to continuously<br \/>improve our work.",
-		"mcopy": "A high-tech project Factory. We connect Design<br \/>with Artificial Intelligence to create innovative<br \/>objects and experiences. We monitor and implement<br \/>the ongoing digital evolution outcomes to continuously<br \/>improve our work."
+		"title": "ORIGINAL ASPIRATION",
+		"copy": "Labor values should be able to circulate,trade and accumulate freely like capital.--Kering",
+		"mcopy": "Labor values should be able to circulate,<br \/> trade and accumulate freely like capital<br \/>--Kering"
 	}, {
 		"title": "Vision",
-		"copy": "When innovation is the goal, technology is the ultimate path to reach it. <br \/>But ideas are the true propellent.",
-		"mcopy": "When innovation is the goal,<br \/>technology is the ultimate path to reach it. <br \/>But ideas are the true propellent."
+		"copy": "Liberate individual value for freer circulation<br \/><br \/>Bade farewell to Rousseau of the 18th century and Marx of the 19th century, in the 21st century the centralized multi-hierarchy org of which the means of production highly concentrated is exacerbating the human inequality: labor force value been exploited by org, while capital gains far greater than labor income.<br \/>Comunion is committed to promoting the DAO construction and governance, make each individual’s labor value able to circulate, trade and accumulate freely, thus to freer the value of labor fundamentally.",
+		"mcopy": "Liberate individual value for freer circulation<br \/><br \/>Bade farewell to Rousseau of the 18th century and Marx of the 19th century, in the 21st century the centralized multi-hierarchy org of which the means of production highly concentrated is exacerbating the human inequality: labor force value been exploited by org, while capital gains far greater than labor income.<br \/>Comunion is committed to promoting the DAO construction and governance, make each individual’s labor value able to circulate, trade and accumulate freely, thus to freer the value of labor fundamentally."
 	}, {
 		"title": "Mission",
-		"copy": "We redesign the way technology and Internet can offer people new perspectives.<br \/>We imagine what does not exist and then we create it.",
-		"mcopy": "We redesign the way technology and Internet can offer<br \/>people new perspectives. We imagine what does not exist<br \/>and then we create it."
+		"copy": "Reshape  production relation, activate productivity<br \/>In the 17th century, the Puritans of England headed for the New World in the faith of Biblical fundamentalism, led a detonation of productivity revolution in the next 300 years, meanwhile shaped the current centralized organization that focuses on control.<br \/>In the digital age of the 21st century, the blockchain tech will detonate a new revolution of productivity relationship: the DAO, base on principle of collaboration and co-governance, incentive by Token, will enormously unleash the labor force that bound by the top-down hierarchical centralizedorganization.",
+		"mcopy": "Reshape  production relation, activate productivity<br \/>In the 17th century, the Puritans of England headed for the New World in the faith of Biblical fundamentalism, led a detonation of productivity revolution in the next 300 years, meanwhile shaped the current centralized organization that focuses on control.<br \/>In the digital age of the 21st century, the blockchain tech will detonate a new revolution of productivity relationship: the DAO, base on principle of collaboration and co-governance, incentive by Token, will enormously unleash the labor force that bound by the top-down hierarchical centralizedorganization."
 	}, {
 		"title": "Projects",
 		"copy": "\u201cInspiration exists, but it has to find you working\u201d<br \/>Pablo Picasso",
@@ -81,9 +83,9 @@
 		"email": "info@comunion.io"
 	},
 	"cookies": {
-		"copy": "This site uses cookies.<br \/>By continuing to browse the site you are agreeing to our use of cookies.",
-		"cta": "Find out More",
-		"link": "\/pdf\/cookie-policy.pdf",
-		"accept": "Accept"
+		"copy": "",
+		"cta": "",
+		"link": "",
+		"accept": ""
 	}
 }

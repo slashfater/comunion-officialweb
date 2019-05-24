@@ -103,13 +103,13 @@ export default {
     initialize () {
       this.iconTimeline = new TimelineMax({ tweens: [
 
-        TweenMax.fromTo(this.$refs.point, 0.75, { opacity: 0 }, { opacity: 1, ease: Cubic.easeOut }),
+        TweenMax.fromTo(this.$refs.point, 1.5, { opacity: 0 }, { opacity: 1, ease: Cubic.easeOut }),
 
         new TimelineMax({ tweens: [
 
-          TweenMax.to(this.$refs.point, 0.75, { y: 7, force3D: true, ease: Cubic.easeOut }),
+          TweenMax.to(this.$refs.point, 1.5, { y: 18, force3D: true, ease: Cubic.easeOut }),
 
-          TweenMax.to(this.$refs.point, 0.75, { opacity: 0, ease: Cubic.easeOut })
+          TweenMax.to(this.$refs.point, 1.5, { opacity: 0, ease: Cubic.easeOut })
 
         ],
         stagger: 0.25 })
@@ -120,7 +120,7 @@ export default {
 
       this.lineTimeline = new TimelineMax({ tweens: [
 
-        TweenMax.fromTo(this.$refs.scrollLineBar, 1.2, { y: -40 }, { bezier: { values: [ { y: 0 }, { y: 40 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut })
+        TweenMax.fromTo(this.$refs.scrollLineBar, 1.5, { opacity: 0, y: -40 }, { opacity: 1, bezier: { values: [ { y: 0 }, { y: 40 } ], curviness: 0 }, force3D: true, ease: Cubic.easeInOut })
 
       ],
       repeatDelay: 1,
@@ -204,9 +204,9 @@ export default {
 
 			bottom: 90px; left: 50%;
 
-			width: 14px; height: 22px;
+			width: 16px; height: 32px;
 
-			margin: -7px 0 0 -7px;
+			margin: -8px 0 0 -8px;
 
 			@include transition( all .6s map-get( $ease, cubic_out ) );
 
@@ -278,7 +278,7 @@ export default {
 
 					background: {
 
-						color: map-get( $colors, com_main );
+						color: map-get( $colors, rgb_full_white );
 					}
 
 					@include transition( background-color .8s map-get( $ease, cubic_out ) );

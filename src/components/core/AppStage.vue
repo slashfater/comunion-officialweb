@@ -61,7 +61,7 @@ export default {
 
   mixins: [Commons],
 
-  data () {
+  data() {
     return {
       visuals: [],
 
@@ -80,13 +80,13 @@ export default {
   },
 
   watch: {
-    $route (to, from) {
+    $route(to, from) {
       // this.update( to, from )
     }
   },
 
   methods: {
-    resize () {
+    resize() {
       if (!this.renderer) return
 
       let width = window.innerWidth
@@ -104,7 +104,7 @@ export default {
     }
   },
 
-  mounted () {}
+  mounted() {}
 }
 </script>
 
@@ -121,18 +121,25 @@ export default {
 
   z-index: 1;
 }
-.stage-cont{
-	position:relative;
-	top: 40%;
-	left: 25%;
-	opacity: 0.5;
+
+.stage-cont {
+  position: relative;
+  top: 40%;
+  left: 25%;
+  opacity: 0.5;
+}
+
+@media (max-width: map-get($sizes, custom) - 1){
+  .stage-cont {
+    left: 0;
+    opacity: 0.3;
+  }
 }
 $planet-names: mercury, venus, earth, mars, jupiter, saturn, uranus, neptune;
 
-$planet-diameter: 0.4878, 1.2104, 1.276, 0.6787, 3.84, 1.95, 1.812, 1.753;
+$planet-diameter: 0.4878, 1.2104, 1.276, 0.6787, 2.84, 1.95, 1.812, 1.753;
 
-$orbit-time: 10.88, 20.25, 30.6525, 60.87, 430.46475, 70.74875, 60.81,
-  20.6625;
+$orbit-time: 10.88, 20.25, 30.6525, 60.87, 130.46475, 70.74875, 60.81, 20.6625;
 //days devided by 100
 
 $planet-colors: #a1a1a1, #f5cc96, #495391, #b95730, #d5ba8e, #dab37a, #c4eaed,
@@ -225,6 +232,33 @@ article {
   }
 }
 
+@media (max-width: map-get( $sizes, custom ) - 1) {
+  @for $i from 1 through length($planet-names) {
+    .#{nth($planet-names, $i)} {
+      height: $i * 4rem;
+      width: $i * 4rem;
+
+      // section:hover &:before {
+      //   content: "#{nth($planet-names, $i)}";
+      // }
+
+      div {
+        animation: orbit nth($orbit-time, $i) + s linear infinite;
+      }
+
+      $half: -0.5rem;
+
+      div:after {
+        background: nth($planet-colors, $i);
+        height: nth($planet-diameter, $i) + rem;
+        margin-left: nth($planet-diameter, $i) * $half;
+        top: nth($planet-diameter, $i) * $half;
+        width: nth($planet-diameter, $i) + rem;
+      }
+    }
+  }
+}
+
 .sun {
   background: yellow;
   border-radius: 50%;
@@ -277,13 +311,13 @@ input[type='range']::-webkit-slider-thumb {
 .jupiter {
   border: 1px solid rgba(white, 0.5);
 }
-.saturn{
-	border: 1px solid rgba(white, 0.4);
+.saturn {
+  border: 1px solid rgba(white, 0.4);
 }
-.uranus{
-	border: 1px solid rgba(white, 0.3);
+.uranus {
+  border: 1px solid rgba(white, 0.3);
 }
-.neptune{
-	border: 1px solid rgba(white, 0.2);
+.neptune {
+  border: 1px solid rgba(white, 0.2);
 }
 </style>

@@ -7,7 +7,7 @@
 			appear
 			name="slide"
 			mode="out-in"
-			@afterEnter="enter"
+			@enter="enter"
     	@leave="leave"
     	:css="false">
 
@@ -97,7 +97,8 @@
 	
 			return {
 
-				deskscreen: true
+				deskscreen: true,
+				enterState: false
 			}
 		},
 
@@ -159,7 +160,7 @@
 			},
 
 			leave ( el, done ) {
-				console.log('=====')
+				console.log(this.$route, '=====')
 
 				let $refs = this.$refs,
 
@@ -197,7 +198,7 @@
 						] } )
 
 					], delay, onComplete: () => {
-
+						this.enterState = false
 						if ( done instanceof Function )
 
 							done()
@@ -205,7 +206,9 @@
 			},
 
 			enter ( el, done ) {
-				console.log('ssss')
+				console.log(this.$route, 'sssssss')
+				if(this.enterState) return false;
+				this.enterState = true;
 				let $refs = this.$refs,
 
 					$mainBtn = $refs.mainBtn ? $refs.mainBtn.$refs.wrap : { y: 0 },
@@ -310,17 +313,19 @@
 			width: 100%; height: 100%;
 		}
 
+
 		h1 {
-
-			margin: 5px 0 10px 0;
-
+			max-width: 880px;
+			margin: 5px auto 10px auto;
+			text-align: left;
+			font-size: 50px;
 			&.main {
 
 				letter-spacing: map-get( $ls, xs );
 
 				font: {
 
-					size: 55px;
+					size: 48px;
 				}
 			}
 
@@ -354,6 +359,7 @@
 			.line {
 
 				position: absolute;
+				display: none;
 
 				width: 40px; height: 2px; top: 50%;
 
@@ -387,7 +393,7 @@
 			}
 
 			>span { 
-				
+				padding-left:0;
 				&:before, &:after {
 
 					//content: '';
@@ -418,7 +424,16 @@
 			}
 		}
 
+
+		@media(max-width: map-get($sizes, custom) - 1) {
+			h1{
+				padding-left: 20px;
+				font-size: 32px;
+			}
+		}
+
 		h3 {
+			max-width: 880px;
 
 			margin: 15px auto 0px;
 
@@ -428,13 +443,13 @@
 
 				transform: uppercase;
 
-				align: center;
+				align: left;
 			}
 		}
 
 		h4 {
 
-		    max-width: 580px;
+		  max-width: 880px;
 		
 			margin: 0 auto 10px;
 
@@ -444,9 +459,9 @@
 
 			text: {
 
-				transform: uppercase;
+				transform: none;
 
-				align: center;
+				align: left;
 			}
 
 			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
@@ -485,7 +500,7 @@
 
 						display: block;
 
-						width: 580px;
+						width: 100%;
 
 						@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
@@ -495,11 +510,11 @@
 
 					&:nth-child(even) {
 						
-						float: right;
+						float: left;
 
 						span {
 							
-							float: right;
+							float: left;
 						}
 					}
 					

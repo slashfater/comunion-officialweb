@@ -118,7 +118,7 @@ export default {
 
           new TimelineMax({ tweens: [
 
-            TweenMax.to($refs.openLabel, 0.8, { x: 50, force3D: true, ease: Cubic.easeInOut }),
+            TweenMax.to($refs.openLabel, 0.8, { x: 60, force3D: true, ease: Cubic.easeInOut }),
 
             TweenMax.to($refs.closeLabel, 0.8, { x: 0, force3D: true, ease: Cubic.easeInOut })
 
@@ -157,7 +157,7 @@ export default {
 
           new TimelineMax({ tweens: [
 
-            TweenMax.to($refs.closeLabel, 0.8, { x: -50, force3D: true, ease: Cubic.easeInOut }),
+            TweenMax.to($refs.closeLabel, 0.8, { x: -65, force3D: true, ease: Cubic.easeInOut }),
 
             TweenMax.to($refs.openLabel, 0.8, { x: 0, force3D: true, ease: Cubic.easeInOut })
 
@@ -251,7 +251,7 @@ export default {
         ],
         stagger: 0.09 }),
 
-        TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeOut } )
+        TweenMax.to( $holder, .6, { y: -42, force3D: true, ease: Cubic.easeOut } )
 
       ] })
     },
@@ -327,7 +327,7 @@ export default {
         ],
         stagger: 0.05 }),
 
-        TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeInOut } )
+        TweenMax.to( $holder, .6, { y: -44, force3D: true, ease: Cubic.easeInOut } )
 
       ] })
     },
@@ -580,7 +580,7 @@ export default {
 
 			.label {
 
-				top: 55px; left: -24px;
+				top: 55px; left: -34px;
 
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
@@ -650,7 +650,7 @@ export default {
 
 			.label {
 
-				top: -90px; left: -28px;
+				top: -90px; left: -38px;
 
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 

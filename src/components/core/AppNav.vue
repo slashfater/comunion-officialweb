@@ -288,6 +288,7 @@ export default {
 		height: 100%;
 
 		z-index: 10;
+		opacity: 0.8;
 
 		@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
@@ -304,7 +305,7 @@ export default {
 
 			background: {
 
-				color: map-get( $colors, red );
+				color: map-get( $colors, com_fill );
 			}
 
 			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
@@ -323,7 +324,7 @@ export default {
 
 			background: {
 
-				color: map-get( $colors, dark );
+				color: map-get( $colors, com_fill );
 			}
 
 			@media ( max-width: map-get( $sizes, custom ) - 1 ) {
@@ -356,7 +357,7 @@ export default {
 
 				//line-height: 40px;
 
-			    padding: 0 40px 0 130px;
+			    padding: 0 40px 0 100px;
 
 			    @media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
@@ -379,7 +380,7 @@ export default {
 
 					background: {
 
-						color: map-get( $colors, rgb_light_white );
+						color: map-get( $colors, com_primary );
 					}
 
 			    	&.top {
@@ -431,7 +432,7 @@ export default {
 
 							.label {
 
-								color: #7B88FF;
+								color: map-get( $colors, com_primary );
 
 								@include transition( color .5s map-get( $ease, cubic_out ) );
 							}
@@ -443,7 +444,7 @@ export default {
 
 							display: inline-block;
 
-							color: #454545;
+							color: #ffffff;
 						}
 
 						span.label {
@@ -479,15 +480,15 @@ export default {
 								//opacity: 0.75;
 
 								&.red {
-
+									display: none;
 									background: {
 
-										color: map-get( $colors, red );
+										color: map-get( $colors, com_primary );
 									}
 								}
 
 								&.dark {
-
+									display: none;
 									background: {
 
 										color: map-get( $colors, dark );
@@ -503,12 +504,12 @@ export default {
 
 							>span {
 
-								color: map-get( $colors, red );
+								color: map-get( $colors, com_primary );
 							}
 
 							span.letter {
 
-								color: map-get( $colors, red );
+								color: map-get( $colors, com_primary );
 							}
 						}
 					}

@@ -52,7 +52,7 @@ export default {
 
 <style lang="scss">
 
-	@import 'src/components/sass/vars.scss';
+	// @import 'src/components/sass/vars.scss';
 
 	#app-main {
 
