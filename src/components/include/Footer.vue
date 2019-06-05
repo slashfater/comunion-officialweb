@@ -39,7 +39,7 @@
 			</span>
 		</p>
 
-		<p class="foo">
+		<!-- <p class="foo">
 			<span class="gsap">
 				<span>
 
@@ -49,7 +49,7 @@
 
 				</span>
 			</span>
-		</p>
+		</p> -->
 
 	</footer>
 
@@ -358,7 +358,7 @@ export default {
 		}
 
 		.audio-icon {
-
+			display: none;
 			position: absolute;
 
 			overflow: hidden;
@@ -455,7 +455,7 @@ export default {
 		}
 
 		.lang {
-
+			display: none;
 			position: absolute;
 
 			bottom: -10px; left: 24px;

@@ -1,66 +1,68 @@
-export const REVISION = '0'
+export const REVISION = "0";
 
 export const States = {
-  HOME: 'home',
+  HOME: "home",
 
-  SLIDER: 'slider',
+  SLIDER: "slider",
 
-  PROJECTS: 'projects',
+  PROJECTS: "projects",
 
-  PARTNERS: 'partners',
+  PARTNERS: "partners",
 
-  CONTACTS: 'contacts',
+  CONTACTS: "contacts",
 
-  LEAF: 'leaf'
-}
+  EXPECT: "expect",
+
+  LEAF: "leaf"
+};
 
 export const Actions = {
-  APP_READY: 'appReady',
+  APP_READY: "appReady",
 
-  OPEN_MENU: 'openMenu',
+  OPEN_MENU: "openMenu",
 
-  CLOSE_MENU: 'closeMenu',
+  CLOSE_MENU: "closeMenu",
 
-  UPDATE_USER: 'updateUser'
-}
+  UPDATE_USER: "updateUser"
+};
 
 export const Events = {
-  TICK: 'tick',
+  TICK: "tick",
 
-  WHEEL: 'wheel',
+  WHEEL: "wheel",
 
-  DRAG: 'drag',
+  DRAG: "drag",
 
-  DROP: 'drop',
+  DROP: "drop",
 
-  RESIZE: 'resize',
+  RESIZE: "resize",
 
-  LOCALE: 'locale',
+  LOCALE: "locale",
 
-  LOADED: 'loaded',
+  LOADED: "loaded",
 
-  PROGRESS: 'progress',
+  PROGRESS: "progress",
 
-  UISTATE: 'uistateupdate',
+  UISTATE: "uistateupdate",
 
-  TRANSFORM: 'transform',
+  TRANSFORM: "transform",
 
-  LEAF_READY: 'leafready',
+  LEAF_READY: "leafready",
 
-  LEAF_LEAVE: 'leafleave',
+  LEAF_LEAVE: "leafleave",
 
-  TOUCH_START: 'touchstart',
+  TOUCH_START: "touchstart",
 
-  TOUCH_MOVE: 'touchmove',
+  TOUCH_MOVE: "touchmove",
 
-  TOUCH_END: 'touchend',
+  TOUCH_END: "touchend",
 
-  MOUSE_MOVE: 'mousemove',
+  MOUSE_MOVE: "mousemove",
 
-  MOUSE_DOWN: 'mousedown',
+  MOUSE_DOWN: "mousedown",
 
-  MOUSE_UP: 'mouseup'
-}
+  MOUSE_UP: "mouseup"
+};
 
 export const Sizes = {
   TABLET_LAND: 1024,
@@ -70,4 +72,4 @@ export const Sizes = {
   SMARTHPHONE: 375,
 
   CUSTOM: 980
-}
+};

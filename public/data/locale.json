@@ -10,10 +10,11 @@
 	},
 	"menu": {
 		"home": "Home",
-		"projects": "Projects",
-		"partners": "Partners",
-		"contacts": "Contacts",
-		"pressarea": "Private area"
+		"projects": "About",
+		"contacts": "dao network",
+		"pressarea": "Comunion BBS",
+		"partners": "White paper",
+		"devdoc": "Dev Document"
 	},
 	"news": [],
 	"counter": [{
@@ -50,11 +51,6 @@
 		"title": "Mission",
 		"copy": "Reshape  production relation, activate productivity<br \/>In the 17th century, the Puritans of England headed for the New World in the faith of Biblical fundamentalism, led a detonation of productivity revolution in the next 300 years, meanwhile shaped the current centralized organization that focuses on control.<br \/>In the digital age of the 21st century, the blockchain tech will detonate a new revolution of productivity relationship: the DAO, base on principle of collaboration and co-governance, incentive by Token, will enormously unleash the labor force that bound by the top-down hierarchical centralizedorganization.",
 		"mcopy": "Reshape  production relation, activate productivity<br \/>In the 17th century, the Puritans of England headed for the New World in the faith of Biblical fundamentalism, led a detonation of productivity revolution in the next 300 years, meanwhile shaped the current centralized organization that focuses on control.<br \/>In the digital age of the 21st century, the blockchain tech will detonate a new revolution of productivity relationship: the DAO, base on principle of collaboration and co-governance, incentive by Token, will enormously unleash the labor force that bound by the top-down hierarchical centralizedorganization."
-	}, {
-		"title": "Projects",
-		"copy": "\u201cInspiration exists, but it has to find you working\u201d<br \/>Pablo Picasso",
-		"mcopy": "\u201cInspiration exists, but it has to find you working\u201d<br \/>Pablo Picasso",
-		"cta": "Discover more"
 	}],
 	"partners": {
 		"copy": "We provide innovation opportunities for branding strategies. <br \/>Our projects generate new physical and digital experiences attracting interest and engagement.<br \/><br \/>This is how we manage to integrate and enhance a brand\u2019s world and the relevant communication strategies, adding value in terms of modernity, social appeal and data generation. <br \/><br \/>We focus on designing and offering customized services and solutions, rather than on applying standard cooperation models."

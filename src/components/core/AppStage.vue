@@ -1,16 +1,19 @@
 
 <template>
 
-  <div id="app-stage">
+  <div id="app-stage" :class="isTheGate ? 'is-the-gate' : ''">
 
     <!-- <canvas ref="canvas"></canvas> -->
-
+    <div class="orbit-plough">
+    </div>
+    <div class="orbit-sp-star">
+    </div>
     <section class="stage-cont">
       <!-- <div class="sun"></div>   -->
 
-      <article class="mercury">
+      <!-- <article class="mercury">
         <div></div>
-      </article>
+      </article> -->
       <article class="venus">
         <div></div>
       </article>
@@ -26,12 +29,12 @@
       <article class="saturn">
         <div></div>
       </article>
-      <article class="uranus">
+      <!-- <article class="uranus">
         <div></div>
       </article>
       <article class="neptune">
         <div></div>
-      </article>
+      </article> -->
 
     </section>
 
@@ -44,7 +47,7 @@ import { mapState } from 'vuex'
 
 import { States, Actions, Events, Sizes } from '../../constants'
 
-import Carousel from '../../factories/visuals/carousel'
+// import Carousel from '../../factories/visuals/carousel'
 
 import Projects from '../../factories/visuals/projects'
 
@@ -81,10 +84,18 @@ export default {
 
   watch: {
     $route(to, from) {
+      console.log(to, from, 'route...')
       // this.update( to, from )
     }
   },
-
+  created(){
+    console.log(this.$route, '*****')
+  },
+  computed:{
+    isTheGate(){
+      return this.$route.fullPath === '/projects/the-gate'
+    }
+  },
   methods: {
     resize() {
       if (!this.renderer) return
@@ -121,7 +132,6 @@ export default {
 
   z-index: 1;
 }
-
 .stage-cont {
   position: relative;
   top: 40%;
@@ -129,8 +139,13 @@ export default {
   opacity: 0.5;
 }
 
-@media (max-width: map-get($sizes, custom) - 1){
-  .stage-cont {
+.is-the-gate .stage-cont{
+  left: 0;
+  top: 50%;
+}
+
+@media (max-width: map-get($sizes, custom) - 1) {
+  .stage-cont, .is-the-gate .stage-cont {
     left: 0;
     opacity: 0.3;
   }
@@ -299,25 +314,69 @@ input[type='range']::-webkit-slider-thumb {
 .mercury {
   border: 1px solid rgba(white, 0.9);
 }
+.is-the-gate .mercury{
+  border: 1px solid rgba(#9CCADC, 0.9);
+}
 .venus {
   border: 1px solid rgba(white, 0.8);
+}
+.is-the-gate .venus {
+  border: 1px solid rgba(#9CCADC, 0.8);
 }
 .earth {
   border: 1px solid rgba(white, 0.7);
 }
+.is-the-gate .earth {
+  border: 1px solid rgba(#9CCADC, 0.7);
+}
 .mars {
   border: 1px solid rgba(white, 0.6);
+}
+.is-the-gate .mars {
+  border: 1px solid rgba(#9CCADC, 0.6);
 }
 .jupiter {
   border: 1px solid rgba(white, 0.5);
 }
+.is-the-gate .jupiter {
+  border: 1px solid rgba(#9CCADC, 0.5);
+}
 .saturn {
   border: 1px solid rgba(white, 0.4);
+}
+.is-the-gate .saturn {
+  border: 1px solid rgba(#9CCADC, 0.4);
 }
 .uranus {
   border: 1px solid rgba(white, 0.3);
 }
 .neptune {
   border: 1px solid rgba(white, 0.2);
+}
+.orbit-plough {
+  position: absolute;
+  left: 233px;
+  top: 86px;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  opacity: 0.48;
+  background: #fdcb6e;
+  background-image: linear-gradient(
+    180deg,
+    rgba(237, 229, 149, 0) 0%,
+    #003079 100%
+  );
+}
+.orbit-sp-star {
+  position: absolute;
+  left: 288px;
+  top: 685px;
+  width: 23px;
+  height: 23px;
+  border-radius: 23px;
+  opacity: 0.67;
+  background: #7b88ff;
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #001f4f 100%);
 }
 </style>

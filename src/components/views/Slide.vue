@@ -4,63 +4,63 @@
 	<!--transition name="slide"-->
 		
 	<transition
-			appear
-			name="slide"
-			mode="out-in"
-			@enter="enter"
+		appear	
+		@enter="enter" 
+    	
     	@leave="leave"
+
     	:css="false">
 
-		<section :key="name" :id="name" class="slide">
+		<section :id="name" class="slide">
 				
 			<div class="table">
 				<div class="table-cell">
 					
 					<h3 v-if="head && !news">
 						<span class="font-reg">
-							<span class="letter" v-for="(letter, i) in head" :class="{ 'space': letter == ' ' }" :key="i" ref="h3Letters">{{ letter }}</span>
+							<span class="letter" v-for="letter in head" :class="{ 'space': letter == ' ' }" ref="h3Letters">{{ letter }}</span>
 						</span>
 					</h3>
 					
 					<h1 v-if="title || news" :class="{ 'main': index == 0, 'news': news }">
-						<span class="font-reg" v-if="!news" key="tn-1">
+						<span class="font-reg" v-if="!news">
 							<span class="left line" ref="h1LeftLine"></span>
-							<span class="letter" v-for="(letter, i) in title" :class="{ 'space': letter == ' ' }" :key="i+100" ref="h1Letters">{{ letter }}</span>
+							<span class="letter" v-for="letter in title" :class="{ 'space': letter == ' ' }" ref="h1Letters">{{ letter }}</span>
 							<span class="right line" ref="h1RightLine"></span>
 						</span>
 
-						<span class="font-reg" v-if="news" key="tn-1">
+						<span class="font-reg" v-if="news">
 							<span class="left line" ref="h1LeftLine"></span>
-							<span class="letter" v-for="(letter, i) in newsTitle" :key="i+1000" :class="{ 'space': letter == ' ' }" ref="h1Letters">{{ letter }}</span>
+							<span class="letter" v-for="letter in newsTitle" :class="{ 'space': letter == ' ' }" ref="h1Letters">{{ letter }}</span>
 							<span class="right line" ref="h1RightLine"></span>
 						</span>
 					</h1>
 
 					<h4 v-if="copy || mcopy || news">
-						<span class="font-reg" :class="{ 'show': deskscreen }" v-if="!news" key="mc-1">
-							<span class="row" v-for="( row, i ) in copy.split('<br />')" :key="i+1100" ref="h4Rows"><span>{{ row }}</span></span>
+						<span class="font-reg" :class="{ 'show': deskscreen }" v-if="!news">
+							<span class="row" v-for="( row, i ) in copy.split('<br />')" ref="h4Rows"><span>{{ row }}</span></span>
 						</span>
 
-						<span class="font-reg" :class="{ 'show': !deskscreen }" v-if="!news" key="mc-2">
-							<span class="row" v-for="( row, i ) in mcopy.split('<br />')" :key="i+1200" ref="mh4Rows"><span>{{ row }}</span></span>
+						<span class="font-reg" :class="{ 'show': !deskscreen }" v-if="!news">
+							<span class="row" v-for="( row, i ) in mcopy.split('<br />')" ref="mh4Rows"><span>{{ row }}</span></span>
 						</span>
 
-						<span class="font-reg" :class="{ 'show': deskscreen }" v-if="news" key="mc-3">
-							<span class="row" v-for="( row, i ) in newsCopy.split('<br />')" :key="i+1300" ref="h4Rows"><span>{{ row }}</span></span>
+						<span class="font-reg" :class="{ 'show': deskscreen }" v-if="news">
+							<span class="row" v-for="( row, i ) in newsCopy.split('<br />')" ref="h4Rows"><span>{{ row }}</span></span>
 						</span>
 
-						<span class="font-reg" :class="{ 'show': !deskscreen }" v-if="news" key="mc-4">
-							<span class="row" v-for="( row, i ) in newsMCopy.split('<br />')" :key="i+1400" ref="mh4Rows"><span>{{ row }}</span></span>
+						<span class="font-reg" :class="{ 'show': !deskscreen }" v-if="news">
+							<span class="row" v-for="( row, i ) in newsMCopy.split('<br />')" ref="mh4Rows"><span>{{ row }}</span></span>
 						</span>
 					</h4>
 
-					<simple-btn class="red" :click="newslink" v-if="news" ref="newsBtn">
+					<!-- <simple-btn class="red" :click="newslink" v-if="news" ref="newsBtn">
 						<span class="font-reg">{{ newsCta }}</span>
 					</simple-btn>
 
 					<main-btn class="red" :click="discover" v-if="cta" ref="mainBtn">
 						<span class="font-reg">{{ cta }}</span>
-					</main-btn>
+					</main-btn> -->
 
 				</div>
 			</div>
@@ -96,9 +96,8 @@
 		data () {
 	
 			return {
-
-				deskscreen: true,
-				enterState: false
+				enterState: false,
+				deskscreen: true
 			}
 		},
 
@@ -118,7 +117,7 @@
 				locale: state => state.site.locale
 			} ),
 
-			// counter () { return this.locale.counter },
+			counter () { return this.locale.counter },
 
 			name () { return this.$route.params.slide },
 
@@ -160,7 +159,6 @@
 			},
 
 			leave ( el, done ) {
-				console.log(this.$route, '=====')
 
 				let $refs = this.$refs,
 
@@ -206,9 +204,8 @@
 			},
 
 			enter ( el, done ) {
-				console.log(this.$route, 'sssssss')
-				if(this.enterState) return false;
-				this.enterState = true;
+				if(this.enterState) return false
+				this.enterState = true
 				let $refs = this.$refs,
 
 					$mainBtn = $refs.mainBtn ? $refs.mainBtn.$refs.wrap : { y: 0 },
@@ -313,19 +310,17 @@
 			width: 100%; height: 100%;
 		}
 
-
 		h1 {
-			max-width: 880px;
-			margin: 5px auto 10px auto;
-			text-align: left;
-			font-size: 50px;
+
+			margin: 5px 0 10px 0;
+
 			&.main {
 
 				letter-spacing: map-get( $ls, xs );
 
 				font: {
 
-					size: 48px;
+					size: 55px;
 				}
 			}
 
@@ -359,7 +354,6 @@
 			.line {
 
 				position: absolute;
-				display: none;
 
 				width: 40px; height: 2px; top: 50%;
 
@@ -367,7 +361,7 @@
 
 					color: map-get( $colors, rgb_xlight_white );
 				}
-				
+				display: none;
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 	
 					display: none;
@@ -393,7 +387,7 @@
 			}
 
 			>span { 
-				padding-left:0;
+				
 				&:before, &:after {
 
 					//content: '';
@@ -424,16 +418,7 @@
 			}
 		}
 
-
-		@media(max-width: map-get($sizes, custom) - 1) {
-			h1{
-				padding-left: 20px;
-				font-size: 32px;
-			}
-		}
-
 		h3 {
-			max-width: 880px;
 
 			margin: 15px auto 0px;
 
@@ -443,19 +428,20 @@
 
 				transform: uppercase;
 
-				align: left;
+				align: center;
 			}
 		}
 
 		h4 {
 
-		  max-width: 880px;
+		  max-width: 580px;
 		
 			margin: 0 auto 10px;
 
 			line-height: 1.75em;
 
 			letter-spacing: map-get( $ls, xs ) * 1.5;
+
 
 			text: {
 
@@ -493,6 +479,8 @@
 					width: 100%;
 
 					clear: both;
+
+					margin-bottom: 20px;
 					
 					span {
 
@@ -500,7 +488,7 @@
 
 						display: block;
 
-						width: 100%;
+						width: 580px;
 
 						@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
@@ -510,11 +498,11 @@
 
 					&:nth-child(even) {
 						
-						float: left;
+						float: right;
 
 						span {
 							
-							float: left;
+							float: right;
 						}
 					}
 					
@@ -629,7 +617,6 @@
 			}
 
 			h4 span.row {
-
 				width: 0%;
 			}
 		}

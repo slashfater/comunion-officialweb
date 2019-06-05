@@ -33,21 +33,21 @@ export default class LoaderManager {
 
       this.loadJson(manifest.json, jsonres => {
         this.loadAssets(manifest.assets, assetsres => {
-          this.loadProjects(jsonres.projects, prjsres => {
-            this.loadFbx(manifest.fbxs, fbxsres => {
-              models.fbxs = fbxsres;
+          this._bus.emit(Events.LOADED, {
+            projects: jsonres.projects,
 
-              models.prjs = prjsres;
+            // partners: jsonres.partners,
 
-              this._bus.emit(Events.LOADED, {
-                projects: jsonres.projects,
-
-                partners: jsonres.partners,
-
-                assets: assetsres
-              });
-            });
+            assets: assetsres
           });
+          // this.loadProjects(jsonres.projects, prjsres => {
+          //   // this.loadFbx(manifest.fbxs, fbxsres => {
+          //   //   models.fbxs = fbxsres;
+
+          //   // });
+          //   // models.prjs = prjsres;
+
+          // });
         });
       });
     });
@@ -217,7 +217,7 @@ export default class LoaderManager {
       progress += value;
     }
 
-    progress /= 4;
+    progress /= 2;
 
     this._bus.emit(Events.PROGRESS, progress);
   }

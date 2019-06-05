@@ -22,7 +22,7 @@
 
 							<span class="top line" ref="topLine"></span>
 
-							<li v-for="item in tree" :class="{ 'active': isActive( item.name ) }">
+							<li v-for="item in tree" :class="{ 'active': isActive( item.name ) }" :key="item.name">
 
 								<a :href="item.path" :name="item.name" @click.prevent="goTo( item )" @mouseenter="mouseenter">
 									<span class="label font-reg">
@@ -157,7 +157,7 @@ export default {
     },
 
     exLink () {
-      window.open('/pressarea/', '_blank')
+      window.open('http://bbs.comunion.io', '_blank')
     },
 
     mouseenter (event) {
@@ -357,7 +357,7 @@ export default {
 
 				//line-height: 40px;
 
-			    padding: 0 40px 0 100px;
+			    padding: 0 40px 0 80px;
 
 			    @media ( max-width: map-get( $sizes, custom ) - 1 ) {
 

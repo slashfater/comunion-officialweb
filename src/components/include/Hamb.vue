@@ -327,7 +327,7 @@ export default {
         ],
         stagger: 0.05 }),
 
-        TweenMax.to( $holder, .6, { y: -44, force3D: true, ease: Cubic.easeInOut } )
+        TweenMax.to( $holder, .6, { y: -34, force3D: true, ease: Cubic.easeInOut } )
 
       ] })
     },
@@ -580,7 +580,7 @@ export default {
 
 			.label {
 
-				top: 55px; left: -34px;
+				top: 55px;
 
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 
@@ -650,7 +650,7 @@ export default {
 
 			.label {
 
-				top: -90px; left: -38px;
+				top: -90px;
 
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {
 

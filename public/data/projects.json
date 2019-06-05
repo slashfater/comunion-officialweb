@@ -1,137 +1,67 @@
 [{
-	"label": "The Gate",
+	"label": "why comunion?",
+	"desc": "The inequality caused by the high concentration of capital has become more and more serious, and it has affected the whole human society profoundly in many ways, like career choice, wealth distribution, entrepreneurship, innovation, and so on.",
 	"name": "the-gate",
 	"route": "the-gate",
-	"threefile": "\/data\/fbx\/898966-thegate.fbx",
+	"threefile": "",
 	"contents": [{
-		"type": "image",
-		"width": 650,
-		"height": 448,
-		"source": "https:\/\/www.igoodi.eu\/cms\/files\/resized\/resized_243496-thegate.png",
-		"side": "right"
-	}, {
 		"type": "tbox",
-		"title": "The project",
-		"content": "Today we all integrate real life with the Internet.<br \/>We are constantly present at both levels and many of our everyday activities have now become digital. <br \/>We interact through social media, shop online, play on virtual game platforms and new possibilities are increasingly appearing thanks to new services. \u2028<br \/>The Gate project aims at making people\u2019s life easier in this new era.",
-		"background": "fill",
-		"theme": "dark",
-		"side": "right"
-	}, {
-		"type": "video",
-		"ytvid": "VUG2yL0djQA",
-		"max-width": "680",
-		"width": "1",
-		"height": "1",
-		"side": "left"
-	}, {
-		"type": "tbox",
-		"title": "The Avatar",
-		"content": "The Gate is a high-tech platform allowing anyone to obtain his\/her 4D Avatar, i.e. a fully virtual \u201cself\u201d that can live in the digital world.<br \/>Every Avatar is physically identical to the original person, allowing a wide range of movements. ",
+		"title": "about comunion",
+		"content": "Comunion is a decentralized autonomous organization collaboration network, helps companies, organizations and individuals all around the world to create, manage and operate their own decentralized autonomous organization (The DAO). Comunion aims to solve complex problems of org and social dilemma by establishing the decentralized collaborate org using swarm intelligence as the decision-making principle, to activate each individual’s creativity，reshape way of organizing to unleash productivity, make the world more efficient and fair. Do the labor value freer.",
 		"background": "fill",
 		"theme": "dark",
 		"side": "left"
-	}, {
-		"type": "image",
-		"width": 650,
-		"height": 366,
-		"source": "https:\/\/www.igoodi.eu\/cms\/files\/resized\/resized_678512-2cc3ba43-44a5-47da-b37f-38add9ca57ff.jpg",
-		"side": "right"
-	}, {
+	},{
 		"type": "tbox",
-		"title": "The 4D booth",
-		"content": "The 4D booth is the first step into The Gate world.<br \/>Original in design, this high-tech and fully automated module can scan the person in a few seconds with extreme accuracy.<br \/>Once his \/ her Avatar has been created, the user can have access to a set of services and choose those who best suit his\/her personal interests.",
+		"title": "product features",
+		"content": "For the first time in the world, we proposed the concept of entropy consensus, as the community consensus indicator - scientifically measured consensus of a collaborative organization system.and this consensus will be used in the decision-making decentralized org to realize fair and efficient decision making.",
+		"background": "fill",
+		"theme": "light",
+		"side": "right"
+	},{
+		"type": "tbox",
+		"title": "technology architecture",
+		"content": "For the first time in the world, we proposed the concept of entropy consensus, as the community consensus indicator - scientifically measured consensus of a collaborative organization system.and this consensus will be used in the decision-making decentralized org to realize fair and efficient decision making.",
 		"background": "fill",
 		"theme": "dark",
+		"side": "left"
+	},{
+		"type": "tbox",
+		"title": "applicable cases",
+		"content": "For the first time in the world, we proposed the concept of entropy consensus, as the community consensus indicator - scientifically measured consensus of a collaborative organization system.and this consensus will be used in the decision-making decentralized org to realize fair and efficient decision making.",
+		"background": "fill",
+		"theme": "light",
 		"side": "right"
-	}, {
+	},{
+		"type": "tbox",
+		"title": "token economy",
+		"content": "For the first time in the world, we proposed the concept of entropy consensus, as the community consensus indicator - scientifically measured consensus of a collaborative organization system.and this consensus will be used in the decision-making decentralized org to realize fair and efficient decision making.",
+		"background": "fill",
+		"theme": "dark",
+		"side": "left"
+	},{
+		"type": "tbox",
+		"title": "comunion bbs",
+		"content": "The Comunion team is the world's first truly decentralized collaborative organization, establish the Comunion network. This BBS records the whole collaboration process of Comunion, including all the documents, task management, daily thoughts and so on; it’s a window for dialogue with the world, we expect to meet you here!",
+		"background": "fill",
+		"theme": "light",
+		"side": "right"
+	},{
+		"type": "tbox",
+		"title": "team",
+		"content": "Comunion Founder Comunion Vision Committee member Blockchain believer Serial Entrepreneur Venture Capital investor Commit to promote and popularize the DAO worldwide.",
+		"background": "fill",
+		"theme": "dark",
+		"side": "left"
+	},{
 		"type": "image",
-		"width": 650,
-		"height": 433,
-		"source": "https:\/\/www.igoodi.eu\/cms\/files\/resized\/resized_892965-5.jpg",
-		"side": "left"
-	}, {
-		"type": "tbox",
-		"title": "SOCIAL & ENTERTAINMENT",
-		"content": "The Gate provides different sets of Avatar movements and animations the user can select to enjoy the experience and create content to be shared through his\/her favourite social media.",
-		"background": "none",
-		"theme": "light",
+		"width": 697,
+		"height": 594,
+		"source": "/data/img/founder.png",
 		"side": "right"
-	}, {
-		"type": "video",
-		"ytvid": "lk-PNrMDwsk",
-		"max-width": "680",
-		"width": "1",
-		"height": "1",
-		"side": "right"
-	}, {
-		"type": "tbox",
-		"title": "FASHION",
-		"content": "Thanks to anthropometric measurements collected during scanning, it is possible to generate a customized service recognizing the correct user size (Shopping ID). The user can then purchase clothing from both physical and online stores. This process increases users\u2019 confidence and significantly reduces returns. <br \/>In addition, by means of the Avatar the user can try on specifically 3D-designed clothes and fashion accessories. Information regarding colours, fabrics and fit can be obtained by simple interactive actions. ",
-		"background": "none",
-		"theme": "light",
-		"side": "left"
-	}, {
-		"type": "tbox",
-		"title": "GAMES",
-		"content": "Videogame lovers will enjoy first-person gaming experiences using the Avatar. ",
-		"background": "none",
-		"theme": "light",
-		"side": "right"
-	}, {
-		"type": "tbox",
-		"title": "SPORT & WELLNESS",
-		"content": "Sportspeople, and others, can check their physical condition and training results by comparing periodic scans.<br \/>Avatar information can also be used by personal trainers to improve their customers\u2019 training schedules. ",
-		"background": "none",
-		"theme": "light",
-		"side": "left"
-	}, {
-		"type": "video",
-		"ytvid": "hTVZgIiwxe8",
-		"max-width": "680",
-		"width": "1",
-		"height": "1",
-		"side": "left"
-	}, {
-		"type": "tbox",
-		"title": "HEALTH & MEDICAL",
-		"content": "In the orthopedics sector body scanning enables 3D printing of braces which perfectly match patients\u2019 physical measures as well as setting up a comprehensive personal anthropometric measurement database.<br \/>Body scanning can also significantly contribute to diagnostic improvements (e.g.  mole mapping) and provide preliminary data support to surgery. ",
-		"background": "none",
-		"theme": "light",
-		"side": "right"
-	}, {
-		"type": "tbox",
-		"title": "Beauty",
-		"content": "Avatars can be helpful in planning and evaluating aesthetic solutions, previewing tattoos, etc. ",
-		"background": "none",
-		"theme": "light",
-		"side": "left"
-	}, {
-		"type": "tbox",
-		"title": "ADVERTISING & ENTERTAINMENT",
-		"content": "In terms of Brand activity, offering the target a chance to create his\/her own Avatar is a powerful drive towards engagement, customer loyalty and sales promotion. <br \/>A scan booth temporarily installed during a branded event or in a showroom produces a significant drive-to-store effect enhancing the physical location\u2019s appeal.",
-		"background": "none",
-		"theme": "light",
-		"side": "right"
-	}, {
-		"type": "tbox",
-		"title": "Design & objects",
-		"content": "In addition to human body scanning, the 4D booth can perform high-resolution object scans to create images and catalogues of furniture and decoration, jewelry, experimental shapes and prototypes, etc.",
-		"background": "none",
-		"theme": "light",
-		"side": "left"
-	}, {
-		"type": "tbox",
-		"title": "3D PRINT",
-		"content": "The Gate also provides a special scanning process to create a 3D print of the user, who can select his\/her favourite pose within a range of specific parameters and\/or experience scanning with a partner.",
-		"background": "none",
-		"theme": "light",
-		"side": "right"
-	}, {
-		"type": "video",
-		"ytvid": "EzfUTh8DTzU",
-		"max-width": "680",
-		"width": "1",
-		"height": "1",
-		"side": "right"
+	},{
+
+	},{
+		
 	}]
 }]

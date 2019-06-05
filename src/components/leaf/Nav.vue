@@ -485,7 +485,7 @@ export default {
 			}
 
 			&.next {
-
+				display: none;
 				margin-top: -$height;
 
 				.btn-side {
@@ -501,7 +501,7 @@ export default {
 			}
 
 			&.prev {
-
+				display: none;
 				margin-top: 1px;
 
 				@media ( max-width: map-get( $sizes, custom ) - 1 ) {

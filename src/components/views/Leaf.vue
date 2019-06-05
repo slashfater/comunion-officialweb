@@ -26,7 +26,7 @@
 									<span class="line" ref="line"></span>
 								</span>
 							</h1>
-
+              <h4 class="why-desc">{{ model.desc }}</h4>
 						</div>
 					</div>
 
@@ -339,7 +339,7 @@ export default {
 
 				position: absolute;
 
-				bottom: -25px; left: 50px; right: 50px;
+				bottom: -10px; left: 50px; right: 50px;
 
 				height: 2px;
 
@@ -401,5 +401,13 @@ export default {
 			width: 100%; height: auto;
 		}
 	}
-
+section.root .why-desc{
+    color: #000;
+    max-width: 522px;
+    margin: 0 auto;
+    text-align: left;
+    margin-top: 40px;
+    font-size: 16px;
+    line-height: 26px;
+  }
 </style>

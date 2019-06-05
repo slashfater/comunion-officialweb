@@ -29,7 +29,7 @@ import { Sizes } from '../../constants'
 
 import Section from '../mixins/Section'
 
-import Counter from '../include/Counter.vue'
+// import Counter from '../include/Counter.vue'
 
 import SliderNav from '../include/SliderNav.vue'
 
@@ -54,9 +54,9 @@ export default {
 
   components: {
 
-    'slider-nav': SliderNav,
+    'slider-nav': SliderNav
 
-    'counter': Counter
+    // 'counter': Counter
   },
 
   methods: {

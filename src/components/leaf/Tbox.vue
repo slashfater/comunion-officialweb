@@ -158,8 +158,9 @@ export default {
 
 		h2 {
 
+				font-size: 40px;
    			color: rgba( 79,79,79,1 );
-
+				
 		    letter-spacing: 0.1em;
 
 	        padding: 100px 60px;
@@ -187,7 +188,7 @@ export default {
 
 			text: {
 
-				transform: uppercase;
+				transform: none;
 
 				align: justify;
 			}
